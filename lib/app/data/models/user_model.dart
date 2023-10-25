@@ -23,6 +23,11 @@ class UserModel {
     this.gender,
   });
 
+  @override
+  String toString() {
+    return '${name!.toLowerCase()}, ${email!.toLowerCase()}, ${loginNumber!.toLowerCase()}, ${phone!.toLowerCase()}';
+  }
+
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'],

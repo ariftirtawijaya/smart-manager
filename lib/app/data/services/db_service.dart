@@ -7,6 +7,7 @@ class DBService {
   static CollectionReference usersCollections =
       FirebaseFirestore.instance.collection('users');
   static final box = GetStorage();
+  static FirebaseFirestore db = FirebaseFirestore.instance;
 
   static saveToLocal({required String key, required dynamic value}) {
     return box.write(key, value);

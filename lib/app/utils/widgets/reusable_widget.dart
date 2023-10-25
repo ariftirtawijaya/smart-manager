@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
@@ -322,6 +324,52 @@ class CustomCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomImageView extends StatelessWidget {
+  const CustomImageView({
+    super.key,
+    required this.imageUrl,
+    required this.size,
+  });
+  final String imageUrl;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) => Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
+      ),
+      placeholder: (context, url) {
+        return Shimmer.fromColors(
+          baseColor: grey3,
+          highlightColor: grey4,
+          child: Image.asset(
+            imagePlaceholder,
+            height: size,
+          ),
+        );
+      },
+      errorWidget: (context, url, error) {
+        return Image.asset(
+          imagePlaceholder,
+          height: size,
+        );
+      },
     );
   }
 }

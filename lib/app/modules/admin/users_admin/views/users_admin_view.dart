@@ -1,14 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/data/models/user_model.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/components/user_list.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_add.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_detail.dart';
 
 import '../controllers/users_admin_controller.dart';
 
@@ -63,19 +60,18 @@ class UsersAdminView extends GetView<UsersAdminController> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  controller: controller.searchC,
+                  onChanged: (value) {
+                    controller.changeKeyword();
+                  },
+                  decoration: const InputDecoration(
                     isDense: false,
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'Search Users',
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        print('pressed');
-                      },
-                      icon: const Icon(
-                        Icons.search,
-                        color: primaryColor,
-                      ),
+                    suffixIcon: Icon(
+                      Icons.search,
+                      color: primaryColor,
                     ),
                   ),
                 ),
@@ -149,104 +145,36 @@ class UsersAdminView extends GetView<UsersAdminController> {
                           ListView(),
                         ],
                       );
+                    } else if (controller.listSearch.isNotEmpty) {
+                      print('1');
+
+                      return UsersList(
+                        itemCount: controller.listSearch.length,
+                        userData: controller.listSearch,
+                      );
+                    } else if (controller.listSearch.isEmpty &&
+                        controller.keyword.value != '') {
+                      print('2');
+                      return Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
+                          ),
+                          ListView(),
+                        ],
+                      );
                     } else {
-                      return ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
+                      print('3');
+
+                      return UsersList(
                         itemCount: controller.dataC.users.length,
-                        itemBuilder: (context, index) {
-                          final UserModel user = controller.dataC.users[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 16, left: 16, right: 16),
-                            child: Card(
-                              elevation: 5,
-                              shadowColor: grey3,
-                              borderOnForeground: true,
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: grey3,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                overlayColor: const MaterialStatePropertyAll(
-                                    primaryColor),
-                                onTap: () {
-                                  Get.to(() => const UsersAdminDetailView(),
-                                      arguments: user);
-                                },
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  title: Text(
-                                    user.name!.capitalize!,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  leading: user.profilePic == null
-                                      ? Image.asset(
-                                          imagePlaceholder,
-                                          height: 52,
-                                        )
-                                      : CachedNetworkImage(
-                                          imageUrl: user.profilePic!,
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            width: 52,
-                                            height: 52,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(8.0),
-                                              ),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) {
-                                            return Shimmer.fromColors(
-                                              baseColor: grey3,
-                                              highlightColor: grey4,
-                                              child: Image.asset(
-                                                imagePlaceholder,
-                                                height: 52,
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (context, url, error) {
-                                            return Image.asset(
-                                              imagePlaceholder,
-                                              height: 52,
-                                            );
-                                          },
-                                        ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        edit,
-                                        colorFilter: const ColorFilter.mode(
-                                            secondaryColor, BlendMode.srcIn),
-                                      ),
-                                      const SizedBox(
-                                        width: 8.0,
-                                      ),
-                                      SvgPicture.asset(
-                                        delete,
-                                        colorFilter: const ColorFilter.mode(
-                                            secondaryColor, BlendMode.srcIn),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                        userData: controller.dataC.users,
                       );
                     }
                   }

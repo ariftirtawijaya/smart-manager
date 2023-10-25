@@ -11,11 +11,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
+import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
+  var listSearch = RxList<UserModel>([]);
 
   TextEditingController nameController = TextEditingController();
   TextEditingController loginNumberController = TextEditingController();
@@ -33,6 +35,39 @@ class UsersAdminController extends GetxController {
     phoneController.clear();
     addressController.clear();
     passwordController.clear();
+  }
+
+  var keyword = ''.obs;
+  final TextEditingController searchC = TextEditingController();
+  void changeKeyword() {
+    keyword.value = searchC.text;
+  }
+
+  @override
+  void onInit() {
+    debounce(
+      time: const Duration(seconds: 1),
+      keyword,
+      (callback) {
+        listSearch.clear();
+        searchUsers(searchC.text);
+      },
+    );
+    super.onInit();
+  }
+
+  searchUsers(String value) {
+    print(value.isEmpty);
+    if (value.isEmpty) {
+      listSearch.clear();
+    } else {
+      listSearch.value = dataC.users
+          .where((user) =>
+              user.toString().toLowerCase().contains(value.toLowerCase()) ||
+              user.toString().toLowerCase().startsWith(value.toLowerCase()))
+          .toList();
+    }
+    // update();
   }
 
   String imagePath = '';
@@ -94,8 +129,8 @@ class UsersAdminController extends GetxController {
   }
 
   Future<void> createUser(BuildContext context) async {
+    showLoading(status: 'Creating User ...');
     try {
-      showLoading(status: 'Creating User ...');
       await DBService.auth
           .createUserWithEmailAndPassword(
         email: emailController.text,
