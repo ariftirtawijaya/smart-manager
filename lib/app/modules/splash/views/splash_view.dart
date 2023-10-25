@@ -22,8 +22,8 @@ class SplashView extends GetView<SplashController> {
                 children: [
                   SizedBox(
                     width: getWidth(context) * 0.3,
-                    child: SvgPicture.asset(
-                      logo,
+                    child: SvgPicture.memory(
+                      logoByteData,
                       colorFilter:
                           const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                     ),

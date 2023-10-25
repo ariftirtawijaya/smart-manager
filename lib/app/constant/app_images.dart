@@ -10,4 +10,4 @@ const String settings = 'assets/icons/settings.svg';
 const String imagePlaceholder = 'assets/images/image_placeholder.png';
 const String empty = 'assets/lottie/empty.json';
 
-late Uint8List byteData;
+late Uint8List logoByteData;

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/utils/theme.dart';
@@ -20,18 +21,30 @@ void main() async {
   Get.put(AuthController(), permanent: true);
   await GetStorage.init();
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );
 
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Smart Manager",
-      theme: appThemeData,
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      builder: EasyLoading.init(),
+  Future<void> loadImage() async {
+    ByteData fileLogo = await rootBundle.load(logo);
+    logoByteData = fileLogo.buffer.asUint8List();
+  }
+
+  await loadImage().then(
+    (value) => runApp(
+      GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Smart Manager",
+        theme: appThemeData,
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
+        builder: EasyLoading.init(),
+      ),
     ),
   );
 }

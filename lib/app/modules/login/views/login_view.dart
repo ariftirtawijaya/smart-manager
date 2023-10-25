@@ -37,9 +37,9 @@ class LoginView extends GetView<LoginController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Get.width * 0.3,
-                        child: SvgPicture.asset(
-                          logo,
+                        width: getWidth(context) * 0.3,
+                        child: SvgPicture.memory(
+                          logoByteData,
                           colorFilter: const ColorFilter.mode(
                               Colors.white, BlendMode.srcIn),
                         ),
