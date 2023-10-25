@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/users/controllers/users_controller.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class UsersAddView extends GetView<UsersController> {
-  const UsersAddView({super.key});
+class UsersAdminAddView extends GetView<UsersAdminController> {
+  const UsersAdminAddView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class UsersAddView extends GetView<UsersController> {
             key: addUserKey,
             child: Column(
               children: [
-                GetBuilder<UsersController>(builder: (controller) {
+                GetBuilder<UsersAdminController>(builder: (controller) {
                   return Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

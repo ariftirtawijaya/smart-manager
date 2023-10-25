@@ -7,13 +7,13 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
-import 'package:smart_manager/app/modules/users/views/users_add.dart';
-import 'package:smart_manager/app/modules/users/views/users_detail.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_add.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_detail.dart';
 
-import '../controllers/users_controller.dart';
+import '../controllers/users_admin_controller.dart';
 
-class UsersView extends GetView<UsersController> {
-  const UsersView({super.key});
+class UsersAdminView extends GetView<UsersAdminController> {
+  const UsersAdminView({super.key});
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -31,7 +31,7 @@ class UsersView extends GetView<UsersController> {
             GestureDetector(
               onTap: () {
                 controller.clear();
-                Get.to(() => const UsersAddView());
+                Get.to(() => const UsersAdminAddView());
               },
               child: SvgPicture.asset(
                 plusSquare,
@@ -173,7 +173,7 @@ class UsersView extends GetView<UsersController> {
                                 overlayColor: const MaterialStatePropertyAll(
                                     primaryColor),
                                 onTap: () {
-                                  Get.to(() => const UsersDetailView(),
+                                  Get.to(() => const UsersAdminDetailView(),
                                       arguments: user);
                                 },
                                 child: ListTile(

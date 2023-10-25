@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/home/views/home_view.dart';
-import 'package:smart_manager/app/modules/profile/views/profile_view.dart';
-import 'package:smart_manager/app/modules/users/views/users_view.dart';
+import 'package:smart_manager/app/modules/admin/home_admin/views/home_admin_view.dart';
+import 'package:smart_manager/app/modules/admin/profile_admin/views/profile_admin_view.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_view.dart';
 
-import '../controllers/dashboard_controller.dart';
+import '../controllers/dashboard_admin_controller.dart';
 
-class DashboardView extends GetView<DashboardController> {
-  const DashboardView({super.key});
+class DashboardAdminView extends GetView<DashboardAdminController> {
+  const DashboardAdminView({super.key});
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DashboardController>(builder: (controller) {
+    return GetBuilder<DashboardAdminController>(builder: (controller) {
       return Scaffold(
         extendBody: true,
         // appBar: AppBar(
@@ -37,9 +37,9 @@ class DashboardView extends GetView<DashboardController> {
           child: IndexedStack(
             index: controller.tabIndex,
             children: const [
-              HomeView(),
-              UsersView(),
-              ProfileView(),
+              HomeAdminView(),
+              UsersAdminView(),
+              ProfileAdminView(),
             ],
           ),
         ),

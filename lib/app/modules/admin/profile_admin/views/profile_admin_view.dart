@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-import '../controllers/profile_controller.dart';
+import '../controllers/profile_admin_controller.dart';
 
-class ProfileView extends GetView<ProfileController> {
-  const ProfileView({super.key});
+class ProfileAdminView extends GetView<ProfileAdminController> {
+  const ProfileAdminView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

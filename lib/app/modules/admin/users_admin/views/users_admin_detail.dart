@@ -5,8 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 
-class UsersDetailView extends GetView {
-  const UsersDetailView({super.key});
+class UsersAdminDetailView extends GetView {
+  const UsersAdminDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {

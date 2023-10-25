@@ -19,8 +19,8 @@ class ForgotView extends GetView<ForgotController> {
       body: Stack(
         children: [
           SizedBox(
-            height: getHeight(context),
-            width: getWidth(context),
+            height: Get.height,
+            width: Get.width,
             child: SvgPicture.asset(
               bgSplash,
             ),
@@ -36,7 +36,7 @@ class ForgotView extends GetView<ForgotController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: getWidth(context) * 0.3,
+                        width: Get.width * 0.3,
                         child: SvgPicture.asset(
                           logo,
                           colorFilter: const ColorFilter.mode(
@@ -109,7 +109,7 @@ class ForgotView extends GetView<ForgotController> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24),
         child: SizedBox(
-          width: getWidth(context),
+          width: Get.width,
           child: CustomButton(
             onPressed: () {
               if (loginKey.currentState!.validate()) {

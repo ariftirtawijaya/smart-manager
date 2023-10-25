@@ -12,10 +12,9 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
-import 'package:smart_manager/app/routes/app_pages.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
-class UsersController extends GetxController {
+class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
 
   TextEditingController nameController = TextEditingController();

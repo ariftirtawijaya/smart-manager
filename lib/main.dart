@@ -8,7 +8,6 @@ import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/utils/theme.dart';
 import 'package:smart_manager/firebase_options.dart';
-import 'package:sizer/sizer.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -26,17 +25,13 @@ void main() async {
   );
 
   runApp(
-    Sizer(
-      builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: "Smart Manager",
-          theme: appThemeData,
-          initialRoute: AppPages.INITIAL,
-          getPages: AppPages.routes,
-          builder: EasyLoading.init(),
-        );
-      },
+    GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Smart Manager",
+      theme: appThemeData,
+      initialRoute: AppPages.INITIAL,
+      getPages: AppPages.routes,
+      builder: EasyLoading.init(),
     ),
   );
 }

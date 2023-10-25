@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-import '../controllers/home_controller.dart';
+import '../controllers/home_admin_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
+class HomeAdminView extends GetView<HomeAdminController> {
+  const HomeAdminView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

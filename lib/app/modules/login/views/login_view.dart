@@ -20,8 +20,8 @@ class LoginView extends GetView<LoginController> {
       body: Stack(
         children: [
           SizedBox(
-            height: getHeight(context),
-            width: getWidth(context),
+            height: Get.height,
+            width: Get.width,
             child: SvgPicture.asset(
               bgSplash,
             ),
@@ -37,7 +37,7 @@ class LoginView extends GetView<LoginController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: getWidth(context) * 0.3,
+                        width: Get.width * 0.3,
                         child: SvgPicture.asset(
                           logo,
                           colorFilter: const ColorFilter.mode(
@@ -128,7 +128,7 @@ class LoginView extends GetView<LoginController> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24),
         child: SizedBox(
-          width: getWidth(context),
+          width: Get.width,
           child: CustomButton(
             onPressed: () {
               if (loginKey.currentState!.validate()) {
