@@ -3,24 +3,24 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
-  static const HOME = _Paths.HOME;
+  static const HOME_ADMIN = _Paths.HOME_ADMIN;
   static const SPLASH = _Paths.SPLASH;
   static const LOGIN = _Paths.LOGIN;
-  static const DASHBOARD = _Paths.DASHBOARD;
+  static const DASHBOARD_ADMIN = _Paths.DASHBOARD_ADMIN;
   static const FORGOT = _Paths.FORGOT;
-  static const PROFILE = _Paths.PROFILE;
-  static const USERS = _Paths.USERS;
+  static const PROFILE_ADMIN = _Paths.PROFILE_ADMIN;
+  static const USERS_ADMIN = _Paths.USERS_ADMIN;
   static const LOADING = _Paths.LOADING;
 }
 
 abstract class _Paths {
   _Paths._();
-  static const HOME = '/home';
+  static const HOME_ADMIN = '/home-admin';
   static const SPLASH = '/splash';
   static const LOGIN = '/login';
-  static const DASHBOARD = '/dashboard';
+  static const DASHBOARD_ADMIN = '/dashboard-admin';
   static const FORGOT = '/forgot';
-  static const PROFILE = '/profile';
-  static const USERS = '/users';
+  static const PROFILE_ADMIN = '/profile-admin';
+  static const USERS_ADMIN = '/users-admin';
   static const LOADING = '/loading';
 }

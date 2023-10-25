@@ -7,7 +7,7 @@ class LoadingController extends GetxController {
 
   @override
   void onInit() {
-    dataC.getUsers().then((_) => Get.offAllNamed(Routes.DASHBOARD));
+    dataC.getUsers().then((_) => Get.offAllNamed(Routes.DASHBOARD_ADMIN));
     super.onInit();
   }
 }

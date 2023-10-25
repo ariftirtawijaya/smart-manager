@@ -25,7 +25,7 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
+      name: _Paths.HOME_ADMIN,
       page: () => const HomeAdminView(),
       binding: HomeAdminBinding(),
     ),
@@ -41,7 +41,7 @@ class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.DASHBOARD,
+      name: _Paths.DASHBOARD_ADMIN,
       page: () => const DashboardAdminView(),
       binding: DashboardAdminBinding(),
     ),
@@ -51,12 +51,12 @@ class AppPages {
       binding: ForgotBinding(),
     ),
     GetPage(
-      name: _Paths.PROFILE,
+      name: _Paths.PROFILE_ADMIN,
       page: () => const ProfileAdminView(),
       binding: ProfileAdminBinding(),
     ),
     GetPage(
-      name: _Paths.USERS,
+      name: _Paths.USERS_ADMIN,
       page: () => const UsersAdminView(),
       binding: UsersAdminBinding(),
     ),
