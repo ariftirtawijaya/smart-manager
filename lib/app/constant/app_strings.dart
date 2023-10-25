@@ -1,1 +1,1 @@
-class AppString {}
+const String usersRef = 'users';

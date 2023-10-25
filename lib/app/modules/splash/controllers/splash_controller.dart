@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
@@ -20,7 +21,7 @@ class SplashController extends GetxController {
           Get.offAllNamed(Routes.LOGIN);
         } else {
           await DBService.getDocument(
-                  from: 'users', doc: DBService.auth.currentUser!.uid)
+                  from: usersRef, doc: DBService.auth.currentUser!.uid)
               .then((userDataFromDB) async {
             Map<String, dynamic> dataUser = {};
             dataUser.clear();

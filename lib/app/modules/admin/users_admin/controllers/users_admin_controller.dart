@@ -103,7 +103,7 @@ class UsersAdminController extends GetxController {
       )
           .then((result) async {
         await DBService.insert(
-          into: 'users',
+          into: usersRef,
           name: result.user!.uid,
           data: {
             'uid': result.user!.uid,
@@ -125,7 +125,7 @@ class UsersAdminController extends GetxController {
             await referenceImageUpload.putFile(File(imagePath));
             String imageUrl = await referenceImageUpload.getDownloadURL();
             await DBService.update(
-              from: 'users',
+              from: usersRef,
               name: result.user!.uid,
               data: {'profilePic': imageUrl},
             );

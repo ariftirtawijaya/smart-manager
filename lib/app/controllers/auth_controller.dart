@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
+import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
@@ -27,7 +28,7 @@ class AuthController extends GetxController {
     try {
       Map<String, dynamic> data = {};
       await DBService.getCollections(
-        from: 'users',
+        from: usersRef,
         where: 'loginNumber',
         isEqualTo: loginNumberController.text,
       ).then((userCollection) {
@@ -146,7 +147,7 @@ class AuthController extends GetxController {
     try {
       Map<String, dynamic> data = {};
       await DBService.getCollections(
-              from: 'users', where: 'email', isEqualTo: emailController.text)
+              from: usersRef, where: 'email', isEqualTo: emailController.text)
           .then((userCollection) async {
         if (userCollection.docs.isNotEmpty) {
           for (var element in userCollection.docs) {
