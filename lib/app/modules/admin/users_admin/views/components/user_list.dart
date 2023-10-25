@@ -1,14 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_detail.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_edit.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class UsersList extends StatelessWidget {
+class UsersList extends GetView<UsersAdminController> {
   const UsersList({
     super.key,
     required this.itemCount,
@@ -59,21 +59,30 @@ class UsersList extends StatelessWidget {
                         imageUrl: user.profilePic!,
                         size: 52,
                       ),
+                // subtitle: const Text('(Disabled)'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset(
-                      edit,
-                      colorFilter: const ColorFilter.mode(
-                          secondaryColor, BlendMode.srcIn),
+                    CustomIconButton(
+                      icon: edit,
+                      color: secondaryColor,
+                      onTap: () {
+                        controller.clear();
+                        Get.to(() => const UsersAdminEdit(), arguments: user);
+                      },
                     ),
                     const SizedBox(
                       width: 8.0,
                     ),
-                    SvgPicture.asset(
-                      delete,
-                      colorFilter: const ColorFilter.mode(
-                          secondaryColor, BlendMode.srcIn),
+                    CustomIconButton(
+                      icon: delete,
+                      color: secondaryColor,
+                      onTap: () {
+                        controller.deleteUser(
+                          context,
+                          user,
+                        );
+                      },
                     ),
                   ],
                 ),

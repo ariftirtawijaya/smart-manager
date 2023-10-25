@@ -210,6 +210,21 @@ class UsersAdminDetailView extends GetView {
                       ),
                       Text(user.phone!,
                           style: Theme.of(context).textTheme.titleMedium!),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                        'Address',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Text(user.address!,
+                          style: Theme.of(context).textTheme.titleMedium!),
                     ],
                   ),
                 ),
@@ -217,6 +232,7 @@ class UsersAdminDetailView extends GetView {
               const SizedBox(
                 height: 16.0,
               ),
+              //TODO implement Store Info
               Card(
                 elevation: 5,
                 shadowColor: grey3,

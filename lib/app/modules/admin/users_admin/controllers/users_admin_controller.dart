@@ -128,65 +128,152 @@ class UsersAdminController extends GetxController {
     update();
   }
 
-  Future<void> createUser(BuildContext context) async {
-    showLoading(status: 'Creating User ...');
-    try {
-      await DBService.auth
-          .createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      )
-          .then((result) async {
-        await DBService.insert(
-          into: usersRef,
-          name: result.user!.uid,
-          data: {
-            'uid': result.user!.uid,
-            'name': nameController.text,
-            'email': emailController.text,
-            'active': true,
-            'loginNumber': loginNumberController.text,
-            'phone': phoneController.text,
-            'role': 'user',
-          },
-        ).then((_) async {
-          if (imagePath != '') {
-            String imagesFile =
-                DateTime.now().microsecondsSinceEpoch.toString();
-            Reference referenceRoot = FirebaseStorage.instance.ref();
-            Reference referenceDirImages = referenceRoot.child("profile");
-            Reference referenceImageUpload =
-                referenceDirImages.child(imagesFile);
-            await referenceImageUpload.putFile(File(imagePath));
-            String imageUrl = await referenceImageUpload.getDownloadURL();
-            await DBService.update(
-              from: usersRef,
-              name: result.user!.uid,
-              data: {'profilePic': imageUrl},
+  Future<void> deleteUser(BuildContext context, UserModel user) async {
+    endLoading().then(
+      (value) => showAlert(
+        context: context,
+        text:
+            'Are you sure want to delete this user including store and employee ?\n\nThis action canot be undone!',
+        type: QuickAlertType.confirm,
+        confirmText: 'Delete User',
+        onConfirmBtnTap: () async {
+          try {
+            //TODO implement delete auth data
+            showLoading();
+            await DBService.delete(from: usersRef, name: user.uid!)
+                .then((value) async {
+              await dataC.getUsers();
+              endLoading();
+              Get.back();
+              EasyLoading.showSuccess('User Deleted!');
+            });
+          } catch (e) {
+            if (kDebugMode) {
+              print(e.toString());
+            }
+            endLoading().then(
+              (value) => showAlert(
+                context: context,
+                text: 'Error While Deleting User',
+                type: QuickAlertType.error,
+              ),
             );
           }
-          await DBService.auth.signOut();
-          var adminData = DBService.getLocalData(key: 'userCredentials');
-          await DBService.login(
-              email: adminData['email'], password: adminData['password']);
-          await dataC.getUsers();
-          endLoading();
-          Get.back();
-          EasyLoading.showSuccess('New User Created!');
-          clear();
-        });
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+        },
+      ),
+    );
+  }
+
+  Future<void> createUser(BuildContext context) async {
+    showLoading(status: 'Creating User ...');
+    List<String> isValid = await checkField();
+    if (isValid.isNotEmpty) {
+      String message = isValid
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .replaceAll(',', '\n');
+      print(isValid
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .replaceAll(',', '\n'));
       endLoading().then(
         (value) => showAlert(
           context: context,
-          text: 'Error While Creating User',
+          text: message,
           type: QuickAlertType.error,
         ),
       );
+    } else {
+      try {
+        await DBService.auth
+            .createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        )
+            .then((result) async {
+          await DBService.insert(
+            into: usersRef,
+            name: result.user!.uid,
+            data: {
+              'uid': result.user!.uid,
+              'name': nameController.text,
+              'email': emailController.text,
+              'active': true,
+              'loginNumber': loginNumberController.text,
+              'phone': phoneController.text,
+              'role': 'user',
+            },
+          ).then((_) async {
+            if (imagePath != '') {
+              String imagesFile =
+                  DateTime.now().microsecondsSinceEpoch.toString();
+              Reference referenceRoot = FirebaseStorage.instance.ref();
+              Reference referenceDirImages = referenceRoot.child("profile");
+              Reference referenceImageUpload =
+                  referenceDirImages.child(imagesFile);
+              await referenceImageUpload.putFile(File(imagePath));
+              String imageUrl = await referenceImageUpload.getDownloadURL();
+              await DBService.update(
+                from: usersRef,
+                name: result.user!.uid,
+                data: {'profilePic': imageUrl},
+              );
+            }
+            await DBService.auth.signOut();
+            var adminData = DBService.getLocalData(key: 'userCredentials');
+            await DBService.login(
+                email: adminData['email'], password: adminData['password']);
+            await dataC.getUsers();
+            endLoading();
+            Get.back();
+            EasyLoading.showSuccess('New User Created!');
+            clear();
+          });
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+        endLoading().then(
+          (value) => showAlert(
+            context: context,
+            text: 'Error While Creating User',
+            type: QuickAlertType.error,
+          ),
+        );
+      }
     }
+  }
+
+  Future<List<String>> checkField() async {
+    List<String> message = [];
+    bool isLoginNumberValid =
+        await check(field: 'loginNumber', data: loginNumberController.text);
+    bool isEmailValid = await check(field: 'email', data: emailController.text);
+    bool isPhoneValid = await check(field: 'phone', data: phoneController.text);
+    if (!isLoginNumberValid) {
+      message.add('Login Number already exist');
+    }
+    if (!isEmailValid) {
+      message.add('Email aready exist');
+    }
+    if (!isPhoneValid) {
+      message.add('Phone Number already exist');
+    }
+    return message;
+  }
+
+  Future<bool> check({required String field, required String data}) async {
+    bool available = false;
+    await DBService.getCollections(
+            from: usersRef, where: field, isEqualTo: data)
+        .then((result) {
+      if (result.docs.isEmpty) {
+        available = true;
+      }
+    });
+    return available;
   }
 }

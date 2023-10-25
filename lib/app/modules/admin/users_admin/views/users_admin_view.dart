@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/views/components/user_list.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_add.dart';
+import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 import '../controllers/users_admin_controller.dart';
 
@@ -25,21 +26,16 @@ class UsersAdminView extends GetView<UsersAdminController> {
           title: const Text('List Users'),
           centerTitle: true,
           actions: [
-            GestureDetector(
+            CustomIconButton(
+              icon: plusSquare,
+              color: Colors.white,
               onTap: () {
                 controller.clear();
                 Get.to(() => const UsersAdminAddView());
               },
-              child: SvgPicture.asset(
-                plusSquare,
-                colorFilter: const ColorFilter.mode(
-                  Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
             ),
             const SizedBox(
-              width: 16.0,
+              width: 8.0,
             ),
           ],
         ),
@@ -146,15 +142,12 @@ class UsersAdminView extends GetView<UsersAdminController> {
                         ],
                       );
                     } else if (controller.listSearch.isNotEmpty) {
-                      print('1');
-
                       return UsersList(
                         itemCount: controller.listSearch.length,
                         userData: controller.listSearch,
                       );
                     } else if (controller.listSearch.isEmpty &&
                         controller.keyword.value != '') {
-                      print('2');
                       return Stack(
                         children: [
                           Column(
@@ -170,8 +163,6 @@ class UsersAdminView extends GetView<UsersAdminController> {
                         ],
                       );
                     } else {
-                      print('3');
-
                       return UsersList(
                         itemCount: controller.dataC.users.length,
                         userData: controller.dataC.users,

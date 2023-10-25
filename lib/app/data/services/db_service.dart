@@ -37,6 +37,13 @@ class DBService {
     return FirebaseFirestore.instance.collection(into).doc(name).set(data);
   }
 
+  static Future<void> delete({
+    required String from,
+    required String name,
+  }) {
+    return FirebaseFirestore.instance.collection(from).doc(name).delete();
+  }
+
   static Future<void> update({
     required String from,
     required String name,

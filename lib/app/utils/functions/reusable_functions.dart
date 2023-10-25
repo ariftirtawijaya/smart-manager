@@ -29,6 +29,7 @@ void showAlert(
     String? confirmText,
     void Function()? onConfirmBtnTap}) {
   QuickAlert.show(
+    textColor: darkBlue,
     onConfirmBtnTap: onConfirmBtnTap,
     barrierDismissible: false,
     showCancelBtn: type != QuickAlertType.confirm ? false : true,

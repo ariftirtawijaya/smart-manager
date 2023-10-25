@@ -11,6 +11,9 @@ abstract class Routes {
   static const PROFILE_ADMIN = _Paths.PROFILE_ADMIN;
   static const USERS_ADMIN = _Paths.USERS_ADMIN;
   static const LOADING = _Paths.LOADING;
+  static const DASHBOARD_USER = _Paths.DASHBOARD_USER;
+  static const HOME_USER = _Paths.HOME_USER;
+  static const PROFILE_USER = _Paths.PROFILE_USER;
 }
 
 abstract class _Paths {
@@ -23,4 +26,7 @@ abstract class _Paths {
   static const PROFILE_ADMIN = '/profile-admin';
   static const USERS_ADMIN = '/users-admin';
   static const LOADING = '/loading';
+  static const DASHBOARD_USER = '/dashboard-user';
+  static const HOME_USER = '/home-user';
+  static const PROFILE_USER = '/profile-user';
 }

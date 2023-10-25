@@ -3,24 +3,31 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
+import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class UsersAdminAddView extends GetView<UsersAdminController> {
-  const UsersAdminAddView({super.key});
+class UsersAdminEdit extends GetView<UsersAdminController> {
+  const UsersAdminEdit({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> addUserKey = GlobalKey<FormState>();
+    final UserModel user = Get.arguments;
+    final GlobalKey<FormState> editUserKey = GlobalKey<FormState>();
+    controller.nameController.text = user.name!;
+    controller.loginNumberController.text = user.loginNumber!;
+    controller.emailController.text = user.email!;
+    controller.phoneController.text = user.phone!;
+    controller.addressController.text = user.address!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add User'),
+        title: const Text('Edit User'),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Form(
-            key: addUserKey,
+            key: editUserKey,
             child: Column(
               children: [
                 GetBuilder<UsersAdminController>(builder: (controller) {
@@ -38,23 +45,41 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         controller.imagePath.isNotEmpty
-                            ? Image.file(
-                                File(
-                                  controller.imagePath,
+                            ? Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        FileImage(File(controller.imagePath)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
                                 ),
-                                height: 48,
                               )
-                            : Image.asset(
-                                imagePlaceholder,
-                                height: 48,
-                              ),
+                            : user.profilePic != null
+                                ? CustomImageView(
+                                    imageUrl: user.profilePic!, size: 48)
+                                : Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(imagePlaceholder),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
                         CustomButtonSmall(
                             onPressed: () {
                               controller.pickImage(context);
                             },
-                            text: controller.imagePath.isNotEmpty
-                                ? 'Change Image'
-                                : 'Choose Image')
+                            text: 'Change Image')
                       ],
                     ),
                   );
@@ -65,7 +90,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.nameController,
@@ -87,7 +112,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.loginNumberController,
@@ -112,7 +137,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomPasswordField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.passwordController,
@@ -135,7 +160,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.emailController,
@@ -157,7 +182,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.phoneController,
@@ -179,7 +204,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
-                      addUserKey.currentState!.validate();
+                      editUserKey.currentState!.validate();
                     }
                   },
                   controller: controller.addressController,
@@ -219,7 +244,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
             const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
         child: CustomButton(
           onPressed: () {
-            if (addUserKey.currentState!.validate()) {
+            if (editUserKey.currentState!.validate()) {
               controller.createUser(context);
             }
           },

@@ -6,6 +6,7 @@ class UserModel {
   String? name;
   String? loginNumber;
   String? phone;
+  String? address;
   String? profilePic;
   String? role;
   String? gender;
@@ -17,6 +18,7 @@ class UserModel {
     this.name,
     this.loginNumber,
     this.phone,
+    this.address,
     this.profilePic,
     this.role,
     this.active,
@@ -35,6 +37,7 @@ class UserModel {
       email: map['email'],
       loginNumber: map['loginNumber'],
       phone: map['phone'],
+      address: map['address'],
       profilePic: map['profilePic'],
       role: map['role'],
       gender: map['gender'],
@@ -49,6 +52,7 @@ class UserModel {
       name: data["name"],
       loginNumber: data["loginNumber"],
       phone: data["phone"],
+      address: data["address"],
       profilePic: data["profilePic"],
       role: data["role"],
       gender: data["gender"],
@@ -63,6 +67,7 @@ class UserModel {
       'name': name,
       'loginNumber': loginNumber,
       'phone': phone,
+      'address': address,
       'profilePic': profilePic,
       'role': role,
       'gender': gender,

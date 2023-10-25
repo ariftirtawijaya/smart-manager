@@ -36,7 +36,7 @@ class ForgotView extends GetView<ForgotController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: getWidth(context) * 0.3,
+                        width: Get.width * 0.3,
                         child: SvgPicture.memory(
                           logoByteData,
                           colorFilter: const ColorFilter.mode(
@@ -57,15 +57,20 @@ class ForgotView extends GetView<ForgotController> {
                         height: 24.0,
                       ),
                       CustomTextField(
+                        onChanged: (p0) {
+                          if (p0.isNotEmpty) {
+                            loginKey.currentState!.validate();
+                          }
+                        },
                         controller: authC.emailController,
                         hintText: 'Enter your registered email',
                         title: 'Email',
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Email cannot empty';
+                            return 'Email cannot empty\n';
                           }
                           if (!value.isEmail) {
-                            return 'Email not valid';
+                            return 'Email not valid\n';
                           }
                           return null;
                         },
@@ -84,7 +89,11 @@ class ForgotView extends GetView<ForgotController> {
                                     ),
                           ),
                           GestureDetector(
-                            onTap: () => Get.back(),
+                            onTap: () {
+                              loginKey.currentState!.reset();
+                              authC.clear();
+                              Get.back();
+                            },
                             child: Text(
                               'Login',
                               style: Theme.of(context)

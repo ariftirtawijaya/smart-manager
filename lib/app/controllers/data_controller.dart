@@ -15,6 +15,9 @@ class DataController extends GetxController {
     for (var element in querySnapshot.docs) {
       users.add(UserModel.fromSnapshot(element));
     }
+    users.sort(
+      (a, b) => a.name!.compareTo(b.name!),
+    );
     isLoading.value = false;
   }
 

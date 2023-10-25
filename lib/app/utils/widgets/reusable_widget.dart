@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.maxLines,
     this.keyboardType,
+    this.onChanged,
   });
 
   final String title;
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final int? maxLines;
   final TextInputType? keyboardType;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,7 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
           TextFormField(
+            onChanged: onChanged,
             maxLines: maxLines,
             controller: controller,
             keyboardType: keyboardType,
@@ -92,6 +96,7 @@ class CustomPasswordField extends StatelessWidget {
     required this.hintText,
     required this.hiddenController,
     this.validator,
+    this.onChanged,
   });
 
   final String title;
@@ -99,6 +104,7 @@ class CustomPasswordField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String hintText;
   final RxBool hiddenController;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +140,7 @@ class CustomPasswordField extends StatelessWidget {
                 ),
                 Obx(() {
                   return TextFormField(
+                    onChanged: onChanged,
                     controller: controller,
                     obscureText: hiddenController.value,
                     validator: validator,
@@ -150,16 +157,12 @@ class CustomPasswordField extends StatelessWidget {
             ),
           ),
           Obx(() {
-            return IconButton(
-              constraints: const BoxConstraints(),
-              splashRadius: 1,
-              onPressed: () {
-                hiddenController.toggle();
-              },
-              icon: Icon(hiddenController.isTrue
-                  ? Icons.remove_red_eye
-                  : Icons.visibility_off_rounded),
-            );
+            return CustomIconButton(
+                icon: hiddenController.isTrue ? hidePassword : showPassword,
+                onTap: () {
+                  hiddenController.toggle();
+                },
+                color: darkBlue);
           }),
           const SizedBox(
             width: 6.0,
@@ -370,6 +373,74 @@ class CustomImageView extends StatelessWidget {
           height: size,
         );
       },
+    );
+  }
+}
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+    required this.color,
+  });
+  final String icon;
+  final void Function() onTap;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SvgPicture.asset(
+          icon,
+          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomListMenu extends StatelessWidget {
+  const CustomListMenu({
+    super.key,
+    required this.title,
+    required this.ontap,
+  });
+
+  final String title;
+  final void Function()? ontap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: primaryColor,
+            width: 0.5,
+          ),
+        ),
+      ),
+      child: ListTile(
+        onTap: ontap,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(color: darkBlue),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: darkBlue,
+        ),
+      ),
     );
   }
 }

@@ -17,6 +17,23 @@ final ThemeData appThemeData = ThemeData(
   fontFamily: GoogleFonts.montserrat().fontFamily,
   primarySwatch: primaryMaterialColor,
   brightness: Brightness.light,
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: darkBlue),
+    bodyMedium: TextStyle(color: darkBlue),
+    bodySmall: TextStyle(color: darkBlue),
+    labelLarge: TextStyle(color: darkBlue),
+    displayLarge: TextStyle(color: darkBlue),
+    displayMedium: TextStyle(color: darkBlue),
+    displaySmall: TextStyle(color: darkBlue),
+    headlineMedium: TextStyle(color: darkBlue),
+    headlineSmall: TextStyle(color: darkBlue),
+    titleLarge: TextStyle(color: darkBlue),
+    headlineLarge: TextStyle(color: darkBlue),
+    labelMedium: TextStyle(color: darkBlue),
+    labelSmall: TextStyle(color: darkBlue),
+    titleMedium: TextStyle(color: darkBlue),
+    titleSmall: TextStyle(color: darkBlue),
+  ),
 
   // textButtonTheme: TextButtonThemeData(
   //   style: TextButton.styleFrom(

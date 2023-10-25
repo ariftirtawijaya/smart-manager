@@ -37,7 +37,7 @@ class LoginView extends GetView<LoginController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: getWidth(context) * 0.3,
+                        width: Get.width * 0.3,
                         child: SvgPicture.memory(
                           logoByteData,
                           colorFilter: const ColorFilter.mode(
@@ -58,18 +58,23 @@ class LoginView extends GetView<LoginController> {
                         height: 24.0,
                       ),
                       CustomTextField(
+                        onChanged: (p0) {
+                          if (p0.isNotEmpty) {
+                            loginKey.currentState!.validate();
+                          }
+                        },
                         controller: authC.loginNumberController,
                         hintText: 'Enter your 7 digits login number',
                         title: 'Number',
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Login Number cannot empty';
+                            return 'Login Number cannot empty\n';
                           }
                           if (!value.isNumericOnly) {
-                            return 'Only number alowed';
+                            return 'Only number alowed\n';
                           }
                           if (value.length < 7) {
-                            return 'Login Number not valid';
+                            return 'Login Number not valid\n';
                           }
                           return null;
                         },
@@ -78,13 +83,21 @@ class LoginView extends GetView<LoginController> {
                         height: 16.0,
                       ),
                       CustomPasswordField(
+                        onChanged: (p0) {
+                          if (p0.isNotEmpty) {
+                            loginKey.currentState!.validate();
+                          }
+                        },
                         hiddenController: controller.isHidden,
                         controller: authC.passwordController,
                         hintText: 'Enter your password',
                         title: 'Password',
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Password cannot empty';
+                            return 'Password cannot empty\n';
+                          }
+                          if (value.length < 7) {
+                            return 'Password to short\n';
                           }
                           return null;
                         },
@@ -103,7 +116,11 @@ class LoginView extends GetView<LoginController> {
                                     ),
                           ),
                           GestureDetector(
-                            onTap: () => Get.toNamed(Routes.FORGOT),
+                            onTap: () {
+                              loginKey.currentState!.reset();
+                              authC.clear();
+                              Get.toNamed(Routes.FORGOT);
+                            },
                             child: Text(
                               'Reset',
                               style: Theme.of(context)
