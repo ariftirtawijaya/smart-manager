@@ -84,6 +84,32 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                 const SizedBox(
                   height: 16.0,
                 ),
+                CustomDropdownField(
+                  items: controller.genderList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (p0) {
+                    controller.genderController.text = p0;
+                    print(p0);
+                    print(controller.genderController.text);
+                  },
+                  controller: controller.genderController,
+                  title: 'Gender',
+                  hintText: 'Select gender',
+                  validator: (v) {
+                    String? value = v;
+                    if (value == null) {
+                      return 'Gender cannot empty\n';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {

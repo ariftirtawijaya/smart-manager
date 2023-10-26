@@ -65,13 +65,41 @@ final ThemeData appThemeData = ThemeData(
   //       ),
   //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
   // ),
-  inputDecorationTheme: const InputDecorationTheme(
-    // fillColor: Colors.transparent,
+  dropdownMenuTheme: const DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(
     isDense: true,
     filled: false,
-    // labelStyle: size12width400,
-
-    // hintStyle: size12width400.copyWith(color: grey2),
+    errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        borderSide: BorderSide(color: Colors.transparent, width: 1)),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+      borderSide: BorderSide(color: Colors.transparent, width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        borderSide: BorderSide(color: Colors.transparent, width: 1)),
+    focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        borderSide: BorderSide(color: Colors.transparent, width: 1)),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        borderSide: BorderSide(color: Colors.transparent, width: 1)),
+    contentPadding: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
+  )),
+  inputDecorationTheme: const InputDecorationTheme(
+    isDense: true,
+    filled: false,
     errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),

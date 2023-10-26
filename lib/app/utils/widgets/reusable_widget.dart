@@ -71,7 +71,7 @@ class CustomTextField extends StatelessWidget {
           ),
           TextFormField(
             onChanged: onChanged,
-            maxLines: maxLines,
+            maxLines: maxLines ?? 1,
             controller: controller,
             keyboardType: keyboardType,
             validator: validator,
@@ -82,6 +82,89 @@ class CustomTextField extends StatelessWidget {
                   ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomDropdownField extends StatelessWidget {
+  const CustomDropdownField({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.hintText,
+    required this.items,
+    this.validator,
+    this.maxLines,
+    this.keyboardType,
+    required this.onChanged,
+  });
+
+  final String title;
+  final TextEditingController controller;
+  final String? Function(dynamic)? validator;
+  final String hintText;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+
+  final List<DropdownMenuItem<dynamic>>? items;
+  final void Function(dynamic)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+          border: Border.all(color: grey2, width: 2)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 16.0,
+                ),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: darkBlue,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          DropdownButtonFormField(
+            items: items,
+            onChanged: onChanged,
+            validator: validator,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: grey2,
+                  ),
+              // contentPadding: EdgeInsets.z
+            ),
+          )
+          // TextFormField(
+          //   onChanged: onChanged,
+          //   maxLines: maxLines,
+          //   controller: controller,
+          //   keyboardType: keyboardType,
+          //   validator: validator,
+          //   decoration: InputDecoration(
+          //     hintText: hintText,
+          //     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          //           color: grey2,
+          //         ),
+          //   ),
+          // ),
         ],
       ),
     );

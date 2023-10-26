@@ -25,9 +25,13 @@ class UsersAdminController extends GetxController {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
   RxBool isHidden = true.obs;
 
+  List<String> genderList = ['Male', 'Female'];
+
   void clear() {
+    genderController.clear();
     imagePath = '';
     nameController.clear();
     loginNumberController.clear();
@@ -201,6 +205,8 @@ class UsersAdminController extends GetxController {
               'name': nameController.text,
               'email': emailController.text,
               'active': true,
+              'gender': genderController.text,
+              'address': addressController.text,
               'loginNumber': loginNumberController.text,
               'phone': phoneController.text,
               'role': 'user',
