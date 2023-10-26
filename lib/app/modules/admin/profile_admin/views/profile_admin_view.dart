@@ -6,6 +6,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
+import 'package:smart_manager/app/modules/admin/profile_admin/views/components/about_app_view.dart';
+import 'package:smart_manager/app/modules/admin/profile_admin/views/components/privacy_policy_view.dart';
+import 'package:smart_manager/app/modules/admin/profile_admin/views/components/terms_conditions_view.dart';
 import 'package:smart_manager/app/modules/admin/profile_admin/views/profile_admin_edit.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
@@ -140,22 +143,28 @@ class ProfileAdminView extends GetView<ProfileAdminController> {
                 height: 8.0,
               ),
               CustomListMenu(
-                ontap: () {},
+                ontap: () {
+                  Get.to(() => const AboutAppView());
+                },
                 title: 'About App',
               ),
               const SizedBox(
                 height: 8.0,
               ),
               CustomListMenu(
-                ontap: () {},
-                title: 'Terms & Conditions',
+                ontap: () {
+                  Get.to(() => const PrivacyPolicyView());
+                },
+                title: 'Privacy Policy',
               ),
               const SizedBox(
                 height: 8.0,
               ),
               CustomListMenu(
-                ontap: () {},
-                title: 'Privacy Policy',
+                ontap: () {
+                  Get.to(() => const TermsConditionsView());
+                },
+                title: 'Terms & Conditions',
               ),
             ],
           ),
