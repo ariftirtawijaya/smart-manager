@@ -15,6 +15,12 @@ abstract class Routes {
   static const HOME_USER = _Paths.HOME_USER;
   static const PROFILE_USER = _Paths.PROFILE_USER;
   static const CREATE_STORE = _Paths.CREATE_STORE;
+  static const INVENTORY = _Paths.INVENTORY;
+  static const USER_MANAGEMENT = _Paths.USER_MANAGEMENT;
+  static const TRANSACTION = _Paths.TRANSACTION;
+  static const REPORT = _Paths.REPORT;
+  static const PROFILE = _Paths.PROFILE;
+  static const STORE_SETTING = _Paths.STORE_SETTING;
 }
 
 abstract class _Paths {
@@ -31,4 +37,10 @@ abstract class _Paths {
   static const HOME_USER = '/home-user';
   static const PROFILE_USER = '/profile-user';
   static const CREATE_STORE = '/create-store';
+  static const INVENTORY = '/inventory';
+  static const USER_MANAGEMENT = '/user-management';
+  static const TRANSACTION = '/transaction';
+  static const REPORT = '/report';
+  static const PROFILE = '/profile';
+  static const STORE_SETTING = '/store-setting';
 }

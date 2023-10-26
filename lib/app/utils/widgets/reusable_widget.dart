@@ -430,9 +430,11 @@ class CustomImageView extends StatelessWidget {
     super.key,
     required this.imageUrl,
     required this.size,
+    this.radius,
   });
   final String imageUrl;
   final double size;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -446,8 +448,8 @@ class CustomImageView extends StatelessWidget {
             image: imageProvider,
             fit: BoxFit.cover,
           ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8.0),
+          borderRadius: BorderRadius.all(
+            Radius.circular(radius ?? 8.0),
           ),
         ),
       ),
@@ -458,6 +460,7 @@ class CustomImageView extends StatelessWidget {
           child: Image.asset(
             imagePlaceholder,
             height: size,
+            width: size,
           ),
         );
       },
@@ -465,6 +468,7 @@ class CustomImageView extends StatelessWidget {
         return Image.asset(
           imagePlaceholder,
           height: size,
+          width: size,
         );
       },
     );
@@ -477,10 +481,12 @@ class CustomIconButton extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.color,
+    this.size,
   });
   final String icon;
   final void Function() onTap;
   final Color color;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -491,6 +497,8 @@ class CustomIconButton extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: SvgPicture.asset(
           icon,
+          height: size,
+          width: size,
           colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
         ),
       ),

@@ -20,10 +20,18 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/user/dashboard_user/bindings/dashboard_user_binding.dart';
 import '../modules/user/dashboard_user/views/dashboard_user_view.dart';
-import '../modules/user/home_user/bindings/home_user_binding.dart';
-import '../modules/user/home_user/views/home_user_view.dart';
-import '../modules/user/profile_user/bindings/profile_user_binding.dart';
-import '../modules/user/profile_user/views/profile_user_view.dart';
+import '../modules/user/inventory/bindings/inventory_binding.dart';
+import '../modules/user/inventory/views/inventory_view.dart';
+import '../modules/user/profile/bindings/profile_binding.dart';
+import '../modules/user/profile/views/profile_view.dart';
+import '../modules/user/report/bindings/report_binding.dart';
+import '../modules/user/report/views/report_view.dart';
+import '../modules/user/store_setting/bindings/store_setting_binding.dart';
+import '../modules/user/store_setting/views/store_setting_view.dart';
+import '../modules/user/transaction/bindings/transaction_binding.dart';
+import '../modules/user/transaction/views/transaction_view.dart';
+import '../modules/user/user_management/bindings/user_management_binding.dart';
+import '../modules/user/user_management/views/user_management_view.dart';
 
 part 'app_routes.dart';
 
@@ -77,23 +85,71 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DASHBOARD_USER,
-      page: () => const DashboardUserView(),
+      page: () => DashboardUserView(),
       binding: DashboardUserBinding(),
-    ),
-    GetPage(
-      name: _Paths.HOME_USER,
-      page: () => const HomeUserView(),
-      binding: HomeUserBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFILE_USER,
-      page: () => const ProfileUserView(),
-      binding: ProfileUserBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
     ),
     GetPage(
       name: _Paths.CREATE_STORE,
       page: () => const CreateStoreView(),
       binding: CreateStoreBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVENTORY,
+      page: () => const InventoryView(),
+      binding: InventoryBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
+    ),
+    GetPage(
+      name: _Paths.USER_MANAGEMENT,
+      page: () => const UserManagementView(),
+      binding: UserManagementBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
+    ),
+    GetPage(
+      name: _Paths.TRANSACTION,
+      page: () => const TransactionView(),
+      binding: TransactionBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
+    ),
+    GetPage(
+      name: _Paths.REPORT,
+      page: () => const ReportView(),
+      binding: ReportBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
+    ),
+    GetPage(
+      name: _Paths.STORE_SETTING,
+      page: () => const StoreSettingView(),
+      binding: StoreSettingBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(
+        milliseconds: 250,
+      ),
     ),
   ];
 }

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class HomeUserController extends GetxController {
-  //TODO: Implement HomeUserController
+class InventoryController extends GetxController {
+  //TODO: Implement InventoryController
 
   final count = 0.obs;
   @override
