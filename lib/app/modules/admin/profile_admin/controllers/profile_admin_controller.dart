@@ -210,4 +210,32 @@ class ProfileAdminController extends GetxController {
     });
     return available;
   }
+
+  Future<void> changeContent(
+      {required BuildContext context,
+      required String content,
+      required String section}) async {
+    showLoading();
+    try {
+      await DBService.update(
+          from: settingsRef,
+          name: section,
+          data: {'content': content}).then((_) {
+        update();
+        endLoading().then((_) => showAlert(
+              context: context,
+              text: 'Content Updated Successfully',
+              type: QuickAlertType.success,
+            ));
+      });
+    } catch (e) {
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: 'Error While Updating Profile',
+          type: QuickAlertType.error,
+        ),
+      );
+    }
+  }
 }
