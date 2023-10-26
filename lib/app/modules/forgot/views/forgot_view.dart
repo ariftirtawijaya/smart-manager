@@ -57,6 +57,7 @@ class ForgotView extends GetView<ForgotController> {
                         height: 24.0,
                       ),
                       CustomTextField(
+                        keyboardType: TextInputType.emailAddress,
                         onChanged: (p0) {
                           if (p0.isNotEmpty) {
                             loginKey.currentState!.validate();

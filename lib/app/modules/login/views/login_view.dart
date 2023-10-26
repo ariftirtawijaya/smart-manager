@@ -63,6 +63,7 @@ class LoginView extends GetView<LoginController> {
                             loginKey.currentState!.validate();
                           }
                         },
+                        keyboardType: TextInputType.number,
                         controller: authC.loginNumberController,
                         hintText: 'Enter your 7 digits login number',
                         title: 'Number',

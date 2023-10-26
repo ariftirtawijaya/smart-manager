@@ -137,6 +137,7 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.number,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editUserKey.currentState!.validate();
@@ -182,6 +183,7 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.emailAddress,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editUserKey.currentState!.validate();
@@ -204,6 +206,7 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.phone,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editUserKey.currentState!.validate();

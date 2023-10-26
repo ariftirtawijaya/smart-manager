@@ -109,6 +109,7 @@ class ProfileAdminEdit extends GetView<ProfileAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.number,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editProfileKey.currentState!.validate();
@@ -154,6 +155,7 @@ class ProfileAdminEdit extends GetView<ProfileAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.emailAddress,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editProfileKey.currentState!.validate();
@@ -176,6 +178,7 @@ class ProfileAdminEdit extends GetView<ProfileAdminController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                  keyboardType: TextInputType.phone,
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
                       editProfileKey.currentState!.validate();
