@@ -20,6 +20,7 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
     controller.phoneController.text = user.phone!;
     controller.addressController.text = user.address!;
     controller.genderController.text = user.gender!;
+    controller.statusController.text = user.active! ? 'Active' : 'Inactive';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit User'),
@@ -240,6 +241,31 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                     }
                     if (value.length < 10) {
                       return 'Address to short';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomDropdownField(
+                  items: controller.statusList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (p0) {
+                    controller.statusController.text = p0;
+                  },
+                  value: controller.statusController.text,
+                  controller: controller.statusController,
+                  title: 'Status',
+                  hintText: 'Select status',
+                  validator: (v) {
+                    String? value = v;
+                    if (value == null) {
+                      return 'Status cannot empty\n';
                     }
                     return null;
                   },

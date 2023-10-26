@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -171,10 +173,12 @@ class ProfileAdminView extends GetView<ProfileAdminController> {
         );
       }),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(
+        padding: EdgeInsets.only(
           left: 16,
           right: 16,
-          bottom: (kBottomNavigationBarHeight * 2) + 8,
+          bottom: Platform.isIOS
+              ? (kBottomNavigationBarHeight * 2)
+              : kBottomNavigationBarHeight + 16,
         ),
         child: CustomButton(
           onPressed: () async {

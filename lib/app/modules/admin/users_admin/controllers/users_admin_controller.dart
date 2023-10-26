@@ -220,7 +220,7 @@ class UsersAdminController extends GetxController {
               'uid': user.uid,
               'name': nameController.text,
               'email': emailController.text,
-              'active': true,
+              'active': statusController.text == 'Active',
               'gender': genderController.text,
               'address': addressController.text,
               'loginNumber': loginNumberController.text,
