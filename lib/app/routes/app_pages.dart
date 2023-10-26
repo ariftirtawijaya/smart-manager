@@ -8,6 +8,8 @@ import '../modules/admin/profile_admin/bindings/profile_admin_binding.dart';
 import '../modules/admin/profile_admin/views/profile_admin_view.dart';
 import '../modules/admin/users_admin/bindings/users_admin_binding.dart';
 import '../modules/admin/users_admin/views/users_admin_view.dart';
+import '../modules/create_store/bindings/create_store_binding.dart';
+import '../modules/create_store/views/create_store_view.dart';
 import '../modules/forgot/bindings/forgot_binding.dart';
 import '../modules/forgot/views/forgot_view.dart';
 import '../modules/loading/bindings/loading_binding.dart';
@@ -87,6 +89,11 @@ class AppPages {
       name: _Paths.PROFILE_USER,
       page: () => const ProfileUserView(),
       binding: ProfileUserBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREATE_STORE,
+      page: () => const CreateStoreView(),
+      binding: CreateStoreBinding(),
     ),
   ];
 }

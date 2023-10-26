@@ -14,6 +14,7 @@ abstract class Routes {
   static const DASHBOARD_USER = _Paths.DASHBOARD_USER;
   static const HOME_USER = _Paths.HOME_USER;
   static const PROFILE_USER = _Paths.PROFILE_USER;
+  static const CREATE_STORE = _Paths.CREATE_STORE;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const DASHBOARD_USER = '/dashboard-user';
   static const HOME_USER = '/home-user';
   static const PROFILE_USER = '/profile-user';
+  static const CREATE_STORE = '/create-store';
 }

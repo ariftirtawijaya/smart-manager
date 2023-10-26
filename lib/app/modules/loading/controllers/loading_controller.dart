@@ -14,26 +14,32 @@ class LoadingController extends GetxController {
   @override
   void onInit() {
     dataC.getUsers().then((_) {
-      if (authC.currentUser.value.role! == 'admin') {
-        Get.offAllNamed(Routes.DASHBOARD_ADMIN);
-      } else {
-        if (authC.currentUser.value.active!) {
-          Get.offAllNamed(Routes.DASHBOARD_USER);
+      dataC.getStore(authC.currentUser.value.uid!).then((_) {
+        if (authC.currentUser.value.role! == 'admin') {
+          Get.offAllNamed(Routes.DASHBOARD_ADMIN);
         } else {
-          EasyLoading.showError(
-            'Your account is inactive!\nPlease contact our support.\n\nYou will be logged out in 5 seconds',
-            duration: const Duration(seconds: 5),
-            dismissOnTap: false,
-            maskType: EasyLoadingMaskType.black,
-          );
-          Timer(const Duration(seconds: 5), () async {
-            dataC.clear();
-            await DBService.removeLocalData(key: 'userCredentials');
-            await DBService.auth.signOut();
-            Get.offAllNamed(Routes.LOGIN);
-          });
+          if (authC.currentUser.value.active!) {
+            if (dataC.store.value.storeId != null) {
+              Get.offAllNamed(Routes.DASHBOARD_USER);
+            } else {
+              Get.offAllNamed(Routes.CREATE_STORE);
+            }
+          } else {
+            EasyLoading.showError(
+              'Your account is inactive!\nPlease contact our support.\n\nYou will be logged out in 5 seconds',
+              duration: const Duration(seconds: 5),
+              dismissOnTap: false,
+              maskType: EasyLoadingMaskType.black,
+            );
+            Timer(const Duration(seconds: 5), () async {
+              dataC.clear();
+              await DBService.removeLocalData(key: 'userCredentials');
+              await DBService.auth.signOut();
+              Get.offAllNamed(Routes.LOGIN);
+            });
+          }
         }
-      }
+      });
     });
     super.onInit();
   }

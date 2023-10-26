@@ -59,6 +59,13 @@ class DBService {
     );
   }
 
+  static Future<DocumentReference<Map<String, dynamic>>> add({
+    required String into,
+    required Map<String, dynamic> data,
+  }) {
+    return FirebaseFirestore.instance.collection(into).add(data);
+  }
+
   static Future<void> insert({
     required String into,
     required String name,
