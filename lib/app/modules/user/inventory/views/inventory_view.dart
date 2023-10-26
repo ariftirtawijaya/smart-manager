@@ -5,20 +5,9 @@ import 'package:get/get.dart';
 import '../controllers/inventory_controller.dart';
 
 class InventoryView extends GetView<InventoryController> {
-  const InventoryView({Key? key}) : super(key: key);
+  const InventoryView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('InventoryView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'InventoryView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
+    return const Center(child: Text('Inventory Will Be Here'));
   }
 }

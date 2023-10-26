@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
 import '../controllers/user_management_controller.dart';
 
 class UserManagementView extends GetView<UserManagementController> {
-  const UserManagementView({Key? key}) : super(key: key);
+  const UserManagementView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('UserManagementView'),
-        centerTitle: true,
-      ),
+    return CustomUserPage(
+      title: 'User Management',
       body: const Center(
-        child: Text(
-          'UserManagementView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+        child: Text('User Management Will Be Here'),
       ),
     );
   }

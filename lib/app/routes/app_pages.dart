@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:smart_manager/app/modules/user/inventory/views/inventory_dashboard.dart';
 
 import '../modules/admin/dashboard_admin/bindings/dashboard_admin_binding.dart';
 import '../modules/admin/dashboard_admin/views/dashboard_admin_view.dart';
@@ -85,7 +86,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DASHBOARD_USER,
-      page: () => DashboardUserView(),
+      page: () => const DashboardUserView(),
       binding: DashboardUserBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(
@@ -99,7 +100,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.INVENTORY,
-      page: () => const InventoryView(),
+      page: () => const InventoryDashboardView(),
       binding: InventoryBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(

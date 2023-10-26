@@ -1,23 +1,18 @@
 import 'package:get/get.dart';
+import 'package:smart_manager/app/controllers/auth_controller.dart';
+import 'package:smart_manager/app/controllers/data_controller.dart';
 
 class InventoryController extends GetxController {
-  //TODO: Implement InventoryController
+  final authC = Get.find<AuthController>();
+  final dataC = Get.find<DataController>();
+  var tabIndex = 0;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  RxBool isLoading = false.obs;
+
+  void changeTabIndex(int index) {
+    tabIndex = index;
+    update();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  Future<void> addCategory() async {}
 }

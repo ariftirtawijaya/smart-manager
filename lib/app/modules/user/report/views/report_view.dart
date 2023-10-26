@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
 import '../controllers/report_controller.dart';
 
 class ReportView extends GetView<ReportController> {
-  const ReportView({Key? key}) : super(key: key);
+  const ReportView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ReportView'),
-        centerTitle: true,
-      ),
+    return CustomUserPage(
+      title: 'Report',
       body: const Center(
-        child: Text(
-          'ReportView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+        child: Text('Report Will Be Here'),
       ),
     );
   }

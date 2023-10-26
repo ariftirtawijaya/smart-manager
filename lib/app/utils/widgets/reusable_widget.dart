@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -541,6 +542,85 @@ class CustomListMenu extends StatelessWidget {
         trailing: const Icon(
           Icons.arrow_forward_ios_rounded,
           color: darkBlue,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomSearch extends StatelessWidget {
+  const CustomSearch({
+    super.key,
+    required this.text,
+    this.hasPrefixIcon = false,
+    this.onPrefixPressed,
+    this.prefixIcon,
+  });
+  final String text;
+  final bool hasPrefixIcon;
+  final void Function()? onPrefixPressed;
+  final IconData? prefixIcon;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: primaryColor,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 4),
+            color: black.withOpacity(0.3),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      width: Get.width,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  // controller: controller.searchC,
+                  onChanged: (value) {
+                    // controller.changeKeyword();
+                  },
+                  decoration: InputDecoration(
+                    isDense: false,
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: text,
+                    prefixIcon: const Icon(
+                      FontAwesomeIcons.magnifyingGlass,
+                      color: primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+              hasPrefixIcon
+                  ? Row(
+                      children: [
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        IconButton(
+                          onPressed: onPrefixPressed,
+                          icon: Icon(
+                            prefixIcon,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            ],
+          ),
         ),
       ),
     );

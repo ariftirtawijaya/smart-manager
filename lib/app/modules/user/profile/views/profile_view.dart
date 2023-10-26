@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  const ProfileView({Key? key}) : super(key: key);
+  const ProfileView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ProfileView'),
-        centerTitle: true,
-      ),
+    return CustomUserPage(
+      title: 'Profile',
       body: const Center(
-        child: Text(
-          'ProfileView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+        child: Text('Profile Will Be Here'),
       ),
     );
   }

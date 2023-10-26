@@ -16,12 +16,18 @@ class CustomUserPage extends StatelessWidget {
     required this.body,
     this.bottom,
     this.floatingActionButton,
+    this.bottomNavigationBar,
+    this.extendBody = false,
+    this.actions,
   });
 
   final String title;
   final Widget body;
   final PreferredSizeWidget? bottom;
   final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
+  final bool extendBody;
+  final List<Widget>? actions;
 
   final advancedDrawerController = AdvancedDrawerController();
   final authC = Get.find<AuthController>();
@@ -29,39 +35,83 @@ class CustomUserPage extends StatelessWidget {
     advancedDrawerController.showDrawer();
   }
 
+  Future<bool> _promptExit() async {
+    late bool canExit;
+    Future<void> showDialog() async {
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Exit'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Are you sure want to exit app ?'),
+              const SizedBox(
+                height: 16.0,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomOutlinedButton(
+                        onPressed: () => canExit = false, text: 'No'),
+                  ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  Expanded(
+                    child: CustomButton(
+                        onPressed: () => canExit = true, text: 'Yes'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    await showDialog();
+    return Future.value(canExit);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AdvancedDrawer(
-      drawer: const DrawerWidget(),
-      backdrop: Container(color: darkBlue),
-      controller: advancedDrawerController,
-      animationCurve: Curves.easeInOut,
-      // openScale: 1,
-      childDecoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: handleMenuButtonPressed,
-            icon: ValueListenableBuilder<AdvancedDrawerValue>(
-              valueListenable: advancedDrawerController,
-              builder: (_, value, __) {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  child: Icon(
-                    value.visible ? Icons.clear : Icons.menu,
-                    key: ValueKey<bool>(value.visible),
-                  ),
-                );
-              },
-            ),
-          ),
-          bottom: bottom,
-          title: Text(title),
+    return WillPopScope(
+      onWillPop: _promptExit,
+      child: AdvancedDrawer(
+        drawer: const DrawerWidget(),
+        backdrop: Container(color: darkBlue),
+        controller: advancedDrawerController,
+        animationCurve: Curves.easeInOut,
+        // openScale: 1,
+        childDecoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
-        body: body,
-        floatingActionButton: floatingActionButton,
+        child: Scaffold(
+          extendBody: extendBody,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: handleMenuButtonPressed,
+              icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                valueListenable: advancedDrawerController,
+                builder: (_, value, __) {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    child: Icon(
+                      value.visible ? Icons.clear : Icons.menu,
+                      key: ValueKey<bool>(value.visible),
+                    ),
+                  );
+                },
+              ),
+            ),
+            bottom: bottom,
+            title: Text(title),
+            actions: actions,
+          ),
+          body: body,
+          floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
+        ),
       ),
     );
   }
@@ -158,7 +208,7 @@ class DrawerWidget extends StatelessWidget {
                 },
                 leading: const SizedBox(
                     width: 48, child: Icon(FontAwesomeIcons.userGear)),
-                title: const Text('Account'),
+                title: const Text('Profile'),
               ),
               ListTile(
                 onTap: () {
