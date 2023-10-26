@@ -14,7 +14,6 @@ import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
-import 'package:http/http.dart' as http;
 
 class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
@@ -407,7 +406,6 @@ class UsersAdminController extends GetxController {
         available = true;
       } else {
         for (var element in result.docs) {
-          Map<String, dynamic> data = element.data();
           if (element.id == uid) {
             available = true;
           } else {
