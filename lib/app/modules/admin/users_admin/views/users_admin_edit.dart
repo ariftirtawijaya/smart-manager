@@ -19,6 +19,7 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
     controller.emailController.text = user.email!;
     controller.phoneController.text = user.phone!;
     controller.addressController.text = user.address!;
+    controller.genderController.text = user.gender!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit User'),
@@ -109,6 +110,31 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                 const SizedBox(
                   height: 16.0,
                 ),
+                CustomDropdownField(
+                  items: controller.genderList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (p0) {
+                    controller.genderController.text = p0;
+                  },
+                  controller: controller.genderController,
+                  title: 'Gender',
+                  value: controller.genderController.text,
+                  hintText: 'Select gender',
+                  validator: (v) {
+                    String? value = v;
+                    if (value == null) {
+                      return 'Gender cannot empty\n';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
                 CustomTextField(
                   onChanged: (p0) {
                     if (p0.isNotEmpty) {
@@ -142,13 +168,10 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
                   },
                   controller: controller.passwordController,
                   title: 'Password',
-                  hintText: '*******',
+                  hintText: "Leave blank if not change",
                   hiddenController: controller.isHidden,
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Password cannot empty\n';
-                    }
-                    if (value.length < 7) {
+                    if (value!.isNotEmpty && value.length < 7) {
                       return 'Password to weak\n';
                     }
                     return null;
@@ -245,10 +268,10 @@ class UsersAdminEdit extends GetView<UsersAdminController> {
         child: CustomButton(
           onPressed: () {
             if (editUserKey.currentState!.validate()) {
-              controller.createUser(context);
+              controller.updateUser(context, user);
             }
           },
-          text: 'Add',
+          text: 'Update',
         ),
       ),
     );

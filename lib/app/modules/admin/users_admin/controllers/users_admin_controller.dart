@@ -14,6 +14,7 @@ import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
+import 'package:http/http.dart' as http;
 
 class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
@@ -26,11 +27,14 @@ class UsersAdminController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController genderController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
   RxBool isHidden = true.obs;
 
   List<String> genderList = ['Male', 'Female'];
+  List<String> statusList = ['Active', 'Inactive'];
 
   void clear() {
+    statusController.clear();
     genderController.clear();
     imagePath = '';
     nameController.clear();
@@ -142,15 +146,30 @@ class UsersAdminController extends GetxController {
         confirmText: 'Delete User',
         onConfirmBtnTap: () async {
           try {
-            //TODO implement delete auth data
             showLoading();
-            await DBService.delete(from: usersRef, name: user.uid!)
-                .then((value) async {
-              await dataC.getUsers();
-              endLoading();
-              Get.back();
-              EasyLoading.showSuccess('User Deleted!');
-            });
+            final response = await DBService.deleteAccount(uid: user.uid!);
+            if (response.statusCode == 200) {
+              if (user.profilePic != null) {
+                final storageRef =
+                    FirebaseStorage.instance.refFromURL(user.profilePic!);
+                await storageRef.delete();
+              }
+              await DBService.delete(from: usersRef, name: user.uid!)
+                  .then((value) async {
+                await dataC.getUsers();
+                endLoading();
+                Get.back();
+                EasyLoading.showSuccess('User Deleted!');
+              });
+            } else {
+              endLoading().then(
+                (value) => showAlert(
+                  context: context,
+                  text: 'Error While Deleting User',
+                  type: QuickAlertType.error,
+                ),
+              );
+            }
           } catch (e) {
             if (kDebugMode) {
               print(e.toString());
@@ -168,20 +187,15 @@ class UsersAdminController extends GetxController {
     );
   }
 
-  Future<void> createUser(BuildContext context) async {
-    showLoading(status: 'Creating User ...');
-    List<String> isValid = await checkField();
+  Future<void> updateUser(BuildContext context, UserModel user) async {
+    showLoading(status: 'Updating User ...');
+    List<String> isValid = await checkFieldUpdate(user.uid!);
     if (isValid.isNotEmpty) {
       String message = isValid
           .toString()
           .replaceAll('[', '')
           .replaceAll(']', '')
           .replaceAll(',', '\n');
-      print(isValid
-          .toString()
-          .replaceAll('[', '')
-          .replaceAll(']', '')
-          .replaceAll(',', '\n'));
       endLoading().then(
         (value) => showAlert(
           context: context,
@@ -191,20 +205,98 @@ class UsersAdminController extends GetxController {
       );
     } else {
       try {
-        await DBService.auth
-            .createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        )
+        await DBService.updateUserCredentials(
+                uid: user.uid!,
+                email: emailController.text,
+                password: passwordController.text)
             .then((result) async {
-          await DBService.insert(
-            into: usersRef,
-            name: result.user!.uid,
+          await DBService.update(
+            from: usersRef,
+            name: user.uid!,
             data: {
-              'uid': result.user!.uid,
+              'uid': user.uid,
               'name': nameController.text,
               'email': emailController.text,
               'active': true,
+              'gender': genderController.text,
+              'address': addressController.text,
+              'loginNumber': loginNumberController.text,
+              'phone': phoneController.text,
+              'role': 'user',
+            },
+          ).then((_) async {
+            if (imagePath != '') {
+              if (user.profilePic != null) {
+                final storageRef =
+                    FirebaseStorage.instance.refFromURL(user.profilePic!);
+                await storageRef.delete();
+              }
+              String imagesFile =
+                  DateTime.now().microsecondsSinceEpoch.toString();
+              Reference referenceRoot = FirebaseStorage.instance.ref();
+              Reference referenceDirImages = referenceRoot.child("profile");
+              Reference referenceImageUpload =
+                  referenceDirImages.child(imagesFile);
+              await referenceImageUpload.putFile(File(imagePath));
+              String imageUrl = await referenceImageUpload.getDownloadURL();
+              await DBService.update(
+                from: usersRef,
+                name: user.uid!,
+                data: {'profilePic': imageUrl},
+              );
+            }
+            await dataC.getUsers();
+            endLoading();
+            Get.back();
+            EasyLoading.showSuccess('User Updated!');
+            clear();
+          });
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+        endLoading().then(
+          (value) => showAlert(
+            context: context,
+            text: 'Error While Updating User',
+            type: QuickAlertType.error,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> createUser(BuildContext context) async {
+    showLoading(status: 'Creating User ...');
+    List<String> isValid = await checkField();
+    if (isValid.isNotEmpty) {
+      String message = isValid
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .replaceAll(',', '\n');
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: message,
+          type: QuickAlertType.error,
+        ),
+      );
+    } else {
+      try {
+        await DBService.createUser(
+                email: emailController.text, password: passwordController.text)
+            .then((result) async {
+          String uid = result.body;
+          await DBService.insert(
+            into: usersRef,
+            name: uid,
+            data: {
+              'uid': uid,
+              'name': nameController.text,
+              'email': emailController.text,
+              'active': statusController.text == 'Active',
               'gender': genderController.text,
               'address': addressController.text,
               'loginNumber': loginNumberController.text,
@@ -223,7 +315,7 @@ class UsersAdminController extends GetxController {
               String imageUrl = await referenceImageUpload.getDownloadURL();
               await DBService.update(
                 from: usersRef,
-                name: result.user!.uid,
+                name: uid,
                 data: {'profilePic': imageUrl},
               );
             }
@@ -271,6 +363,26 @@ class UsersAdminController extends GetxController {
     return message;
   }
 
+  Future<List<String>> checkFieldUpdate(String uid) async {
+    List<String> message = [];
+    bool isLoginNumberValid = await checkUpdate(
+        uid: uid, field: 'loginNumber', data: loginNumberController.text);
+    bool isEmailValid =
+        await checkUpdate(uid: uid, field: 'email', data: emailController.text);
+    bool isPhoneValid =
+        await checkUpdate(uid: uid, field: 'phone', data: phoneController.text);
+    if (!isLoginNumberValid) {
+      message.add('Login Number already exist');
+    }
+    if (!isEmailValid) {
+      message.add('Email aready exist');
+    }
+    if (!isPhoneValid) {
+      message.add('Phone Number already exist');
+    }
+    return message;
+  }
+
   Future<bool> check({required String field, required String data}) async {
     bool available = false;
     await DBService.getCollections(
@@ -278,6 +390,30 @@ class UsersAdminController extends GetxController {
         .then((result) {
       if (result.docs.isEmpty) {
         available = true;
+      }
+    });
+    return available;
+  }
+
+  Future<bool> checkUpdate(
+      {required String uid,
+      required String field,
+      required String data}) async {
+    bool available = false;
+    await DBService.getCollections(
+            from: usersRef, where: field, isEqualTo: data)
+        .then((result) {
+      if (result.docs.isEmpty) {
+        available = true;
+      } else {
+        for (var element in result.docs) {
+          Map<String, dynamic> data = element.data();
+          if (element.id == uid) {
+            available = true;
+          } else {
+            available = false;
+          }
+        }
       }
     });
     return available;

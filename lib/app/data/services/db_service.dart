@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:smart_manager/app/constant/app_constant.dart';
 
 class DBService {
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,6 +28,34 @@ class DBService {
     return await auth.signInWithEmailAndPassword(
       email: email,
       password: password,
+    );
+  }
+
+  static Future<http.Response> deleteAccount({required String uid}) async {
+    return await http.get(
+      Uri.parse(
+        "$deleteUserApi$uid",
+      ),
+    );
+  }
+
+  static Future<http.Response> updateUserCredentials(
+      {required String uid,
+      required String email,
+      required String password}) async {
+    return await http.get(
+      Uri.parse(
+        "$updateUserCredentialApi$uid&newEmail=$email&newPassword=$password",
+      ),
+    );
+  }
+
+  static Future<http.Response> createUser(
+      {required String email, required String password}) async {
+    return await http.get(
+      Uri.parse(
+        "$createUserApi?email=$email&password=$password",
+      ),
     );
   }
 

@@ -98,6 +98,7 @@ class CustomDropdownField extends StatelessWidget {
     this.validator,
     this.maxLines,
     this.keyboardType,
+    this.value,
     required this.onChanged,
   });
 
@@ -110,6 +111,7 @@ class CustomDropdownField extends StatelessWidget {
 
   final List<DropdownMenuItem<dynamic>>? items;
   final void Function(dynamic)? onChanged;
+  final dynamic value;
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +146,7 @@ class CustomDropdownField extends StatelessWidget {
             items: items,
             onChanged: onChanged,
             validator: validator,
+            value: value,
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(

@@ -12,6 +12,7 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> addUserKey = GlobalKey<FormState>();
+    controller.statusController.text = 'Active';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add User'),
@@ -38,11 +39,19 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         controller.imagePath.isNotEmpty
-                            ? Image.file(
-                                File(
-                                  controller.imagePath,
-                                ),
+                            ? Container(
+                                width: 48,
                                 height: 48,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        FileImage(File(controller.imagePath)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
                               )
                             : Image.asset(
                                 imagePlaceholder,
@@ -218,6 +227,31 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                     }
                     if (value.length < 10) {
                       return 'Address to short';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomDropdownField(
+                  items: controller.statusList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (p0) {
+                    controller.statusController.text = p0;
+                  },
+                  value: controller.statusController.text,
+                  controller: controller.statusController,
+                  title: 'Status',
+                  hintText: 'Select status',
+                  validator: (v) {
+                    String? value = v;
+                    if (value == null) {
+                      return 'Status cannot empty\n';
                     }
                     return null;
                   },
