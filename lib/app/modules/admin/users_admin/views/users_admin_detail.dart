@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
+import 'package:smart_manager/app/data/models/store_model.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
+import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
 import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_edit.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
@@ -250,85 +253,272 @@ class UsersAdminDetailView extends GetView<UsersAdminController> {
               const SizedBox(
                 height: 16.0,
               ),
-              //TODO implement Store Info
-              Card(
-                elevation: 5,
-                shadowColor: grey3,
-                borderOnForeground: true,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    color: grey3,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  width: Get.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Store Info',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: FontWeight.bold),
+              FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                future: DBService.getCollections(
+                    from: storesRef, where: 'userId', isEqualTo: user.uid),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Shimmer.fromColors(
+                        baseColor: grey3,
+                        highlightColor: grey4,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                          ),
+                          width: Get.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Store Info',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              const Divider(
+                                thickness: 2,
+                                color: grey3,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Store Name',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text("storeData.storeName!",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!),
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Total Employee',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(user.phone!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!),
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Total Product',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border: Border.all(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Text(user.phone!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!),
+                              ),
+                            ],
+                          ),
+                        ));
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  }
+                  if (snapshot.data!.docs.isNotEmpty) {
+                    final StoreModel storeData =
+                        StoreModel.fromSnapshot(snapshot.data!.docs.first);
+                    return Card(
+                      elevation: 5,
+                      shadowColor: grey3,
+                      borderOnForeground: true,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: grey3,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      const SizedBox(
-                        height: 8.0,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        width: Get.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Store Info',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            const Divider(
+                              thickness: 2,
+                              color: grey3,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            Text(
+                              'Store Name',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            Text(storeData.storeName!,
+                                style:
+                                    Theme.of(context).textTheme.titleMedium!),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            Text(
+                              'Total Employee',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                                future: FirebaseFirestore.instance
+                                    .collection('stores')
+                                    .doc(storeData.storeId)
+                                    .collection('employees')
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                      "${snapshot.data?.docs.length ?? '0'}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!);
+                                }),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            Text(
+                              'Total Product',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                                future: FirebaseFirestore.instance
+                                    .collection('stores')
+                                    .doc(storeData.storeId)
+                                    .collection('products')
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                      "${snapshot.data?.docs.length ?? '0'}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!);
+                                }),
+                          ],
+                        ),
                       ),
-                      const Divider(
-                        thickness: 2,
-                        color: grey3,
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(
-                        'Store Name',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(user.email!,
-                          style: Theme.of(context).textTheme.titleMedium!),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                      Text(
-                        'Total Employee',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(user.phone!,
-                          style: Theme.of(context).textTheme.titleMedium!),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                      Text(
-                        'Total Product',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(user.phone!,
-                          style: Theme.of(context).textTheme.titleMedium!),
-                    ],
-                  ),
-                ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
               ),
             ],
           ),
