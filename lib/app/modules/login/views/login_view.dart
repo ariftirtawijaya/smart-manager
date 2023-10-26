@@ -89,6 +89,11 @@ class LoginView extends GetView<LoginController> {
                             loginKey.currentState!.validate();
                           }
                         },
+                        onComplete: () {
+                          if (loginKey.currentState!.validate()) {
+                            authC.checkLoginNumber(context);
+                          }
+                        },
                         hiddenController: controller.isHidden,
                         controller: authC.passwordController,
                         hintText: 'Enter your password',

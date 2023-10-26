@@ -30,6 +30,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLines,
     this.keyboardType,
     this.onChanged,
+    this.onComplete,
   });
 
   final String title;
@@ -39,6 +40,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
+  final void Function()? onComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
           TextFormField(
+            onEditingComplete: onComplete,
             onChanged: onChanged,
             maxLines: maxLines ?? 1,
             controller: controller,
@@ -183,6 +186,7 @@ class CustomPasswordField extends StatelessWidget {
     required this.hiddenController,
     this.validator,
     this.onChanged,
+    this.onComplete,
   });
 
   final String title;
@@ -191,6 +195,7 @@ class CustomPasswordField extends StatelessWidget {
   final String hintText;
   final RxBool hiddenController;
   final void Function(String)? onChanged;
+  final void Function()? onComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +231,7 @@ class CustomPasswordField extends StatelessWidget {
                 ),
                 Obx(() {
                   return TextFormField(
+                    onEditingComplete: onComplete,
                     onChanged: onChanged,
                     controller: controller,
                     obscureText: hiddenController.value,

@@ -63,6 +63,11 @@ class ForgotView extends GetView<ForgotController> {
                             loginKey.currentState!.validate();
                           }
                         },
+                        onComplete: () {
+                          if (loginKey.currentState!.validate()) {
+                            authC.resetPassword(context);
+                          }
+                        },
                         controller: authC.emailController,
                         hintText: 'Enter your registered email',
                         title: 'Email',
