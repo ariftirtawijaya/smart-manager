@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
+import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_edit.dart';
+import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class UsersAdminDetailView extends GetView {
+class UsersAdminDetailView extends GetView<UsersAdminController> {
   const UsersAdminDetailView({super.key});
 
   @override
@@ -139,6 +142,21 @@ class UsersAdminDetailView extends GetView {
                         height: 8.0,
                       ),
                       Text(user.gender!.capitalizeFirst!,
+                          style: Theme.of(context).textTheme.titleMedium!),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                        'Status',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Text(user.active == true ? 'Active' : 'Inactive',
                           style: Theme.of(context).textTheme.titleMedium!),
                       const SizedBox(
                         height: 16.0,
@@ -312,11 +330,54 @@ class UsersAdminDetailView extends GetView {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 16.0,
-              ),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, -5),
+              color: grey3,
+              blurRadius: 4,
+            )
+          ],
+        ),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomButton(
+                onPressed: () {
+                  Get.back();
+                  Get.to(() => const UsersAdminEdit(), arguments: user);
+                },
+                text: 'Edit',
+              ),
+            ),
+            const SizedBox(
+              width: 16.0,
+            ),
+            Expanded(
+              child: CustomButton(
+                color: red,
+                onPressed: () {
+                  controller.deleteUser(
+                    context,
+                    user,
+                    true,
+                  );
+                },
+                text: 'Delete',
+              ),
+            ),
+          ],
         ),
       ),
     );

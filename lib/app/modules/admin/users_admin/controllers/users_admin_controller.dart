@@ -85,9 +85,8 @@ class UsersAdminController extends GetxController {
       imagePath = '';
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        imagePath = image.path;
         CroppedFile? croppedFile = await ImageCropper().cropImage(
-          sourcePath: imagePath,
+          sourcePath: image.path,
           maxWidth: 500,
           maxHeight: 500,
           aspectRatioPresets: [
@@ -113,6 +112,7 @@ class UsersAdminController extends GetxController {
           ],
           compressQuality: 60,
         );
+        print(croppedFile);
         if (croppedFile != null) {
           imagePath = croppedFile.path;
         }
@@ -135,7 +135,8 @@ class UsersAdminController extends GetxController {
     update();
   }
 
-  Future<void> deleteUser(BuildContext context, UserModel user) async {
+  Future<void> deleteUser(
+      BuildContext context, UserModel user, bool fromDetail) async {
     endLoading().then(
       (value) => showAlert(
         context: context,
@@ -158,6 +159,9 @@ class UsersAdminController extends GetxController {
                 await dataC.getUsers();
                 endLoading();
                 Get.back();
+                if (fromDetail == true) {
+                  Get.back();
+                }
                 EasyLoading.showSuccess('User Deleted!');
               });
             } else {

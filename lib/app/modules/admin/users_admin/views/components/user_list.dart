@@ -77,10 +77,7 @@ class UsersList extends GetView<UsersAdminController> {
                       icon: delete,
                       color: secondaryColor,
                       onTap: () {
-                        controller.deleteUser(
-                          context,
-                          user,
-                        );
+                        controller.deleteUser(context, user, false);
                       },
                     ),
                   ],

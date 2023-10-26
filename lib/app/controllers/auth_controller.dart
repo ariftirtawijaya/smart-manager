@@ -23,6 +23,14 @@ class AuthController extends GetxController {
     passwordController.clear();
   }
 
+  Future<void> getMe() async {
+    await DBService.getDocument(from: usersRef, doc: currentUser.value.uid!)
+        .then((value) {
+      currentUser.value = UserModel.fromSnapshot(value);
+      update();
+    });
+  }
+
   Future<void> checkLoginNumber(BuildContext context) async {
     showLoading();
     try {
