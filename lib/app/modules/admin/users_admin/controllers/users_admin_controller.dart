@@ -154,15 +154,27 @@ class UsersAdminController extends GetxController {
                     FirebaseStorage.instance.refFromURL(user.profilePic!);
                 await storageRef.delete();
               }
-              await DBService.delete(from: usersRef, name: user.uid!)
-                  .then((value) async {
-                await dataC.getUsers();
-                endLoading();
-                Get.back();
-                if (fromDetail == true) {
-                  Get.back();
+              await DBService.getCollections(
+                      from: storesRef, where: 'userId', isEqualTo: user.uid)
+                  .then((result) async {
+                if (result.docs.isNotEmpty) {
+                  final storeLogo = FirebaseStorage.instance
+                      .ref('store/${result.docs.first.id}');
+                  await storeLogo.delete();
+                  await DBService.delete(
+                      from: storesRef, name: result.docs.first.id);
                 }
-                EasyLoading.showSuccess('User Deleted!');
+              }).then((value) async {
+                await DBService.delete(from: usersRef, name: user.uid!)
+                    .then((value) async {
+                  await dataC.getUsers();
+                  endLoading();
+                  Get.back();
+                  if (fromDetail == true) {
+                    Get.back();
+                  }
+                  EasyLoading.showSuccess('User Deleted!');
+                });
               });
             } else {
               endLoading().then(

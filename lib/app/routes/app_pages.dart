@@ -22,7 +22,6 @@ import '../modules/splash/views/splash_view.dart';
 import '../modules/user/dashboard_user/bindings/dashboard_user_binding.dart';
 import '../modules/user/dashboard_user/views/dashboard_user_view.dart';
 import '../modules/user/inventory/bindings/inventory_binding.dart';
-import '../modules/user/inventory/views/inventory_view.dart';
 import '../modules/user/profile/bindings/profile_binding.dart';
 import '../modules/user/profile/views/profile_view.dart';
 import '../modules/user/report/bindings/report_binding.dart';
