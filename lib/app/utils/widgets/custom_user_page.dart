@@ -221,7 +221,7 @@ class DrawerWidget extends StatelessWidget {
               const Spacer(),
               Row(
                 children: [
-                  authC.currentUser.value.profilePic != null
+                  authC.currentUser.value.profilePic == null
                       ? Image.asset(
                           imagePlaceholder,
                           width: 48,
