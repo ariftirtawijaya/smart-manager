@@ -17,7 +17,6 @@ import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
-  var listSearch = RxList<UserModel>([]);
 
   TextEditingController nameController = TextEditingController();
   TextEditingController loginNumberController = TextEditingController();
@@ -44,6 +43,7 @@ class UsersAdminController extends GetxController {
     passwordController.clear();
   }
 
+  var listSearch = RxList<UserModel>([]);
   var keyword = ''.obs;
   final TextEditingController searchC = TextEditingController();
   void changeKeyword() {
@@ -74,7 +74,6 @@ class UsersAdminController extends GetxController {
               user.toString().toLowerCase().startsWith(value.toLowerCase()))
           .toList();
     }
-    // update();
   }
 
   String imagePath = '';
@@ -89,6 +88,7 @@ class UsersAdminController extends GetxController {
           sourcePath: image.path,
           maxWidth: 500,
           maxHeight: 500,
+          compressFormat: ImageCompressFormat.png,
           aspectRatioPresets: [
             CropAspectRatioPreset.square,
           ],

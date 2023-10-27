@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/data/models/user_model.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/controllers/users_admin_controller.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_detail.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_edit.dart';
+import 'package:smart_manager/app/data/models/category_model.dart';
+import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/views/category/category_edit.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class UsersList extends GetView<UsersAdminController> {
-  const UsersList({
+class CategoryList extends GetView<InventoryController> {
+  const CategoryList({
     super.key,
     required this.itemCount,
-    required this.userData,
+    required this.categoryData,
   });
   final int itemCount;
-  final RxList<UserModel> userData;
+  final RxList<CategoryModel> categoryData;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class UsersList extends GetView<UsersAdminController> {
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: itemCount,
       itemBuilder: (context, index) {
-        final UserModel user = userData[index];
+        final CategoryModel category = categoryData[index];
         return Padding(
           padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
           child: Card(
@@ -40,27 +39,25 @@ class UsersList extends GetView<UsersAdminController> {
               borderRadius: BorderRadius.circular(8),
               overlayColor: const MaterialStatePropertyAll(primaryColor),
               onTap: () {
-                Get.to(() => const UsersAdminDetailView(), arguments: user);
+                // Get.to(() => const UsersAdminDetailView(), arguments: category);
               },
               child: ListTile(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 title: Text(
-                  user.name!.capitalize!,
+                  category.categoryName!.capitalize!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                leading: user.profilePic == null
+                leading: category.categoryIcon == null
                     ? Image.asset(
                         imagePlaceholder,
                         height: 52,
                       )
                     : CustomImageView(
-                        imageUrl: user.profilePic!,
+                        imageUrl: category.categoryIcon!,
                         size: 52,
                       ),
-                subtitle:
-                    user.active == false ? const Text('(Inactive)') : null,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -69,7 +66,7 @@ class UsersList extends GetView<UsersAdminController> {
                       color: secondaryColor,
                       onTap: () {
                         controller.clear();
-                        Get.to(() => const UsersAdminEdit(), arguments: user);
+                        Get.bottomSheet(CategoryEdit(category: category));
                       },
                     ),
                     const SizedBox(
@@ -79,7 +76,7 @@ class UsersList extends GetView<UsersAdminController> {
                       icon: FontAwesomeIcons.trash,
                       color: secondaryColor,
                       onTap: () {
-                        controller.deleteUser(context, user, false);
+                        controller.deleteCategory(context, category);
                       },
                     ),
                   ],

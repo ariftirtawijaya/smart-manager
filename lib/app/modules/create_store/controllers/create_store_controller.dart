@@ -40,6 +40,7 @@ class CreateStoreController extends GetxController {
       if (image != null) {
         CroppedFile? croppedFile = await ImageCropper().cropImage(
           sourcePath: image.path,
+          compressFormat: ImageCompressFormat.png,
           maxWidth: 500,
           maxHeight: 500,
           aspectRatioPresets: [

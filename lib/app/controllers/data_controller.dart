@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
+import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/store_model.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 
 class DataController extends GetxController {
   var users = RxList<UserModel>([]);
+  var categories = RxList<CategoryModel>([]);
   Rx<StoreModel> store = StoreModel().obs;
 
   RxBool isLoading = false.obs;
@@ -20,6 +22,22 @@ class DataController extends GetxController {
     }
     users.sort(
       (a, b) => a.name!.compareTo(b.name!),
+    );
+    isLoading.value = false;
+  }
+
+  Future<void> getCategory() async {
+    isLoading.value = true;
+    final querySnapshot = await DBService.getSubCollection(
+        from: storesRef,
+        id: store.value.storeId!,
+        subCollection: categoriesRef);
+    categories.clear();
+    for (var element in querySnapshot.docs) {
+      categories.add(CategoryModel.fromSnapshot(element));
+    }
+    categories.sort(
+      (a, b) => a.categoryName!.compareTo(b.categoryName!),
     );
     isLoading.value = false;
   }

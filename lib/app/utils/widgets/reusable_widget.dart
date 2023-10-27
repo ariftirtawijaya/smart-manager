@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -559,11 +558,15 @@ class CustomSearch extends StatelessWidget {
     this.hasPrefixIcon = false,
     this.onPrefixPressed,
     this.prefixIcon,
+    this.controller,
+    this.onChanged,
   });
   final String text;
   final bool hasPrefixIcon;
   final void Function()? onPrefixPressed;
   final IconData? prefixIcon;
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -591,10 +594,8 @@ class CustomSearch extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
-                  // controller: controller.searchC,
-                  onChanged: (value) {
-                    // controller.changeKeyword();
-                  },
+                  controller: controller,
+                  onChanged: onChanged,
                   decoration: InputDecoration(
                     isDense: false,
                     filled: true,

@@ -146,29 +146,19 @@ class DBService {
     return query.get();
   }
 
-  // static Future<QuerySnapshot<Map<String, dynamic>>> getCollections(
-  //     {Object? where,
-  //     Object? isEqualTo,
-  //     Object? isNotEqualTo,
-  //     Object? isLessThan,
-  //     Object? isLessThanOrEqualTo,
-  //     Object? isGreaterThan,
-  //     Object? isGreaterThanOrEqualTo,
-  //     Object? arrayContains,
-  //     Iterable<Object?>? arrayContainsAny,
-  //     Iterable<Object?>? whereIn,
-  //     Iterable<Object?>? whereNotIn,
-  //     bool? isNull,
-  //     required String from}) async {
-  //   if (where != null) {
-  //     return FirebaseFirestore.instance.collection(from).where(where).get();
-  //   } else {
-  //     return FirebaseFirestore.instance.collection(from).get();
-  //   }
-  // }
-
   static Future<DocumentSnapshot<Map<String, dynamic>>> getDocument(
       {required String from, required String doc}) async {
     return FirebaseFirestore.instance.collection(from).doc(doc).get();
+  }
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getSubCollection(
+      {required String from,
+      required String id,
+      required String subCollection}) async {
+    return FirebaseFirestore.instance
+        .collection(from)
+        .doc(id)
+        .collection(subCollection)
+        .get();
   }
 }

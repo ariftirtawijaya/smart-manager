@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/inventory_controller.dart';
+import '../../controllers/inventory_controller.dart';
 
 class InventoryView extends GetView<InventoryController> {
   const InventoryView({super.key});

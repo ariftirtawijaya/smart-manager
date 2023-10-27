@@ -14,13 +14,15 @@ class LoadingController extends GetxController {
   @override
   void onInit() {
     dataC.getUsers().then((_) {
-      dataC.getStore(authC.currentUser.value.uid!).then((_) {
+      dataC.getStore(authC.currentUser.value.uid!).then((_) async {
         if (authC.currentUser.value.role! == 'admin') {
           Get.offAllNamed(Routes.DASHBOARD_ADMIN);
         } else {
           if (authC.currentUser.value.active!) {
             if (dataC.store.value.storeId != null) {
-              Get.offAllNamed(Routes.DASHBOARD_USER);
+              await dataC
+                  .getCategory()
+                  .then((_) => Get.offAllNamed(Routes.DASHBOARD_USER));
             } else {
               Get.offAllNamed(Routes.CREATE_STORE);
             }

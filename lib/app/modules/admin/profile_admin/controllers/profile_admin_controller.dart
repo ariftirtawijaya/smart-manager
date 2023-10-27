@@ -45,6 +45,7 @@ class ProfileAdminController extends GetxController {
           sourcePath: image.path,
           maxWidth: 500,
           maxHeight: 500,
+          compressFormat: ImageCompressFormat.png,
           aspectRatioPresets: [
             CropAspectRatioPreset.square,
           ],
