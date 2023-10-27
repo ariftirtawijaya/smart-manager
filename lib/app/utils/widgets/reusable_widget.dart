@@ -251,7 +251,9 @@ class CustomPasswordField extends StatelessWidget {
           ),
           Obx(() {
             return CustomIconButton(
-                icon: hiddenController.isTrue ? hidePassword : showPassword,
+                icon: hiddenController.isTrue
+                    ? FontAwesomeIcons.solidEye
+                    : FontAwesomeIcons.solidEyeSlash,
                 onTap: () {
                   hiddenController.toggle();
                 },
@@ -395,12 +397,16 @@ class CustomCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Icon(
-                icon,
-                size: 48,
-                color: Colors.white,
+              SizedBox(
+                // color: Colors.red,
+                width: 64,
+                child: Icon(
+                  icon,
+                  size: 48,
+                  color: Colors.white,
+                ),
               ),
               AutoSizeText(
                 value.toString(),
@@ -484,7 +490,7 @@ class CustomIconButton extends StatelessWidget {
     required this.color,
     this.size,
   });
-  final String icon;
+  final IconData icon;
   final void Function() onTap;
   final Color color;
   final double? size;
@@ -496,11 +502,9 @@ class CustomIconButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SvgPicture.asset(
+        child: Icon(
           icon,
-          height: size,
-          width: size,
-          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          color: color,
         ),
       ),
     );
@@ -540,7 +544,7 @@ class CustomListMenu extends StatelessWidget {
           style: const TextStyle(color: darkBlue),
         ),
         trailing: const Icon(
-          Icons.arrow_forward_ios_rounded,
+          FontAwesomeIcons.chevronRight,
           color: darkBlue,
         ),
       ),

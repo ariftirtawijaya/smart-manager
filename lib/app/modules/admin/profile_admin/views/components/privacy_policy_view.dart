@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -23,7 +24,7 @@ class PrivacyPolicyView extends StatelessWidget {
           title: const Text('Privacy Policy'),
           actions: [
             CustomIconButton(
-              icon: edit,
+              icon: FontAwesomeIcons.solidPenToSquare,
               onTap: () {
                 Get.to(() => const PrivacyPolicyEdit());
               },

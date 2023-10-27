@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
@@ -32,14 +33,14 @@ class HomeAdminView extends GetView<HomeAdminController> {
                   title: 'Total Users',
                   value: controller.dataC.users.length,
                   onTap: () {},
-                  icon: Icons.people,
+                  icon: FontAwesomeIcons.users,
                 );
               }),
               CustomCard(
                 title: 'Total Store',
                 value: 0,
                 onTap: () {},
-                icon: Icons.store,
+                icon: FontAwesomeIcons.store,
               ),
             ],
           ),

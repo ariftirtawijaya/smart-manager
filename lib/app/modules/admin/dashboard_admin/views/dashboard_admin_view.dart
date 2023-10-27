@@ -1,5 +1,6 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
@@ -16,23 +17,6 @@ class DashboardAdminView extends GetView<DashboardAdminController> {
     return GetBuilder<DashboardAdminController>(builder: (controller) {
       return Scaffold(
         extendBody: true,
-        // appBar: AppBar(
-        //   title: Text(controller.authC.currentUser.value.role == 'admin'
-        //       ? 'Admin Panel'
-        //       : 'Dashboard'),
-        //   centerTitle: true,
-        //   actions: [
-        //     IconButton(
-        //       splashRadius: 24,
-        //       onPressed: () {
-        //         controller.authC.signOut(context);
-        //       },
-        //       icon: const Icon(
-        //         Icons.logout,
-        //       ),
-        //     ),
-        //   ],
-        // ),
         body: Center(
           child: IndexedStack(
             index: controller.tabIndex,
@@ -61,19 +45,28 @@ class DashboardAdminView extends GetView<DashboardAdminController> {
               },
               items: [
                 CustomNavigationBarItem(
-                  icon: const Icon(Icons.home),
+                  icon: const Icon(
+                    FontAwesomeIcons.house,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Home',
                   ),
                 ),
                 CustomNavigationBarItem(
-                  icon: const Icon(Icons.people),
+                  icon: const Icon(
+                    FontAwesomeIcons.users,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Users',
                   ),
                 ),
                 CustomNavigationBarItem(
-                  icon: const Icon(Icons.person),
+                  icon: const Icon(
+                    FontAwesomeIcons.userLarge,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Profile',
                   ),

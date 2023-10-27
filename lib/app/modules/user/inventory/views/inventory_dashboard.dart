@@ -95,19 +95,28 @@ class InventoryDashboardView extends GetView<InventoryController> {
               },
               items: [
                 CustomNavigationBarItem(
-                  icon: const Icon(FontAwesomeIcons.box),
+                  icon: const Icon(
+                    FontAwesomeIcons.box,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Product',
                   ),
                 ),
                 CustomNavigationBarItem(
-                  icon: const Icon(FontAwesomeIcons.tags),
+                  icon: const Icon(
+                    FontAwesomeIcons.tags,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Category',
                   ),
                 ),
                 CustomNavigationBarItem(
-                  icon: const Icon(Icons.archive),
+                  icon: const Icon(
+                    FontAwesomeIcons.boxArchive,
+                    size: 20,
+                  ),
                   title: const Text(
                     'Inventory',
                   ),

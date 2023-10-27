@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
@@ -26,7 +27,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
           centerTitle: true,
           actions: [
             CustomIconButton(
-              icon: plusSquare,
+              icon: FontAwesomeIcons.squarePlus,
               color: Colors.white,
               onTap: () {
                 controller.clear();
@@ -65,7 +66,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
                     fillColor: Colors.white,
                     hintText: 'Search Users',
                     suffixIcon: Icon(
-                      Icons.search,
+                      FontAwesomeIcons.magnifyingGlass,
                       color: primaryColor,
                     ),
                   ),

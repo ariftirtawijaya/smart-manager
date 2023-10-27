@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -28,7 +29,7 @@ class AboutAppEdit extends GetView<ProfileAdminController> {
                   );
             },
             icon: const Icon(
-              Icons.save,
+              FontAwesomeIcons.solidFloppyDisk,
               size: 24.0,
             ),
           ),

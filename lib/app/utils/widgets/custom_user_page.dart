@@ -97,7 +97,9 @@ class CustomUserPage extends StatelessWidget {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 250),
                     child: Icon(
-                      value.visible ? Icons.clear : Icons.menu,
+                      value.visible
+                          ? FontAwesomeIcons.xmark
+                          : FontAwesomeIcons.bars,
                       key: ValueKey<bool>(value.visible),
                     ),
                   );

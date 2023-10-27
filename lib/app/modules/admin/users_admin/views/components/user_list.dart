@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/user_model.dart';
@@ -63,7 +64,7 @@ class UsersList extends GetView<UsersAdminController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomIconButton(
-                      icon: edit,
+                      icon: FontAwesomeIcons.solidPenToSquare,
                       color: secondaryColor,
                       onTap: () {
                         controller.clear();
@@ -74,7 +75,7 @@ class UsersList extends GetView<UsersAdminController> {
                       width: 8.0,
                     ),
                     CustomIconButton(
-                      icon: delete,
+                      icon: FontAwesomeIcons.trash,
                       color: secondaryColor,
                       onTap: () {
                         controller.deleteUser(context, user, false);
