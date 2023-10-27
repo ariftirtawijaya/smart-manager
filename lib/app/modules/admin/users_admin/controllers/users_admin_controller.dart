@@ -158,13 +158,12 @@ class UsersAdminController extends GetxController {
                       from: storesRef, where: 'userId', isEqualTo: user.uid)
                   .then((result) async {
                 if (result.docs.isNotEmpty) {
-                  final storeLogo = FirebaseStorage.instance
-                      .ref('store/${result.docs.first.id}');
-                  await storeLogo.delete();
                   await DBService.delete(
                       from: storesRef, name: result.docs.first.id);
+                  await DBService.deleteStoreFolder(
+                      storeId: result.docs.first.id);
                 }
-              }).then((value) async {
+              }).then((_) async {
                 await DBService.delete(from: usersRef, name: user.uid!)
                     .then((value) async {
                   await dataC.getUsers();
@@ -173,7 +172,7 @@ class UsersAdminController extends GetxController {
                   if (fromDetail == true) {
                     Get.back();
                   }
-                  EasyLoading.showSuccess('User Deleted!');
+                  EasyLoading.showSuccess('User Successfully Deleted!');
                 });
               });
             } else {
@@ -323,7 +322,8 @@ class UsersAdminController extends GetxController {
               String imagesFile =
                   DateTime.now().microsecondsSinceEpoch.toString();
               Reference referenceRoot = FirebaseStorage.instance.ref();
-              Reference referenceDirImages = referenceRoot.child("profile");
+              Reference referenceDirImages =
+                  referenceRoot.child("profile/${result.body}");
               Reference referenceImageUpload =
                   referenceDirImages.child(imagesFile);
               await referenceImageUpload.putFile(File(imagePath));

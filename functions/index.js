@@ -56,3 +56,22 @@ exports.createUser = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Error while creating user: " + error);
   }
 });
+
+exports.deleteStoreFolder = functions.https.onRequest(async (req, res) => {
+  const storeId = req.query.storeId;
+
+  try {
+    const bucket = admin.storage().bucket();
+    const folderPath = `store/${storeId}`;
+    const [files] = await bucket.getFiles({
+      prefix: folderPath,
+    });
+    for (const file of files) {
+      await file.delete();
+    }
+
+    res.status(200).send("All image from "+ storeId + " sucessfully deleted");
+  } catch (error) {
+    res.status(500).send("Error while deleting store images: " + error);
+  }
+});

@@ -36,5 +36,6 @@ class DataController extends GetxController {
 
   void clear() {
     users.clear();
+    store.value = StoreModel();
   }
 }

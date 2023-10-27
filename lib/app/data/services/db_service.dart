@@ -39,6 +39,15 @@ class DBService {
     );
   }
 
+  static Future<http.Response> deleteStoreFolder(
+      {required String storeId}) async {
+    return await http.get(
+      Uri.parse(
+        "$deleteStoreFolderApi$storeId",
+      ),
+    );
+  }
+
   static Future<http.Response> updateUserCredentials(
       {required String uid,
       required String email,

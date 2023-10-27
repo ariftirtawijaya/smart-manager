@@ -140,6 +140,7 @@ class AuthController extends GetxController {
       confirmText: 'Logout',
       onConfirmBtnTap: () async {
         showLoading();
+        currentUser.value = UserModel();
         dataC.clear();
         Get.back();
         await DBService.removeLocalData(key: 'userCredentials');
