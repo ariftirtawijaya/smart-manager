@@ -31,6 +31,8 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.onChanged,
     this.onComplete,
+    this.readOnly = false,
+    this.isPriceField = false,
   });
 
   final String title;
@@ -41,12 +43,14 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
   final void Function()? onComplete;
+  final bool? isPriceField;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: readOnly! ? grey3 : Colors.white,
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
@@ -71,19 +75,50 @@ class CustomTextField extends StatelessWidget {
               ],
             ),
           ),
-          TextFormField(
-            onEditingComplete: onComplete,
-            onChanged: onChanged,
-            maxLines: maxLines ?? 1,
-            controller: controller,
-            keyboardType: keyboardType,
-            validator: validator,
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: grey2,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isPriceField!)
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 16.0,
+                    ),
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 7.0,
+                        ),
+                        Text("B\$",
+                            style: Theme.of(context).textTheme.titleMedium!),
+                      ],
+                    ),
+                  ],
+                ),
+              Expanded(
+                child: TextFormField(
+                  readOnly: readOnly!,
+                  onEditingComplete: onComplete,
+                  onChanged: onChanged,
+                  maxLines: maxLines ?? 1,
+                  controller: controller,
+                  keyboardType: keyboardType,
+                  validator: validator,
+                  decoration: InputDecoration(
+                    contentPadding: isPriceField!
+                        ? Theme.of(context)
+                            .inputDecorationTheme
+                            .contentPadding!
+                            .subtract(const EdgeInsets.only(left: 12))
+                        : null,
+                    hintText: hintText,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: grey2,
+                        ),
                   ),
-            ),
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -435,13 +470,12 @@ class CustomImageView extends StatelessWidget {
   const CustomImageView({
     super.key,
     required this.imageUrl,
-    required this.size,
-    this.radius,
+    this.size,
+    this.borderRadius,
   });
   final String imageUrl;
-  final double size;
-  final double? radius;
-
+  final double? size;
+  final BorderRadiusGeometry? borderRadius;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -454,27 +488,46 @@ class CustomImageView extends StatelessWidget {
             image: imageProvider,
             fit: BoxFit.cover,
           ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(radius ?? 8.0),
-          ),
+          borderRadius: borderRadius ??
+              const BorderRadius.all(
+                Radius.circular(8.0),
+              ),
         ),
       ),
       placeholder: (context, url) {
         return Shimmer.fromColors(
           baseColor: grey3,
           highlightColor: grey4,
-          child: Image.asset(
-            imagePlaceholder,
-            height: size,
+          child: Container(
             width: size,
+            height: size,
+            decoration: BoxDecoration(
+              image: const DecorationImage(
+                image: AssetImage(productImage),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: borderRadius ??
+                  const BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+            ),
           ),
         );
       },
       errorWidget: (context, url, error) {
-        return Image.asset(
-          imagePlaceholder,
-          height: size,
+        return Container(
           width: size,
+          height: size,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage(productImage),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: borderRadius ??
+                const BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+          ),
         );
       },
     );

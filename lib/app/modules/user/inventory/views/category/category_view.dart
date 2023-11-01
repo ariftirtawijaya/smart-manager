@@ -24,15 +24,15 @@ class CategoryView extends GetView<InventoryController> {
           children: [
             CustomSearch(
               text: 'Search categories',
-              controller: controller.searchC,
+              controller: controller.searchCategoryC,
               onChanged: (p0) {
-                controller.changeKeyword();
+                controller.changeKeyword('category');
               },
             ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () {
-                  return controller.dataC.getCategory();
+                  return controller.dataC.getCategories();
                 },
                 child: Obx(() {
                   if (controller.dataC.isLoading.isTrue) {
@@ -97,13 +97,13 @@ class CategoryView extends GetView<InventoryController> {
                           ListView(),
                         ],
                       );
-                    } else if (controller.listSearch.isNotEmpty) {
+                    } else if (controller.listSearchCategory.isNotEmpty) {
                       return CategoryList(
-                        itemCount: controller.listSearch.length,
-                        categoryData: controller.listSearch,
+                        itemCount: controller.listSearchCategory.length,
+                        categoryData: controller.listSearchCategory,
                       );
-                    } else if (controller.listSearch.isEmpty &&
-                        controller.keyword.value != '') {
+                    } else if (controller.listSearchCategory.isEmpty &&
+                        controller.keywordCategory.value != '') {
                       return Stack(
                         children: [
                           Column(

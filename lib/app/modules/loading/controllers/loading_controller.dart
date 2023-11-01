@@ -20,9 +20,11 @@ class LoadingController extends GetxController {
         } else {
           if (authC.currentUser.value.active!) {
             if (dataC.store.value.storeId != null) {
-              await dataC
-                  .getCategory()
-                  .then((_) => Get.offAllNamed(Routes.DASHBOARD_USER));
+              await dataC.getCategories().then((_) async {
+                await dataC.getProducts().then((_) {
+                  Get.offAllNamed(Routes.DASHBOARD_USER);
+                });
+              });
             } else {
               Get.offAllNamed(Routes.CREATE_STORE);
             }

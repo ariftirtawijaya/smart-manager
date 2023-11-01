@@ -14,6 +14,15 @@ final ThemeData appThemeData = ThemeData(
     centerTitle: true,
     // titleTextStyle: size16width500.copyWith(color: Colors.white),
   ),
+  chipTheme: ChipThemeData(
+    backgroundColor: lighBlue2,
+    labelStyle: TextStyle(
+      fontFamily: GoogleFonts.montserrat().fontFamily,
+      color: primaryColor,
+    ),
+    // padding: Ed
+  ),
+
   fontFamily: GoogleFonts.montserrat().fontFamily,
   primarySwatch: primaryMaterialColor,
   brightness: Brightness.light,
@@ -97,36 +106,41 @@ final ThemeData appThemeData = ThemeData(
         borderSide: BorderSide(color: Colors.transparent, width: 1)),
     contentPadding: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
   )),
-  inputDecorationTheme: const InputDecorationTheme(
+  inputDecorationTheme: InputDecorationTheme(
     isDense: true,
     filled: false,
-    errorBorder: OutlineInputBorder(
+    errorStyle: TextStyle(
+      color: red,
+      fontFamily: GoogleFonts.montserrat().fontFamily,
+    ),
+    errorBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
         borderSide: BorderSide(color: Colors.transparent, width: 1)),
-    border: OutlineInputBorder(
+    border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(8),
       ),
       borderSide: BorderSide(color: Colors.transparent, width: 1),
     ),
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
         borderSide: BorderSide(color: Colors.transparent, width: 1)),
-    focusedErrorBorder: OutlineInputBorder(
+    focusedErrorBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
         borderSide: BorderSide(color: Colors.transparent, width: 1)),
-    focusedBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
         borderSide: BorderSide(color: Colors.transparent, width: 1)),
-    contentPadding: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
+    contentPadding:
+        const EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
   ),
   // dialogTheme: DialogTheme(
   //     contentTextStyle: size16width400.copyWith(

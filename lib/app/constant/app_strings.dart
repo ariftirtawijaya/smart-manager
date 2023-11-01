@@ -3,6 +3,7 @@ const String settingsRef = 'settings';
 const String storesRef = 'stores';
 const String categoriesRef = 'categories';
 const String productsRef = 'products';
+const String variantsRef = 'variants';
 
 const String deleteUserApi =
     'https://us-central1-smart-pos-b934c.cloudfunctions.net/deleteUser?userId=';

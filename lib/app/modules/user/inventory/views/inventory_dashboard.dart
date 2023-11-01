@@ -8,6 +8,7 @@ import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_c
 import 'package:smart_manager/app/modules/user/inventory/views/category/category_add.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/category/category_view.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/inventory/inventory_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/views/product/product_add.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/product/product_view.dart';
 import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
@@ -28,7 +29,8 @@ class InventoryDashboardView extends GetView<InventoryController> {
             ? [
                 IconButton(
                   onPressed: () {
-                    EasyLoading.showInfo('Add Product');
+                    controller.clear();
+                    Get.to(() => const ProductAdd());
                   },
                   icon: const Icon(
                     FontAwesomeIcons.squarePlus,

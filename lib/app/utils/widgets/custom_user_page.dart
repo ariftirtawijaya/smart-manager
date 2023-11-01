@@ -141,7 +141,9 @@ class DrawerWidget extends StatelessWidget {
               CustomImageView(
                 imageUrl: dataC.store.value.storeLogo!,
                 size: 128,
-                radius: 128,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(128.0),
+                ),
               ),
               const SizedBox(
                 height: 16.0,
@@ -164,63 +166,74 @@ class DrawerWidget extends StatelessWidget {
               const SizedBox(
                 height: 16.0,
               ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.DASHBOARD_USER);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.house)),
-                title: const Text('Dashboard'),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.DASHBOARD_USER);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.house)),
+                        title: const Text('Dashboard'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.INVENTORY);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.box)),
+                        title: const Text('Inventory'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.USER_MANAGEMENT);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.users)),
+                        title: const Text('User Management'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.TRANSACTION);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.moneyBill)),
+                        title: const Text('Transaction'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.REPORT);
+                        },
+                        leading: const SizedBox(
+                            width: 48,
+                            child: Icon(FontAwesomeIcons.clipboardList)),
+                        title: const Text('Report'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.PROFILE);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.userGear)),
+                        title: const Text('Profile'),
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.offAllNamed(Routes.STORE_SETTING);
+                        },
+                        leading: const SizedBox(
+                            width: 48, child: Icon(FontAwesomeIcons.store)),
+                        title: const Text('Store Setting'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.INVENTORY);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.box)),
-                title: const Text('Inventory'),
+              const SizedBox(
+                height: 16.0,
               ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.USER_MANAGEMENT);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.users)),
-                title: const Text('User Management'),
-              ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.TRANSACTION);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.moneyBill)),
-                title: const Text('Transaction'),
-              ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.REPORT);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.clipboardList)),
-                title: const Text('Report'),
-              ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.PROFILE);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.userGear)),
-                title: const Text('Profile'),
-              ),
-              ListTile(
-                onTap: () {
-                  Get.offAllNamed(Routes.STORE_SETTING);
-                },
-                leading: const SizedBox(
-                    width: 48, child: Icon(FontAwesomeIcons.store)),
-                title: const Text('Store Setting'),
-              ),
-              const Spacer(),
               Row(
                 children: [
                   authC.currentUser.value.profilePic == null
