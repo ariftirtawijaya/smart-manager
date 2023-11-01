@@ -19,7 +19,7 @@ class ProductList extends StatelessWidget {
     return AutoHeightGridView(
       itemCount: itemCount,
       physics: const AlwaysScrollableScrollPhysics(),
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       padding: const EdgeInsets.all(16),
@@ -63,6 +63,8 @@ class ProductList extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(
                       height: 4.0,
