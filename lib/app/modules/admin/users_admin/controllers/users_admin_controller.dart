@@ -64,7 +64,6 @@ class UsersAdminController extends GetxController {
   }
 
   searchUsers(String value) {
-    print(value.isEmpty);
     if (value.isEmpty) {
       listSearch.clear();
     } else {
@@ -112,7 +111,6 @@ class UsersAdminController extends GetxController {
           ],
           compressQuality: 60,
         );
-        print(croppedFile);
         if (croppedFile != null) {
           imagePath = croppedFile.path;
         }

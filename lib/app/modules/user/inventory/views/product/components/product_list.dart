@@ -1,6 +1,5 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';

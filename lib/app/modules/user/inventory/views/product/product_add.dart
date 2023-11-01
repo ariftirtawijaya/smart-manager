@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get.dart';
-import 'package:get/get.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -282,7 +280,6 @@ class ProductAdd extends GetView<InventoryController> {
             const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
         child: CustomButton(
           onPressed: () {
-            print(controller.imagePath.isEmpty);
             if (controller.imagePath.isEmpty) {
               controller.isImageNull.value = true;
             }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/inventory_dashboard.dart';
 

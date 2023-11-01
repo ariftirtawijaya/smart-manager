@@ -102,8 +102,6 @@ class UsersAdminAddView extends GetView<UsersAdminController> {
                       .toList(),
                   onChanged: (p0) {
                     controller.genderController.text = p0;
-                    print(p0);
-                    print(controller.genderController.text);
                   },
                   controller: controller.genderController,
                   title: 'Gender',

@@ -66,7 +66,6 @@ class CreateStoreController extends GetxController {
           ],
           compressQuality: 60,
         );
-        print(croppedFile);
         if (croppedFile != null) {
           imagePath = croppedFile.path;
         }

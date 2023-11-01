@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
 import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
@@ -91,7 +89,6 @@ class ProductView extends GetView<InventoryController> {
                                     : null,
                           ),
                           onPressed: () {
-                            print(category.categoryId);
                             controller.selectedCategoryId.value =
                                 category.categoryId!;
                             controller.selectedCategoryIndex.value = index;
