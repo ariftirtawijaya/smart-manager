@@ -272,7 +272,6 @@ class ProductView extends GetView<InventoryController> {
                         ],
                       );
                     } else {
-                      log('INI');
                       List<ProductModel> list = [];
                       if (controller.selectedCategoryId.isNotEmpty) {
                         list = controller.dataC.products

@@ -192,7 +192,7 @@ class ProductAdd extends GetView<InventoryController> {
                       if (value!.isEmpty) {
                         return 'Price cannot empty\n';
                       }
-                      if (!value.isNumericOnly) {
+                      if (!value.isCurrency) {
                         return 'Not valid!\n';
                       }
                       return null;
@@ -214,7 +214,7 @@ class ProductAdd extends GetView<InventoryController> {
                           keyboardType: TextInputType.number,
                           isPriceField: true,
                           validator: (value) {
-                            if (!value!.isNumericOnly) {
+                            if (!value!.isCurrency) {
                               return 'Not valid!\n';
                             }
                             return null;

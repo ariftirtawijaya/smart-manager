@@ -39,10 +39,6 @@ class InventoryController extends GetxController {
 
   RxBool noMemberPrice = true.obs;
 
-  void productByCategory({required int index, required String categoryId}) {
-    selectedCategoryIndex.value = index;
-  }
-
   void togleMemberPrice(bool value) {
     noMemberPrice.value = value;
     if (value == true) {
@@ -361,7 +357,7 @@ class InventoryController extends GetxController {
                 .doc(category.categoryId)
                 .delete()
                 .then((_) async {
-              await dataC.getProducts();
+              await dataC.getCategories();
               endLoading();
               Get.back();
               EasyLoading.showSuccess('Category Successfully Deleted!');
@@ -437,7 +433,7 @@ class InventoryController extends GetxController {
           }
         }
       });
-      // await dataC.getCategory();
+      await dataC.getProducts();
       endLoading();
       Get.back();
       EasyLoading.showSuccess('New Product Created!');

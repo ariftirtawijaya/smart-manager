@@ -46,7 +46,6 @@ class _VariantFormState extends State<VariantForm> {
 
   @override
   Widget build(BuildContext context) {
-    log(noMemberPrice.toString());
     return Column(
       children: [
         Card(
@@ -94,8 +93,8 @@ class _VariantFormState extends State<VariantForm> {
                                     if (value!.isEmpty) {
                                       return 'Cannot empty\n';
                                     }
-                                    if (!value.isNumericOnly) {
-                                      return 'Not valid\n';
+                                    if (!value.isCurrency) {
+                                      return 'Not valid!\n';
                                     }
                                     return null;
                                   },
@@ -119,8 +118,8 @@ class _VariantFormState extends State<VariantForm> {
                                     if (value!.isEmpty) {
                                       return 'Cannot empty\n';
                                     }
-                                    if (!value.isNumericOnly) {
-                                      return 'Not valid\n';
+                                    if (!value.isCurrency) {
+                                      return 'Not valid!\n';
                                     }
                                     return null;
                                   },
