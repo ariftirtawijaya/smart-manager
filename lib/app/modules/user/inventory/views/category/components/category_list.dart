@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
+import 'package:smart_manager/app/data/models/product_model.dart';
 import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/category/category_edit.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
@@ -12,9 +13,11 @@ class CategoryList extends GetView<InventoryController> {
     super.key,
     required this.itemCount,
     required this.categoryData,
+    required this.productData,
   });
   final int itemCount;
   final RxList<CategoryModel> categoryData;
+  final RxList<ProductModel> productData;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class CategoryList extends GetView<InventoryController> {
       itemBuilder: (context, index) {
         final CategoryModel category = categoryData[index];
         return Padding(
-          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
           child: Card(
             elevation: 5,
             shadowColor: grey3,
@@ -48,6 +51,10 @@ class CategoryList extends GetView<InventoryController> {
                   category.categoryName!.capitalize!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  "(${productData.where((product) => product.product.productCategoryId == category.categoryId).length} products)",
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 leading: category.categoryIcon == null
                     ? Image.asset(

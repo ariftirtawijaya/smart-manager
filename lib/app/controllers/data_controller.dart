@@ -10,6 +10,7 @@ class DataController extends GetxController {
   var users = RxList<UserModel>([]);
   var categories = RxList<CategoryModel>([]);
   var products = RxList<ProductModel>([]);
+  var variantTypes = RxList<String>([]);
   Rx<StoreModel> store = StoreModel().obs;
 
   RxBool isLoading = false.obs;
@@ -42,6 +43,21 @@ class DataController extends GetxController {
       (a, b) => a.categoryName!.compareTo(b.categoryName!),
     );
     isLoading.value = false;
+  }
+
+  Future<void> getVariantType() async {
+    final querySnapshot = await DBService.db
+        .collection(storesRef)
+        .doc(store.value.storeId)
+        .collection(variantTypeRef)
+        .get();
+    variantTypes.clear();
+    for (var element in querySnapshot.docs) {
+      variantTypes.add(element.id);
+    }
+    variantTypes.sort(
+      (a, b) => a.compareTo(b),
+    );
   }
 
   Future<void> getProducts() async {

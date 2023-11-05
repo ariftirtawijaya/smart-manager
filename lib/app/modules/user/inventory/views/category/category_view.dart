@@ -22,13 +22,19 @@ class CategoryView extends GetView<InventoryController> {
       child: Scaffold(
         body: Column(
           children: [
-            CustomSearch(
-              text: 'Search categories',
-              controller: controller.searchCategoryC,
-              onChanged: (p0) {
-                controller.changeKeyword('category');
-              },
-            ),
+            GetBuilder<InventoryController>(builder: (controller) {
+              return CustomSearch(
+                text: 'Search categories',
+                controller: controller.searchCategoryC,
+                onChanged: (p0) {
+                  controller.changeKeyword('category');
+                },
+                onSuffixPressed: () {
+                  controller.searchCategoryC.clear();
+                  controller.changeKeyword('category');
+                },
+              );
+            }),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () {
@@ -100,6 +106,7 @@ class CategoryView extends GetView<InventoryController> {
                     } else if (controller.listSearchCategory.isNotEmpty) {
                       return CategoryList(
                         itemCount: controller.listSearchCategory.length,
+                        productData: controller.dataC.products,
                         categoryData: controller.listSearchCategory,
                       );
                     } else if (controller.listSearchCategory.isEmpty &&
@@ -121,6 +128,7 @@ class CategoryView extends GetView<InventoryController> {
                     } else {
                       return CategoryList(
                         itemCount: controller.dataC.categories.length,
+                        productData: controller.dataC.products,
                         categoryData: controller.dataC.categories,
                       );
                     }

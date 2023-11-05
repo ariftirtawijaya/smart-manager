@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
@@ -123,7 +122,10 @@ class ProductAdd extends GetView<InventoryController> {
                           ))
                       .toList(),
                   onChanged: (p0) {
-                    controller.categoryController.text = p0;
+                    print(p0);
+                    if (p0 != null) {
+                      controller.categoryController.text = p0;
+                    }
                   },
                   controller: controller.categoryController,
                   title: 'Category',
@@ -157,106 +159,117 @@ class ProductAdd extends GetView<InventoryController> {
                 const SizedBox(
                   height: 16.0,
                 ),
-                CustomTextField(
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        addProductKey.currentState!.validate();
-                      }
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Stock cannot empty\n';
-                      }
-                      if (!value.isNumericOnly) {
-                        return 'Not valid!\n';
-                      }
-                      return null;
-                    },
-                    controller: controller.stockController,
-                    title: 'Product Stock',
-                    hintText: 'Insert product stock'),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                CustomTextField(
-                    onChanged: (value) {
-                      if (controller.noMemberPrice.isTrue) {
-                        controller.memberPriceController.text =
-                            controller.regularPriceController.text;
-                      }
-                      if (value.isNotEmpty) {
-                        addProductKey.currentState!.validate();
-                      }
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Price cannot empty\n';
-                      }
-                      if (!value.isCurrency) {
-                        return 'Not valid!\n';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    isPriceField: true,
-                    controller: controller.regularPriceController,
-                    title: 'Regular Price',
-                    hintText: 'Insert regular price'),
-                const SizedBox(
-                  height: 16.0,
-                ),
                 Obx(() {
-                  return Column(
-                    children: [
-                      CustomTextField(
-                          readOnly:
-                              controller.noMemberPrice.isFalse ? false : true,
-                          keyboardType: TextInputType.number,
-                          isPriceField: true,
-                          validator: (value) {
-                            if (!value!.isCurrency) {
-                              return 'Not valid!\n';
-                            }
-                            return null;
-                          },
-                          controller: controller.memberPriceController,
-                          title: 'Member Price',
-                          hintText: 'Insert member price'),
-                      CheckboxListTile(
-                        title: const Text('Same as regular price'),
-                        value: controller.noMemberPrice.value,
-                        contentPadding: const EdgeInsets.only(left: 16),
-                        onChanged: (value) {
-                          controller.togleMemberPrice(value!);
-                        },
-                      )
-                    ],
-                  );
+                  if (controller.variantForms.isNotEmpty) {
+                    return const SizedBox();
+                  } else {
+                    return Column(
+                      children: [
+                        CustomTextField(
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                addProductKey.currentState!.validate();
+                              }
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Stock cannot empty\n';
+                              }
+                              if (!value.isNumericOnly) {
+                                return 'Not valid!\n';
+                              }
+                              return null;
+                            },
+                            controller: controller.stockController,
+                            title: 'Product Stock',
+                            hintText: 'Insert product stock'),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
+                        CustomTextField(
+                            onChanged: (value) {
+                              // if (controller.noMemberPrice.isTrue) {
+                              //   controller.memberPriceController.text =
+                              //       controller.regularPriceController.text;
+                              // }
+                              if (value.isNotEmpty) {
+                                addProductKey.currentState!.validate();
+                              }
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Price cannot empty\n';
+                              }
+                              if (!value.isCurrency) {
+                                return 'Not valid!\n';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            isPriceField: true,
+                            controller: controller.regularPriceController,
+                            title: 'Price',
+                            hintText: 'Insert product price'),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
+                        // Obx(() {
+                        //   return Column(
+                        //     children: [
+                        //       CustomTextField(
+                        //           readOnly: controller.noMemberPrice.isFalse
+                        //               ? false
+                        //               : true,
+                        //           keyboardType: TextInputType.number,
+                        //           isPriceField: true,
+                        //           validator: (value) {
+                        //             if (!value!.isCurrency) {
+                        //               return 'Not valid!\n';
+                        //             }
+                        //             return null;
+                        //           },
+                        //           controller: controller.memberPriceController,
+                        //           title: 'Member Price',
+                        //           hintText: 'Insert member price'),
+                        //       CheckboxListTile(
+                        //         title: const Text('Same as regular price'),
+                        //         value: controller.noMemberPrice.value,
+                        //         contentPadding: const EdgeInsets.only(left: 16),
+                        //         onChanged: (value) {
+                        //           controller.togleMemberPrice(value!);
+                        //         },
+                        //       )
+                        //     ],
+                        //   );
+                        // }),
+                      ],
+                    );
+                  }
                 }),
                 CustomTextField(
                     maxLines: 4,
                     controller: controller.descriptionController,
                     title: 'Description',
                     hintText: 'Product description (optional)'),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                Obx(() {
-                  return CustomOutlinedButton(
-                    onPressed: () {
-                      if (controller.variantForms.isNotEmpty) {
-                        Get.to(() => const ProductVariant());
-                      } else {
-                        controller.hasVariant.value = true;
-                        controller.addVariantForm();
-                        Get.to(() => const ProductVariant());
-                      }
-                    },
-                    text: controller.variantForms.isEmpty
-                        ? 'Add Variant'
-                        : 'Show Product Variant (${controller.variantForms.length})',
-                  );
-                }),
+                // const SizedBox(
+                //   height: 8.0,
+                // ),
+                // Obx(() {
+                //   return CustomOutlinedButton(
+                //     onPressed: () {
+                //       if (controller.variantForms.isNotEmpty) {
+                //         Get.to(() => const ProductVariant());
+                //       } else {
+                //         controller.hasVariant.value = true;
+                //         controller.addVariantForm();
+                //         Get.to(() => const ProductVariant());
+                //       }
+                //     },
+                //     text: controller.variantForms.isEmpty
+                //         ? 'Enable Variant'
+                //         : 'Show Variant (${controller.variantForms.length})',
+                //   );
+                // }),
               ],
             ),
           ),
@@ -280,15 +293,23 @@ class ProductAdd extends GetView<InventoryController> {
             const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
         child: CustomButton(
           onPressed: () {
-            if (controller.imagePath.isEmpty) {
-              controller.isImageNull.value = true;
-            }
-            if (addProductKey.currentState!.validate() &&
-                controller.isImageNull.isFalse) {
-              controller.createProduct(context);
-            }
+            // if (controller.imagePath.isEmpty) {
+            //   controller.isImageNull.value = true;
+            // }
+            // if (addProductKey.currentState!.validate() &&
+            //     controller.isImageNull.isFalse) {
+            // }
+            Get.to(() => const ProductVariant());
+
+            // if (controller.imagePath.isEmpty) {
+            //   controller.isImageNull.value = true;
+            // }
+            // if (addProductKey.currentState!.validate() &&
+            //     controller.isImageNull.isFalse) {
+            //   controller.createProduct(context);
+            // }
           },
-          text: 'Add',
+          text: 'Next',
         ),
       ),
     );

@@ -14,9 +14,11 @@ import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
+import 'package:smart_manager/app/data/models/product_variant.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/modules/user/inventory/views/product/components/variant_form.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
+import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class InventoryController extends GetxController {
   final authC = Get.find<AuthController>();
@@ -31,47 +33,336 @@ class InventoryController extends GetxController {
   TextEditingController categoryController = TextEditingController();
   TextEditingController skuController = TextEditingController();
   TextEditingController stockController = TextEditingController();
+  TextEditingController variantController = TextEditingController();
+  TextEditingController variantValueController = TextEditingController();
   TextEditingController regularPriceController = TextEditingController();
-  TextEditingController memberPriceController = TextEditingController();
+  // TextEditingController memberPriceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   RxBool isLoading = false.obs;
 
-  RxBool noMemberPrice = true.obs;
+  var productVariant = RxList<VariantType>([]);
 
-  void togleMemberPrice(bool value) {
-    noMemberPrice.value = value;
-    if (value == true) {
-      memberPriceController.text = regularPriceController.text;
-    } else {
-      memberPriceController.clear();
+  void deleteValueVariant(VariantType variantType, String value) {
+    productVariant
+        .where((variantData) => variantData.name == variantType.name)
+        .first
+        .options!
+        .removeWhere((element) => element.name == value);
+  }
+
+  void addValueVariant(BuildContext context, VariantType variantType) {
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    variantValueController.clear();
+    Get.bottomSheet(Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Add ${variantType.name}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(
+                height: 16.0,
+              ),
+              CustomTextField(
+                  autofocus: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Cannot empty!\n';
+                    }
+                    if (productVariant
+                        .where((variantData) =>
+                            variantData.name == variantType.name)
+                        .first
+                        .options!
+                        .where((variantOption) =>
+                            variantOption.name!.toLowerCase() ==
+                            value.toLowerCase())
+                        .isNotEmpty) {
+                      return 'Name is already in use!\n';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      formKey.currentState!.reset();
+                    }
+                  },
+                  onComplete: () {
+                    if (formKey.currentState!.validate()) {
+                      productVariant
+                          .where((variantData) =>
+                              variantData.name == variantType.name)
+                          .first
+                          .options!
+                          .add(VariantOptions(
+                              name: variantValueController.text));
+                      Get.back();
+                    }
+                  },
+                  controller: variantValueController,
+                  title: "${variantType.name} Name",
+                  hintText: "Insert ${variantType.name} Name"),
+              const SizedBox(
+                height: 16.0,
+              ),
+              CustomButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    productVariant
+                        .where((variantData) =>
+                            variantData.name == variantType.name)
+                        .first
+                        .options!
+                        .add(VariantOptions(name: variantValueController.text));
+                    addVariantForm();
+                    Get.back();
+                  }
+                },
+                text: 'Add',
+              )
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
+
+  Future<void> variantModal(
+      {required BuildContext context, required bool isFromAdd}) {
+    variantController.clear();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    return Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8),
+            topRight: Radius.circular(8),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                !isFromAdd
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Choose Variant Type",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold)),
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: Get.width,
+                              child: Wrap(
+                                children: dataC.variantTypes
+                                    .map(
+                                      (variantType) => Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ActionChip(
+                                            label: Text(
+                                              variantType,
+                                              style: productVariant
+                                                      .where((variantData) =>
+                                                          variantData.name ==
+                                                          variantType)
+                                                      .isNotEmpty
+                                                  ? const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold)
+                                                  : null,
+                                            ),
+                                            backgroundColor: productVariant
+                                                    .where((variantData) =>
+                                                        variantData.name ==
+                                                        variantType)
+                                                    .isNotEmpty
+                                                ? primaryColor
+                                                : null,
+                                            onPressed: () {
+                                              if (productVariant
+                                                  .where((variantData) =>
+                                                      variantData.name ==
+                                                      variantType)
+                                                  .isEmpty) {
+                                                if (productVariant.length < 2) {
+                                                  productVariant.add(
+                                                      VariantType(
+                                                          name: variantType,
+                                                          options: RxList([])));
+                                                  Get.back();
+                                                } else {
+                                                  EasyLoading.showToast(
+                                                      'Maximum 2 types of product variants');
+                                                }
+                                              } else {
+                                                productVariant.removeWhere(
+                                                    (variant) =>
+                                                        variant.name ==
+                                                        variantType);
+                                              }
+                                            },
+                                            pressElevation: 2,
+                                          ),
+                                          const SizedBox(
+                                            width: 8.0,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+                Text(
+                  isFromAdd ? "Create New Variant Type" : "Or Create New",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomTextField(
+                  onComplete: () {
+                    if (formKey.currentState!.validate()) {
+                      createVariantType(context);
+                    }
+                  },
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      formKey.currentState!.reset();
+                    }
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Cannot empty!\n';
+                    }
+                    if (dataC.variantTypes.isNotEmpty) {
+                      if (dataC.variantTypes
+                          .where((variantType) =>
+                              variantType.toLowerCase() == value.toLowerCase())
+                          .isNotEmpty) {
+                        return 'Variant type already exists!\n';
+                      }
+                    }
+                    return null;
+                  },
+                  controller: variantController,
+                  title: 'Variant Type Name',
+                  hintText: 'Color, Size, Pattern, etc',
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      createVariantType(context);
+                    }
+                  },
+                  text: 'Save',
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> createVariantType(BuildContext context) async {
+    showLoading(status: 'Creating Variant Type ...');
+    try {
+      await DBService.db
+          .collection(storesRef)
+          .doc(dataC.store.value.storeId)
+          .collection(variantTypeRef)
+          .doc(variantController.text)
+          .set({}).then((_) async {});
+      await dataC.getVariantType();
+      endLoading();
+      EasyLoading.showSuccess('New Variant Type Created!');
+      variantController.clear();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: 'Error While Creating Variant Type!',
+          type: QuickAlertType.error,
+        ),
+      );
     }
   }
+
+  // RxBool noMemberPrice = true.obs;
+
+  // void togleMemberPrice(bool value) {
+  //   noMemberPrice.value = value;
+  //   if (value == true) {
+  //     memberPriceController.text = regularPriceController.text;
+  //   } else {
+  //     memberPriceController.clear();
+  //   }
+  // }
 
   var hasVariant = false.obs;
   var variantForms = <Rx<VariantForm>>[].obs;
 
-  void saveVariant() {
-    bool success = false;
-    for (var element in variantForms) {
-      if (element.value.formKey.currentState!.validate()) {
-        element.value.saved = true;
-        success = true;
-      } else {
-        success = false;
-      }
-    }
-    if (success) {
-      Get.back();
-      EasyLoading.showSuccess('Product Variant Saved Successfully!');
-    }
-  }
+  // void saveVariant() {
+  //   bool success = false;
+  //   for (var element in variantForms) {
+  //     if (element.value.formKey.currentState!.validate()) {
+  //       element.value.saved = true;
+  //       success = true;
+  //     } else {
+  //       success = false;
+  //     }
+  //   }
+  //   if (success) {
+  //     Get.back();
+  //     EasyLoading.showSuccess('Product Variant Saved Successfully!');
+  //   }
+  // }
 
   void addVariantForm() {
     var formKey = GlobalKey<FormState>();
     var name = TextEditingController();
-    var regularPrice = TextEditingController();
-    var memberPrice = TextEditingController();
+    var price = TextEditingController();
     var stock = TextEditingController();
 
     variantForms.add(
@@ -79,8 +370,7 @@ class InventoryController extends GetxController {
         VariantForm(
           formKey: formKey,
           nameController: name,
-          regularPriceController: regularPrice,
-          memberPriceController: memberPrice,
+          priceController: price,
           stockController: stock,
         ),
       ),
@@ -94,16 +384,17 @@ class InventoryController extends GetxController {
   }
 
   void clear() {
+    productVariant.clear();
     stockController.clear();
     descriptionController.clear();
-    noMemberPrice.value = true;
+    // noMemberPrice.value = true;
     hasVariant.value = false;
     variantForms.clear();
     nameController.clear();
     categoryController.clear();
     skuController.clear();
     regularPriceController.clear();
-    memberPriceController.clear();
+    // memberPriceController.clear();
     imagePath = '';
     isImageNull.value = false;
   }
@@ -123,9 +414,11 @@ class InventoryController extends GetxController {
     switch (type) {
       case "category":
         keywordCategory.value = searchCategoryC.text;
+        update();
         break;
       case "product":
         keywordProduct.value = searchProductC.text;
+        update();
         break;
     }
   }
@@ -379,76 +672,76 @@ class InventoryController extends GetxController {
     );
   }
 
-  Future<void> createProduct(BuildContext context) async {
-    showLoading(status: 'Creating Product ...');
-    try {
-      Map<String, dynamic> product = {
-        'productName': nameController.text,
-        'productCategoryId': categoryController.text,
-        'productSKU': skuController.text,
-        'productStock': int.parse(stockController.text),
-        'productRegularPrice': double.parse(regularPriceController.text),
-        'productMemberPrice': double.parse(memberPriceController.text),
-      };
-      if (descriptionController.text.isNotEmpty) {
-        product.addAll({'productDescription': descriptionController.text});
-      }
-      await DBService.db
-          .collection(storesRef)
-          .doc(dataC.store.value.storeId)
-          .collection(productsRef)
-          .add(product)
-          .then((productData) async {
-        if (imagePath != '') {
-          String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
-          Reference referenceRoot = FirebaseStorage.instance.ref();
-          Reference referenceDirImages = referenceRoot
-              .child("store/${dataC.store.value.storeId}/products");
-          Reference referenceImageUpload = referenceDirImages.child(imagesFile);
-          await referenceImageUpload.putFile(File(imagePath));
-          String imageUrl = await referenceImageUpload.getDownloadURL();
-          await DBService.db
-              .collection(storesRef)
-              .doc(dataC.store.value.storeId)
-              .collection(productsRef)
-              .doc(productData.id)
-              .update({'productImage': imageUrl});
-        }
-        if (hasVariant.isTrue) {
-          for (var variant in variantForms) {
-            await DBService.db
-                .collection(storesRef)
-                .doc(dataC.store.value.storeId)
-                .collection(productsRef)
-                .doc(productData.id)
-                .collection(variantsRef)
-                .add({
-              'variantName': variant.value.nameController.text,
-              'variantRegularPrice':
-                  double.parse(variant.value.regularPriceController.text),
-              'variantMemberPrice':
-                  double.parse(variant.value.memberPriceController.text),
-              'variantStock': int.parse(variant.value.stockController.text),
-            });
-          }
-        }
-      });
-      await dataC.getProducts();
-      endLoading();
-      Get.back();
-      EasyLoading.showSuccess('New Product Created!');
-      clear();
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      endLoading().then(
-        (value) => showAlert(
-          context: context,
-          text: 'Error While Creating Product!',
-          type: QuickAlertType.error,
-        ),
-      );
-    }
-  }
+  // Future<void> createProduct(BuildContext context) async {
+  //   showLoading(status: 'Creating Product ...');
+  //   try {
+  //     Map<String, dynamic> product = {
+  //       'productName': nameController.text,
+  //       'productCategoryId': categoryController.text,
+  //       'productSKU': skuController.text,
+  //       'productStock': int.parse(stockController.text),
+  //       'productRegularPrice': double.parse(regularPriceController.text),
+  //       // 'productMemberPrice': double.parse(memberPriceController.text),
+  //     };
+  //     if (descriptionController.text.isNotEmpty) {
+  //       product.addAll({'productDescription': descriptionController.text});
+  //     }
+  //     await DBService.db
+  //         .collection(storesRef)
+  //         .doc(dataC.store.value.storeId)
+  //         .collection(productsRef)
+  //         .add(product)
+  //         .then((productData) async {
+  //       if (imagePath != '') {
+  //         String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
+  //         Reference referenceRoot = FirebaseStorage.instance.ref();
+  //         Reference referenceDirImages = referenceRoot
+  //             .child("store/${dataC.store.value.storeId}/products");
+  //         Reference referenceImageUpload = referenceDirImages.child(imagesFile);
+  //         await referenceImageUpload.putFile(File(imagePath));
+  //         String imageUrl = await referenceImageUpload.getDownloadURL();
+  //         await DBService.db
+  //             .collection(storesRef)
+  //             .doc(dataC.store.value.storeId)
+  //             .collection(productsRef)
+  //             .doc(productData.id)
+  //             .update({'productImage': imageUrl});
+  //       }
+  //       if (hasVariant.isTrue) {
+  //         for (var variant in variantForms) {
+  //           await DBService.db
+  //               .collection(storesRef)
+  //               .doc(dataC.store.value.storeId)
+  //               .collection(productsRef)
+  //               .doc(productData.id)
+  //               .collection(variantsRef)
+  //               .add({
+  //             'variantName': variant.value.nameController.text,
+  //             'variantRegularPrice':
+  //                 double.parse(variant.value.regularPriceController.text),
+  //             'variantMemberPrice':
+  //                 double.parse(variant.value.memberPriceController.text),
+  //             'variantStock': int.parse(variant.value.stockController.text),
+  //           });
+  //         }
+  //       }
+  //     });
+  //     await dataC.getProducts();
+  //     endLoading();
+  //     Get.back();
+  //     EasyLoading.showSuccess('New Product Created!');
+  //     clear();
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e.toString());
+  //     }
+  //     endLoading().then(
+  //       (value) => showAlert(
+  //         context: context,
+  //         text: 'Error While Creating Product!',
+  //         type: QuickAlertType.error,
+  //       ),
+  //     );
+  //   }
+  // }
 }

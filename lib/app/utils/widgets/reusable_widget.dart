@@ -23,7 +23,7 @@ class CustomProgressIndicator extends StatelessWidget {
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
-    required this.controller,
+    this.controller,
     required this.title,
     required this.hintText,
     this.validator,
@@ -33,10 +33,11 @@ class CustomTextField extends StatelessWidget {
     this.onComplete,
     this.readOnly = false,
     this.isPriceField = false,
+    this.autofocus = false,
   });
 
   final String title;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
   final String hintText;
   final int? maxLines;
@@ -45,6 +46,7 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onComplete;
   final bool? isPriceField;
   final bool? readOnly;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
-          border: Border.all(color: grey2, width: 2)),
+          border: Border.all(color: grey2, width: 1)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,6 +99,7 @@ class CustomTextField extends StatelessWidget {
                 ),
               Expanded(
                 child: TextFormField(
+                  autofocus: autofocus,
                   readOnly: readOnly!,
                   onEditingComplete: onComplete,
                   onChanged: onChanged,
@@ -159,7 +162,7 @@ class CustomDropdownField extends StatelessWidget {
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
-          border: Border.all(color: grey2, width: 2)),
+          border: Border.all(color: grey2, width: 1)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -240,7 +243,7 @@ class CustomPasswordField extends StatelessWidget {
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
-          border: Border.all(color: grey2, width: 2)),
+          border: Border.all(color: grey2, width: 1)),
       child: Row(
         children: [
           Expanded(
@@ -613,6 +616,7 @@ class CustomSearch extends StatelessWidget {
     this.prefixIcon,
     this.controller,
     this.onChanged,
+    this.onSuffixPressed,
   });
   final String text;
   final bool hasPrefixIcon;
@@ -620,6 +624,7 @@ class CustomSearch extends StatelessWidget {
   final IconData? prefixIcon;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
+  final void Function()? onSuffixPressed;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -650,15 +655,23 @@ class CustomSearch extends StatelessWidget {
                   controller: controller,
                   onChanged: onChanged,
                   decoration: InputDecoration(
-                    isDense: false,
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: text,
-                    prefixIcon: const Icon(
-                      FontAwesomeIcons.magnifyingGlass,
-                      color: primaryColor,
-                    ),
-                  ),
+                      isDense: false,
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: text,
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.magnifyingGlass,
+                        color: primaryColor,
+                      ),
+                      suffixIcon: controller!.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: onSuffixPressed,
+                              icon: const Icon(
+                                FontAwesomeIcons.xmark,
+                                color: primaryColor,
+                              ),
+                            )
+                          : null),
                 ),
               ),
               hasPrefixIcon

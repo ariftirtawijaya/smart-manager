@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -29,18 +27,24 @@ class ProductView extends GetView<InventoryController> {
       child: Scaffold(
         body: Column(
           children: [
-            CustomSearch(
-              text: 'Search products or scan barcode',
-              hasPrefixIcon: true,
-              onPrefixPressed: () {
-                EasyLoading.showInfo('Scan Barcode');
-              },
-              controller: controller.searchProductC,
-              onChanged: (value) {
-                controller.changeKeyword('product');
-              },
-              prefixIcon: FontAwesomeIcons.barcode,
-            ),
+            GetBuilder<InventoryController>(builder: (controller) {
+              return CustomSearch(
+                text: 'Search products or scan barcode',
+                hasPrefixIcon: true,
+                onPrefixPressed: () {
+                  EasyLoading.showInfo('Scan Barcode');
+                },
+                controller: controller.searchProductC,
+                onChanged: (value) {
+                  controller.changeKeyword('product');
+                },
+                onSuffixPressed: () {
+                  controller.searchProductC.clear();
+                  controller.changeKeyword('product');
+                },
+                prefixIcon: FontAwesomeIcons.barcode,
+              );
+            }),
             const SizedBox(
               height: 8.0,
             ),
@@ -114,7 +118,7 @@ class ProductView extends GetView<InventoryController> {
                     return AutoHeightGridView(
                       itemCount: 10,
                       physics: const AlwaysScrollableScrollPhysics(),
-                      crossAxisCount: 2,
+                      crossAxisCount: 3,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       padding: const EdgeInsets.all(16),
