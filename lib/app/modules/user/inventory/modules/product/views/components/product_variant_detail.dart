@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,8 +44,6 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                   .asMap()
                                   .entries
                                   .map((entry2) {
-                                int rowIndex = entry.key;
-                                int colIndex = entry2.key;
                                 Map<String, dynamic> targetOption = {
                                   entry.value: entry2.value
                                 };
