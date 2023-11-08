@@ -95,10 +95,10 @@ class CreateStoreController extends GetxController {
         into: storesRef,
         data: {
           'userId': authC.currentUser.value.uid!,
-          'storeName': nameController.text,
-          'storeEmail': emailController.text,
-          'storeAddress': addressController.text,
-          'storePhone': phoneController.text,
+          'name': nameController.text,
+          'email': emailController.text,
+          'address': addressController.text,
+          'phone': phoneController.text,
         },
       ).then((storeData) async {
         await DBService.update(

@@ -1,62 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StoreModel {
-  String? storeId;
-  String? storeEmail;
-  String? storeName;
+  String? id;
+  String? email;
+  String? name;
   String? userId;
-  String? storePhone;
-  String? storeAddress;
-  String? storeLogo;
+  String? phone;
+  String? address;
+  String? logo;
 
   StoreModel({
-    this.storeId,
-    this.storeEmail,
-    this.storeName,
+    this.id,
+    this.email,
+    this.name,
     this.userId,
-    this.storePhone,
-    this.storeAddress,
-    this.storeLogo,
+    this.phone,
+    this.address,
+    this.logo,
   });
 
   @override
   String toString() {
-    return '${storeName!.toLowerCase()}, ${storeEmail!.toLowerCase()}, ${userId!.toLowerCase()}, ${storePhone!.toLowerCase()}';
+    return '${name!.toLowerCase()}, ${email!.toLowerCase()}, ${userId!.toLowerCase()}, ${phone!.toLowerCase()}';
   }
 
   factory StoreModel.fromMap(Map<String, dynamic> map) {
     return StoreModel(
-      storeId: map['storeId'],
-      storeName: map['storeName'],
-      storeEmail: map['storeEmail'],
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
       userId: map['userId'],
-      storePhone: map['storePhone'],
-      storeAddress: map['storeAddress'],
-      storeLogo: map['storeLogo'],
+      phone: map['phone'],
+      address: map['address'],
+      logo: map['logo'],
     );
   }
   factory StoreModel.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return StoreModel(
-      storeId: snapshot.id,
-      storeEmail: data['storeEmail'],
-      storeName: data["storeName"],
+      id: snapshot.id,
+      email: data['email'],
+      name: data["name"],
       userId: data["userId"],
-      storePhone: data["storePhone"],
-      storeAddress: data["storeAddress"],
-      storeLogo: data["storeLogo"],
+      phone: data["phone"],
+      address: data["address"],
+      logo: data["logo"],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'storeId': storeId,
-      'storeEmail': storeEmail,
-      'storeName': storeName,
+      'id': id,
+      'email': email,
+      'name': name,
       'userId': userId,
-      'storePhone': storePhone,
-      'storeAddress': storeAddress,
-      'storeLogo': storeLogo,
+      'phone': phone,
+      'address': address,
+      'logo': logo,
     };
   }
 }

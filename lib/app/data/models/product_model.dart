@@ -1,145 +1,206 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-List<ProductModel> productModelFromJson(String str) => List<ProductModel>.from(
-    json.decode(str).map((x) => ProductModel.fromJson(x)));
-
-String productModelToJson(List<ProductModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+import 'package:get/get.dart';
 
 class ProductModel {
   Product product;
-  List<Variant>? variants;
+  List<ProductVariant>? variants;
 
   ProductModel({
     required this.product,
     this.variants,
   });
 
-  @override
-  String toString() {
-    return product.productName.toLowerCase();
+  factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+    final product = Product.fromJson(data['product']);
+    final variants = (data['variants'] as List<dynamic>?)
+        ?.map((variantData) => ProductVariant.fromMap(variantData))
+        .toList();
+
+    return ProductModel(product: product, variants: variants);
+  }
+  factory ProductModel.fromJson(Map<String, dynamic> data) {
+    // final Map<String, dynamic> data = jsonDecode(json);
+    final product = Product.fromJson(data['product']);
+    final variants = (data['variants'] as List<dynamic>?)
+        ?.map((variantData) => ProductVariant.fromMap(variantData))
+        .toList();
+
+    return ProductModel(product: product, variants: variants);
+  }
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    final product = Product.fromMap(map['product']);
+    final variants = (map['variants'] as List<dynamic>?)
+        ?.map((variantData) => ProductVariant.fromMap(variantData))
+        .toList();
+
+    return ProductModel(product: product, variants: variants);
+  }
+  String toJson() {
+    final Map<String, dynamic> data = {
+      'product': product.toJson(),
+      'variants': variants?.map((variant) => variant.toMap()).toList(),
+    };
+    return jsonEncode(data);
   }
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        product: Product.fromJson(json["product"]),
-        variants: json["variants"] == null
-            ? []
-            : List<Variant>.from(
-                json["variants"]!.map((x) => Variant.fromJson(x))),
-      );
+  Map<String, dynamic> toMap() {
+    return {
+      'product': product.toMap(),
+      'variants': variants?.map((variant) => variant.toMap()).toList(),
+    };
+  }
 
-  Map<String, dynamic> toJson() => {
-        "product": product.toJson(),
-        "variants": variants == null
-            ? []
-            : List<dynamic>.from(variants!.map((x) => x.toJson())),
-      };
+  @override
+  String toString() {
+    return toJson();
+  }
 }
 
 class Product {
-  String productId;
-  String productCategoryId;
-  double productRegularPrice;
-  String productSku;
-  String productImage;
-  int productStock;
-  String productName;
-  double productMemberPrice;
-  String? productDescription;
+  String id;
+  String categoryId;
+  double price;
+  String sku;
+  String image;
+  int stock;
+  String name;
+  String? description;
 
   Product({
-    required this.productId,
-    required this.productCategoryId,
-    required this.productRegularPrice,
-    required this.productSku,
-    required this.productImage,
-    required this.productStock,
-    required this.productName,
-    required this.productMemberPrice,
-    this.productDescription,
+    required this.id,
+    required this.categoryId,
+    required this.price,
+    required this.sku,
+    required this.image,
+    required this.stock,
+    required this.name,
+    this.description,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        productId: json["productId"],
-        productCategoryId: json["productCategoryId"],
-        productRegularPrice: json["productRegularPrice"],
-        productSku: json["productSKU"],
-        productImage: json["productImage"],
-        productStock: json["productStock"],
-        productName: json["productName"],
-        productMemberPrice: json["productMemberPrice"],
-        productDescription: json["productDescription"],
-      );
-
-  factory Product.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      productId: snapshot.id,
-      productCategoryId: data["productCategoryId"],
-      productRegularPrice: data["productRegularPrice"],
-      productSku: data["productSKU"],
-      productImage: data["productImage"],
-      productStock: data["productStock"],
-      productName: data["productName"],
-      productMemberPrice: data["productMemberPrice"],
-      productDescription: data["productDescription"],
+      id: json['id'],
+      categoryId: json['categoryId'],
+      price: json['price'],
+      sku: json['sku'],
+      image: json['image'],
+      stock: json['stock'],
+      name: json['name'],
+      description: json['description'],
     );
   }
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      id: map['id'],
+      categoryId: map['categoryId'],
+      price: map['price'],
+      sku: map['sku'],
+      image: map['image'],
+      stock: map['stock'],
+      name: map['name'],
+      description: map['description'],
+    );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'categoryId': categoryId,
+      'price': price,
+      'sku': sku,
+      'image': image,
+      'stock': stock,
+      'name': name,
+      'description': description,
+    };
+  }
 
-  Map<String, dynamic> toJson() => {
-        "productId": productId,
-        "productCategoryId": productCategoryId,
-        "productRegularPrice": productRegularPrice,
-        "productSKU": productSku,
-        "productImage": productImage,
-        "productStock": productStock,
-        "productName": productName,
-        "productMemberPrice": productMemberPrice,
-        "productDescription": productDescription,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'categoryId': categoryId,
+      'price': price,
+      'sku': sku,
+      'image': image,
+      'stock': stock,
+      'name': name,
+      'description': description,
+    };
+  }
 }
 
-class Variant {
-  String variantId;
-  int variantStock;
-  double variantRegularPrice;
-  String variantName;
-  double variantMemberPrice;
+class ProductVariant {
+  String? name;
+  RxList<String>? options;
+  RxList<VariantPrices>? prices;
 
-  Variant({
-    required this.variantId,
-    required this.variantStock,
-    required this.variantRegularPrice,
-    required this.variantName,
-    required this.variantMemberPrice,
+  ProductVariant({
+    this.name,
+    this.options,
+    this.prices,
   });
 
-  factory Variant.fromJson(Map<String, dynamic> json) => Variant(
-        variantId: json["variantId"],
-        variantStock: json["variantStock"],
-        variantRegularPrice: json["variantRegularPrice"],
-        variantName: json["variantName"],
-        variantMemberPrice: json["variantMemberPrice"],
-      );
-
-  factory Variant.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return Variant(
-      variantId: snapshot.id,
-      variantStock: data["variantStock"],
-      variantRegularPrice: data["variantRegularPrice"],
-      variantName: data["variantName"],
-      variantMemberPrice: data["variantMemberPrice"],
-    );
+  @override
+  String toString() {
+    return 'ProductVariant(name: $name, options: $options, prices: $prices)';
   }
 
-  Map<String, dynamic> toJson() => {
-        "variantId": variantId,
-        "variantStock": variantStock,
-        "variantRegularPrice": variantRegularPrice,
-        "variantName": variantName,
-        "variantMemberPrice": variantMemberPrice,
-      };
+  factory ProductVariant.fromMap(Map<String, dynamic> map) {
+    return ProductVariant(
+      name: map['name'],
+      options: (map['options'] as List<dynamic>?)
+          ?.map((option) => option.toString())
+          .toList()
+          .obs,
+      prices: (map['prices'] as List<dynamic>?)
+          ?.map((priceData) => VariantPrices.fromMap(priceData))
+          .toList()
+          .obs,
+    );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'options': options,
+      'prices': prices?.map((price) => price.toMap()).toList(),
+    };
+  }
+}
+
+class VariantPrices {
+  Map<String, dynamic>? option;
+  double? price;
+  int? stock;
+  String? sku;
+
+  VariantPrices({
+    this.option,
+    this.price,
+    this.stock,
+    this.sku,
+  });
+
+  @override
+  String toString() {
+    return 'VariantPrices(option: $option, price: $price, stock: $stock, sku: $sku)';
+  }
+
+  factory VariantPrices.fromMap(Map<String, dynamic> map) {
+    return VariantPrices(
+      option: map['option'] as Map<String, dynamic>?,
+      price: map['price'] as double?,
+      stock: map['stock'] as int?,
+      sku: map['sku'] as String?,
+    );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'option': option,
+      'price': price,
+      'stock': stock,
+      'sku': sku,
+    };
+  }
 }

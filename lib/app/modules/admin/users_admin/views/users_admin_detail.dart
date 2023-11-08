@@ -326,7 +326,7 @@ class UsersAdminDetailView extends GetView<UsersAdminController> {
                                     Radius.circular(8.0),
                                   ),
                                 ),
-                                child: Text("storeData.storeName!",
+                                child: Text("storeData.name!",
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium!),
@@ -456,7 +456,7 @@ class UsersAdminDetailView extends GetView<UsersAdminController> {
                             const SizedBox(
                               height: 8.0,
                             ),
-                            Text(storeData.storeName!,
+                            Text(storeData.name!,
                                 style:
                                     Theme.of(context).textTheme.titleMedium!),
                             const SizedBox(
@@ -475,7 +475,7 @@ class UsersAdminDetailView extends GetView<UsersAdminController> {
                             FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
                                 future: FirebaseFirestore.instance
                                     .collection('stores')
-                                    .doc(storeData.storeId)
+                                    .doc(storeData.id)
                                     .collection('employees')
                                     .get(),
                                 builder: (context, snapshot) {
@@ -501,7 +501,7 @@ class UsersAdminDetailView extends GetView<UsersAdminController> {
                             FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
                                 future: FirebaseFirestore.instance
                                     .collection('stores')
-                                    .doc(storeData.storeId)
+                                    .doc(storeData.id)
                                     .collection('products')
                                     .get(),
                                 builder: (context, snapshot) {

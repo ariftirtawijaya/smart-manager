@@ -34,6 +34,7 @@ class CustomTextField extends StatelessWidget {
     this.readOnly = false,
     this.isPriceField = false,
     this.autofocus = false,
+    this.textCapitalization,
   });
 
   final String title;
@@ -47,6 +48,7 @@ class CustomTextField extends StatelessWidget {
   final bool? isPriceField;
   final bool? readOnly;
   final bool autofocus;
+  final TextCapitalization? textCapitalization;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +101,8 @@ class CustomTextField extends StatelessWidget {
                 ),
               Expanded(
                 child: TextFormField(
+                  textCapitalization:
+                      textCapitalization ?? TextCapitalization.none,
                   autofocus: autofocus,
                   readOnly: readOnly!,
                   onEditingComplete: onComplete,

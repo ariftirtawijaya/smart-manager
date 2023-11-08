@@ -14,9 +14,7 @@ import 'package:smart_manager/app/controllers/auth_controller.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
-import 'package:smart_manager/app/data/models/product_variant.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/product/components/variant_form.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
@@ -36,109 +34,158 @@ class InventoryController extends GetxController {
   TextEditingController variantController = TextEditingController();
   TextEditingController variantValueController = TextEditingController();
   TextEditingController regularPriceController = TextEditingController();
-  // TextEditingController memberPriceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   RxBool isLoading = false.obs;
 
-  var productVariant = RxList<VariantType>([]);
+  var productVariant = RxList<ProductVariant>([]);
 
-  void deleteValueVariant(VariantType variantType, String value) {
+  void deleteValueVariant(ProductVariant variantType, String value) {
     productVariant
         .where((variantData) => variantData.name == variantType.name)
         .first
         .options!
-        .removeWhere((element) => element.name == value);
+        .removeWhere((element) => element == value);
   }
 
-  void addValueVariant(BuildContext context, VariantType variantType) {
+  bool mapEquals(Map<String, dynamic>? map1, Map<String, dynamic> map2) {
+    if (map1 == null) {
+      return false;
+    }
+    if (map1.length != map2.length) {
+      return false;
+    }
+    for (var key in map1.keys) {
+      if (map1[key] != map2[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void setVariantPrices() {
+    if (productVariant.length > 1) {
+      productVariant.first.prices!.clear();
+      for (var firstOptions in productVariant.first.options!) {
+        for (var secondOptions in productVariant.last.options!) {
+          Map<String, String> priceOption = {firstOptions: secondOptions};
+          productVariant.first.prices!.add(
+            VariantPrices(
+              option: priceOption,
+              price: 0,
+              sku: "",
+              stock: 0,
+            ),
+          );
+        }
+      }
+    } else {
+      productVariant.first.prices!.clear();
+      for (var firstOptions in productVariant.first.options!) {
+        Map<String, String> priceOption = {firstOptions: firstOptions};
+        productVariant.first.prices!.add(
+          VariantPrices(
+            option: priceOption,
+            price: 0,
+            sku: "",
+            stock: 0,
+          ),
+        );
+      }
+    }
+  }
+
+  void addValueVariant(BuildContext context, ProductVariant variantType) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     variantValueController.clear();
-    Get.bottomSheet(Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8),
+            topRight: Radius.circular(8),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Add ${variantType.name}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(
-                height: 16.0,
-              ),
-              CustomTextField(
-                  autofocus: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Cannot empty!\n';
-                    }
-                    if (productVariant
-                        .where((variantData) =>
-                            variantData.name == variantType.name)
-                        .first
-                        .options!
-                        .where((variantOption) =>
-                            variantOption.name!.toLowerCase() ==
-                            value.toLowerCase())
-                        .isNotEmpty) {
-                      return 'Name is already in use!\n';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    if (value.isEmpty) {
-                      formKey.currentState!.reset();
-                    }
-                  },
-                  onComplete: () {
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Add Options For ${variantType.name}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomTextField(
+                    autofocus: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Cannot empty!\n';
+                      }
+                      if (productVariant
+                          .where((variantData) =>
+                              variantData.name == variantType.name)
+                          .first
+                          .options!
+                          .where((variantOption) =>
+                              variantOption.toLowerCase() ==
+                              value.toLowerCase())
+                          .isNotEmpty) {
+                        return 'Name is already in use!\n';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        formKey.currentState!.reset();
+                      }
+                    },
+                    onComplete: () {
+                      if (formKey.currentState!.validate()) {
+                        productVariant
+                            .where((variantData) =>
+                                variantData.name == variantType.name)
+                            .first
+                            .options!
+                            .add(variantValueController.text);
+                        Get.back();
+                      }
+                    },
+                    controller: variantValueController,
+                    title: "${variantType.name} Name",
+                    hintText: "Insert ${variantType.name} Name"),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                CustomButton(
+                  onPressed: () {
                     if (formKey.currentState!.validate()) {
                       productVariant
                           .where((variantData) =>
                               variantData.name == variantType.name)
                           .first
                           .options!
-                          .add(VariantOptions(
-                              name: variantValueController.text));
+                          .add(variantValueController.text);
+                      print(productVariant);
+                      // addVariantForm();
                       Get.back();
                     }
                   },
-                  controller: variantValueController,
-                  title: "${variantType.name} Name",
-                  hintText: "Insert ${variantType.name} Name"),
-              const SizedBox(
-                height: 16.0,
-              ),
-              CustomButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    productVariant
-                        .where((variantData) =>
-                            variantData.name == variantType.name)
-                        .first
-                        .options!
-                        .add(VariantOptions(name: variantValueController.text));
-                    addVariantForm();
-                    Get.back();
-                  }
-                },
-                text: 'Add',
-              )
-            ],
+                  text: 'Add',
+                )
+              ],
+            ),
           ),
         ),
       ),
-    ));
+      isDismissible: false,
+    );
   }
 
   Future<void> variantModal(
@@ -210,11 +257,19 @@ class InventoryController extends GetxController {
                                                       variantType)
                                                   .isEmpty) {
                                                 if (productVariant.length < 2) {
-                                                  productVariant.add(
-                                                      VariantType(
-                                                          name: variantType,
-                                                          options: RxList([])));
+                                                  var selectedVariant =
+                                                      ProductVariant(
+                                                    name: variantType,
+                                                    options: RxList<String>([]),
+                                                    prices:
+                                                        RxList<VariantPrices>(
+                                                            []),
+                                                  );
+                                                  productVariant
+                                                      .add(selectedVariant);
                                                   Get.back();
+                                                  // addValueVariant(
+                                                  //     context, selectedVariant);
                                                 } else {
                                                   EasyLoading.showToast(
                                                       'Maximum 2 types of product variants');
@@ -307,7 +362,7 @@ class InventoryController extends GetxController {
     try {
       await DBService.db
           .collection(storesRef)
-          .doc(dataC.store.value.storeId)
+          .doc(dataC.store.value.id)
           .collection(variantTypeRef)
           .doc(variantController.text)
           .set({}).then((_) async {});
@@ -329,72 +384,14 @@ class InventoryController extends GetxController {
     }
   }
 
-  // RxBool noMemberPrice = true.obs;
-
-  // void togleMemberPrice(bool value) {
-  //   noMemberPrice.value = value;
-  //   if (value == true) {
-  //     memberPriceController.text = regularPriceController.text;
-  //   } else {
-  //     memberPriceController.clear();
-  //   }
-  // }
-
-  var hasVariant = false.obs;
-  var variantForms = <Rx<VariantForm>>[].obs;
-
-  // void saveVariant() {
-  //   bool success = false;
-  //   for (var element in variantForms) {
-  //     if (element.value.formKey.currentState!.validate()) {
-  //       element.value.saved = true;
-  //       success = true;
-  //     } else {
-  //       success = false;
-  //     }
-  //   }
-  //   if (success) {
-  //     Get.back();
-  //     EasyLoading.showSuccess('Product Variant Saved Successfully!');
-  //   }
-  // }
-
-  void addVariantForm() {
-    var formKey = GlobalKey<FormState>();
-    var name = TextEditingController();
-    var price = TextEditingController();
-    var stock = TextEditingController();
-
-    variantForms.add(
-      Rx(
-        VariantForm(
-          formKey: formKey,
-          nameController: name,
-          priceController: price,
-          stockController: stock,
-        ),
-      ),
-    );
-  }
-
-  void deleteVariantForm(int index) {
-    if (index >= 0 && index < variantForms.length) {
-      variantForms.removeAt(index);
-    }
-  }
-
   void clear() {
     productVariant.clear();
     stockController.clear();
     descriptionController.clear();
-    // noMemberPrice.value = true;
-    hasVariant.value = false;
-    variantForms.clear();
     nameController.clear();
     categoryController.clear();
     skuController.clear();
     regularPriceController.clear();
-    // memberPriceController.clear();
     imagePath = '';
     isImageNull.value = false;
   }
@@ -410,6 +407,7 @@ class InventoryController extends GetxController {
   var keywordProduct = ''.obs;
   final TextEditingController searchCategoryC = TextEditingController();
   final TextEditingController searchProductC = TextEditingController();
+
   void changeKeyword(String type) {
     switch (type) {
       case "category":
@@ -534,7 +532,7 @@ class InventoryController extends GetxController {
     try {
       await DBService.db
           .collection(storesRef)
-          .doc(dataC.store.value.storeId)
+          .doc(dataC.store.value.id)
           .collection(categoriesRef)
           .add({
         'categoryName': nameController.text,
@@ -542,14 +540,14 @@ class InventoryController extends GetxController {
         if (imagePath != '') {
           String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
           Reference referenceRoot = FirebaseStorage.instance.ref();
-          Reference referenceDirImages = referenceRoot
-              .child("store/${dataC.store.value.storeId}/categories");
+          Reference referenceDirImages =
+              referenceRoot.child("store/${dataC.store.value.id}/categories");
           Reference referenceImageUpload = referenceDirImages.child(imagesFile);
           await referenceImageUpload.putFile(File(imagePath));
           String imageUrl = await referenceImageUpload.getDownloadURL();
           await DBService.db
               .collection(storesRef)
-              .doc(dataC.store.value.storeId)
+              .doc(dataC.store.value.id)
               .collection(categoriesRef)
               .doc(categoryData.id)
               .update({'categoryIcon': imageUrl});
@@ -580,7 +578,7 @@ class InventoryController extends GetxController {
     try {
       await DBService.db
           .collection(storesRef)
-          .doc(dataC.store.value.storeId)
+          .doc(dataC.store.value.id)
           .collection(categoriesRef)
           .doc(category.categoryId)
           .update({
@@ -594,14 +592,14 @@ class InventoryController extends GetxController {
           }
           String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
           Reference referenceRoot = FirebaseStorage.instance.ref();
-          Reference referenceDirImages = referenceRoot
-              .child("store/${dataC.store.value.storeId}/categories");
+          Reference referenceDirImages =
+              referenceRoot.child("store/${dataC.store.value.id}/categories");
           Reference referenceImageUpload = referenceDirImages.child(imagesFile);
           await referenceImageUpload.putFile(File(imagePath));
           String imageUrl = await referenceImageUpload.getDownloadURL();
           await DBService.db
               .collection(storesRef)
-              .doc(dataC.store.value.storeId)
+              .doc(dataC.store.value.id)
               .collection(categoriesRef)
               .doc(category.categoryId)
               .update({'categoryIcon': imageUrl});
@@ -645,7 +643,7 @@ class InventoryController extends GetxController {
             }
             await DBService.db
                 .collection(storesRef)
-                .doc(dataC.store.value.storeId)
+                .doc(dataC.store.value.id)
                 .collection(categoriesRef)
                 .doc(category.categoryId)
                 .delete()
@@ -672,76 +670,85 @@ class InventoryController extends GetxController {
     );
   }
 
-  // Future<void> createProduct(BuildContext context) async {
-  //   showLoading(status: 'Creating Product ...');
-  //   try {
-  //     Map<String, dynamic> product = {
-  //       'productName': nameController.text,
-  //       'productCategoryId': categoryController.text,
-  //       'productSKU': skuController.text,
-  //       'productStock': int.parse(stockController.text),
-  //       'productRegularPrice': double.parse(regularPriceController.text),
-  //       // 'productMemberPrice': double.parse(memberPriceController.text),
-  //     };
-  //     if (descriptionController.text.isNotEmpty) {
-  //       product.addAll({'productDescription': descriptionController.text});
-  //     }
-  //     await DBService.db
-  //         .collection(storesRef)
-  //         .doc(dataC.store.value.storeId)
-  //         .collection(productsRef)
-  //         .add(product)
-  //         .then((productData) async {
-  //       if (imagePath != '') {
-  //         String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
-  //         Reference referenceRoot = FirebaseStorage.instance.ref();
-  //         Reference referenceDirImages = referenceRoot
-  //             .child("store/${dataC.store.value.storeId}/products");
-  //         Reference referenceImageUpload = referenceDirImages.child(imagesFile);
-  //         await referenceImageUpload.putFile(File(imagePath));
-  //         String imageUrl = await referenceImageUpload.getDownloadURL();
-  //         await DBService.db
-  //             .collection(storesRef)
-  //             .doc(dataC.store.value.storeId)
-  //             .collection(productsRef)
-  //             .doc(productData.id)
-  //             .update({'productImage': imageUrl});
-  //       }
-  //       if (hasVariant.isTrue) {
-  //         for (var variant in variantForms) {
-  //           await DBService.db
-  //               .collection(storesRef)
-  //               .doc(dataC.store.value.storeId)
-  //               .collection(productsRef)
-  //               .doc(productData.id)
-  //               .collection(variantsRef)
-  //               .add({
-  //             'variantName': variant.value.nameController.text,
-  //             'variantRegularPrice':
-  //                 double.parse(variant.value.regularPriceController.text),
-  //             'variantMemberPrice':
-  //                 double.parse(variant.value.memberPriceController.text),
-  //             'variantStock': int.parse(variant.value.stockController.text),
-  //           });
-  //         }
-  //       }
-  //     });
-  //     await dataC.getProducts();
-  //     endLoading();
-  //     Get.back();
-  //     EasyLoading.showSuccess('New Product Created!');
-  //     clear();
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print(e.toString());
-  //     }
-  //     endLoading().then(
-  //       (value) => showAlert(
-  //         context: context,
-  //         text: 'Error While Creating Product!',
-  //         type: QuickAlertType.error,
-  //       ),
-  //     );
-  //   }
-  // }
+  Future<void> createProduct(BuildContext context) async {
+    showLoading(status: 'Creating Product ...');
+    try {
+      Map<String, dynamic> product = {
+        'name': nameController.text,
+        'categoryId': categoryController.text,
+        'sku': skuController.text,
+        'stock': int.parse(stockController.text),
+        'price': double.parse(regularPriceController.text),
+      };
+      if (descriptionController.text.isNotEmpty) {
+        product.addAll({'description': descriptionController.text});
+      }
+      await DBService.db
+          .collection(storesRef)
+          .doc(dataC.store.value.id)
+          .collection(productsRef)
+          .add(product)
+          .then((productData) async {
+        if (imagePath != '') {
+          String imagesFile = DateTime.now().microsecondsSinceEpoch.toString();
+          Reference referenceRoot = FirebaseStorage.instance.ref();
+          Reference referenceDirImages =
+              referenceRoot.child("store/${dataC.store.value.id}/products");
+          Reference referenceImageUpload = referenceDirImages.child(imagesFile);
+          await referenceImageUpload.putFile(File(imagePath));
+          String imageUrl = await referenceImageUpload.getDownloadURL();
+          await DBService.db
+              .collection(storesRef)
+              .doc(dataC.store.value.id)
+              .collection(productsRef)
+              .doc(productData.id)
+              .update({'image': imageUrl});
+        }
+        if (productVariant.isNotEmpty) {
+          for (var variant in productVariant) {
+            await DBService.db
+                .collection(storesRef)
+                .doc(dataC.store.value.id)
+                .collection(productsRef)
+                .doc(productData.id)
+                .collection(variantsRef)
+                .add({
+              'name': variant.name,
+              'options': variant.options,
+            });
+          }
+          for (var price in productVariant.first.prices!) {
+            await DBService.db
+                .collection(storesRef)
+                .doc(dataC.store.value.id)
+                .collection(productsRef)
+                .doc(productData.id)
+                .collection(variantsPricesRef)
+                .add({
+              'option': price.option,
+              'price': price.price,
+              'stock': price.stock,
+              'sku': price.sku,
+            });
+          }
+        }
+      });
+      // await dataC.getProducts();
+      endLoading();
+      // Get.back();
+      EasyLoading.showSuccess('New Product Created!');
+      clear();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: 'Error While Creating Product!',
+          type: QuickAlertType.error,
+        ),
+      );
+    }
+  }
 }

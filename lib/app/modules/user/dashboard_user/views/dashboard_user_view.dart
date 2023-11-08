@@ -9,7 +9,7 @@ class DashboardUserView extends GetView<DashboardUserController> {
   @override
   Widget build(BuildContext context) {
     return CustomUserPage(
-      title: controller.dataC.store.value.storeName!,
+      title: controller.dataC.store.value.name!,
       body: Center(
         child: Text(controller.text),
       ),

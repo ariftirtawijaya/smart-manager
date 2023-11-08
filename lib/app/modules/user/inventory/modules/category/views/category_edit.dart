@@ -3,14 +3,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/data/models/category_model.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class CategoryAdd extends GetView<InventoryController> {
-  const CategoryAdd({super.key});
+class CategoryEdit extends GetView<InventoryController> {
+  const CategoryEdit({super.key, required this.category});
+
+  final CategoryModel category;
 
   @override
   Widget build(BuildContext context) {
+    controller.nameController.text = category.categoryName!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -24,7 +28,7 @@ class CategoryAdd extends GetView<InventoryController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Add Category',
+            'Edit Category',
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
@@ -60,17 +64,18 @@ class CategoryAdd extends GetView<InventoryController> {
                             ),
                           ),
                         )
-                      : Image.asset(
-                          imagePlaceholder,
-                          height: 48,
-                        ),
+                      : category.categoryIcon != null
+                          ? CustomImageView(
+                              imageUrl: category.categoryIcon!, size: 48)
+                          : Image.asset(
+                              imagePlaceholder,
+                              height: 48,
+                            ),
                   CustomButtonSmall(
                       onPressed: () {
                         controller.pickImage(context);
                       },
-                      text: controller.imagePath.isNotEmpty
-                          ? 'Change Icon'
-                          : 'Choose Icon')
+                      text: 'Change Icon')
                 ],
               ),
             );
@@ -87,7 +92,7 @@ class CategoryAdd extends GetView<InventoryController> {
           ),
           CustomButton(
               onPressed: () {
-                controller.createCategory(context);
+                controller.updateCategory(context, category);
               },
               text: "Add"),
         ],

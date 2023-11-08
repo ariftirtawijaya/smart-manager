@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/category/components/category_list.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/views/components/category_list.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class CategoryView extends GetView<InventoryController> {

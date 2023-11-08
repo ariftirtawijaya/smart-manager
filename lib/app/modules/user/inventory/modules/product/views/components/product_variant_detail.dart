@@ -1,7 +1,9 @@
+import 'dart:developer';
+import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class ProductVariantDetail extends GetView<InventoryController> {
@@ -9,22 +11,8 @@ class ProductVariantDetail extends GetView<InventoryController> {
 
   @override
   Widget build(BuildContext context) {
+    var logger = Logger();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    List<List<TextEditingController>> priceControllers = List.generate(
-        controller.productVariant.first.options!.length,
-        (index) => List<TextEditingController>.generate(
-            controller.productVariant.last.options!.length,
-            (index) => TextEditingController()));
-    List<List<TextEditingController>> stockControllers = List.generate(
-        controller.productVariant.first.options!.length,
-        (index) => List<TextEditingController>.generate(
-            controller.productVariant.last.options!.length,
-            (index) => TextEditingController()));
-    List<List<TextEditingController>> skuControllers = List.generate(
-        controller.productVariant.first.options!.length,
-        (index) => List<TextEditingController>.generate(
-            controller.productVariant.last.options!.length,
-            (index) => TextEditingController()));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Variant Detail'),
@@ -44,7 +32,7 @@ class ProductVariantDetail extends GetView<InventoryController> {
                           initiallyExpanded: true,
                           tilePadding: EdgeInsets.zero,
                           title: Text(
-                            entry.value.name!,
+                            entry.value,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -59,10 +47,13 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                   .map((entry2) {
                                 int rowIndex = entry.key;
                                 int colIndex = entry2.key;
+                                Map<String, dynamic> targetOption = {
+                                  entry.value: entry2.value
+                                };
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(entry2.value.name!,
+                                    Text(entry2.value,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium!),
@@ -72,20 +63,31 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                     Row(
                                       children: [
                                         Expanded(
-                                          flex: 2,
+                                          // flex: 2,
                                           child: CustomTextField(
+                                              isPriceField: true,
                                               onChanged: (value) {
-                                                if (value.isNumericOnly) {
-                                                  entry2.value.price =
-                                                      double.parse(value);
+                                                if (value.isCurrency) {
+                                                  for (var price in controller
+                                                      .productVariant
+                                                      .first
+                                                      .prices!) {
+                                                    if (controller.mapEquals(
+                                                        price.option,
+                                                        targetOption)) {
+                                                      price.price =
+                                                          double.parse(value);
+                                                      break;
+                                                    }
+                                                  }
                                                 }
                                               },
-                                              controller:
-                                                  priceControllers[rowIndex]
-                                                      [colIndex],
                                               validator: (value) {
                                                 if (value!.isEmpty) {
                                                   return 'Cannot Empty!\n';
+                                                }
+                                                if (!value.isCurrency) {
+                                                  return 'Wrong Format!\n';
                                                 }
                                                 return null;
                                               },
@@ -96,17 +98,24 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                           width: 6.0,
                                         ),
                                         Expanded(
-                                          flex: 1,
+                                          // flex: 1,
                                           child: CustomTextField(
                                               onChanged: (value) {
                                                 if (value.isNumericOnly) {
-                                                  entry2.value.stock =
-                                                      int.parse(value);
+                                                  for (var price in controller
+                                                      .productVariant
+                                                      .first
+                                                      .prices!) {
+                                                    if (controller.mapEquals(
+                                                        price.option,
+                                                        targetOption)) {
+                                                      price.stock =
+                                                          int.parse(value);
+                                                      break;
+                                                    }
+                                                  }
                                                 }
                                               },
-                                              controller:
-                                                  stockControllers[rowIndex]
-                                                      [colIndex],
                                               validator: (value) {
                                                 if (value!.isEmpty) {
                                                   return 'Cannot Empty!\n';
@@ -125,11 +134,18 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                       height: 16.0,
                                     ),
                                     CustomTextField(
+                                        textCapitalization:
+                                            TextCapitalization.characters,
                                         onChanged: (value) {
-                                          entry2.value.sku = value;
+                                          for (var price in controller
+                                              .productVariant.first.prices!) {
+                                            if (controller.mapEquals(
+                                                price.option, targetOption)) {
+                                              price.sku = value;
+                                              break;
+                                            }
+                                          }
                                         },
-                                        controller: skuControllers[rowIndex]
-                                            [colIndex],
                                         validator: (value) {
                                           if (value!.isEmpty) {
                                             return 'Cannot Empty!\n';
@@ -172,7 +188,7 @@ class ProductVariantDetail extends GetView<InventoryController> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(entry2.value.name!,
+                                  Text(entry2.value,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium!),
@@ -184,15 +200,15 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                       Expanded(
                                         flex: 2,
                                         child: CustomTextField(
-                                            onChanged: (value) {
-                                              if (value.isNumericOnly) {
-                                                entry2.value.price =
-                                                    double.parse(value);
-                                              }
-                                            },
-                                            controller:
-                                                priceControllers[rowIndex]
-                                                    [colIndex],
+                                            // onChanged: (value) {
+                                            //   if (value.isNumericOnly) {
+                                            //     entry2.value.price =
+                                            //         double.parse(value);
+                                            //   }
+                                            // },
+                                            // controller:
+                                            //     priceControllers[rowIndex]
+                                            //         [colIndex],
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return 'Cannot Empty!\n';
@@ -208,15 +224,15 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                       Expanded(
                                         flex: 1,
                                         child: CustomTextField(
-                                            onChanged: (value) {
-                                              if (value.isNumericOnly) {
-                                                entry2.value.stock =
-                                                    int.parse(value);
-                                              }
-                                            },
-                                            controller:
-                                                stockControllers[rowIndex]
-                                                    [colIndex],
+                                            // onChanged: (value) {
+                                            //   if (value.isNumericOnly) {
+                                            //     entry2.value.stock =
+                                            //         int.parse(value);
+                                            //   }
+                                            // },
+                                            // controller:
+                                            //     stockControllers[rowIndex]
+                                            //         [colIndex],
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return 'Cannot Empty!\n';
@@ -235,11 +251,11 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                     height: 16.0,
                                   ),
                                   CustomTextField(
-                                      onChanged: (value) {
-                                        entry2.value.sku = value;
-                                      },
-                                      controller: skuControllers[rowIndex]
-                                          [colIndex],
+                                      // onChanged: (value) {
+                                      //   entry2.value.sku = value;
+                                      // },
+                                      // controller: skuControllers[rowIndex]
+                                      //     [colIndex],
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return 'Cannot Empty!\n';
@@ -279,35 +295,21 @@ class ProductVariantDetail extends GetView<InventoryController> {
         padding:
             const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
         child: CustomButton(
-          onPressed: () {
+          onPressed: () async {
             if (formKey.currentState!.validate()) {
-              // for (var i = 0; i < priceControllers.length; i++) {
-              //   var item = priceControllers[i];
-              //   for (var j = 0; j < item.length; j++) {
-              //     var price = priceControllers[i][j];
-              //     var stock = stockControllers[i][j];
-              //     var sku = skuControllers[i][j];
-              //     print("Price ${price.value.text}");
-              //     print("Stock : ${stock.value.text}");
-              //     print("SKU : ${sku.value.text}");
-              //   }
+              logger.i(
+                controller.productVariant.toString(),
+              );
+              await controller.createProduct(context);
+              // for (var price in controller.productVariant.first.prices!) {
+              //   print(price);
               // }
-              for (var i = 0; i < controller.productVariant.length; i++) {
-                var item = controller.productVariant[i];
-                print(item.toJson());
-                // print("itemName : ${item.name}");
-                // for (var j = 0; j < item.options!.length; j++) {
-                //   var item2 = item.options![j];
-
-                //   print("item2Name : ${item2.name}");
-                //   print("item2Price : ${item2.price}");
-                //   print("item2SKU : ${item2.sku}");
-                //   print("item2Stock : ${item2.stock}");
-                // }
-              }
+              // for (var variant in controller.productVariant) {
+              //   print(variant);
+              // }
             }
           },
-          text: 'Next',
+          text: 'Save Product',
         ),
       ),
     );

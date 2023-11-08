@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/product/components/product_variant.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_variant.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class ProductAdd extends GetView<InventoryController> {
@@ -160,7 +160,7 @@ class ProductAdd extends GetView<InventoryController> {
                   height: 16.0,
                 ),
                 Obx(() {
-                  if (controller.variantForms.isNotEmpty) {
+                  if (controller.productVariant.isNotEmpty) {
                     return const SizedBox();
                   } else {
                     return Column(
@@ -299,15 +299,15 @@ class ProductAdd extends GetView<InventoryController> {
             // if (addProductKey.currentState!.validate() &&
             //     controller.isImageNull.isFalse) {
             // }
-            Get.to(() => const ProductVariant());
 
-            // if (controller.imagePath.isEmpty) {
-            //   controller.isImageNull.value = true;
-            // }
-            // if (addProductKey.currentState!.validate() &&
-            //     controller.isImageNull.isFalse) {
-            //   controller.createProduct(context);
-            // }
+            if (controller.imagePath.isEmpty) {
+              controller.isImageNull.value = true;
+            }
+            if (addProductKey.currentState!.validate() &&
+                controller.isImageNull.isFalse) {
+              Get.to(() => const ProductVariant());
+              // controller.createProduct(context);
+            }
           },
           text: 'Next',
         ),

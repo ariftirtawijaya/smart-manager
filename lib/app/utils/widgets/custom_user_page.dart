@@ -138,7 +138,7 @@ class DrawerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               CustomImageView(
-                imageUrl: dataC.store.value.storeLogo!,
+                imageUrl: dataC.store.value.logo!,
                 size: 128,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(128.0),
@@ -154,7 +154,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(8),
                 child: Text(
-                  dataC.store.value.storeName!,
+                  dataC.store.value.name!,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.white,

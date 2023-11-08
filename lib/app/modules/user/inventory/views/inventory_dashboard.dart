@@ -4,12 +4,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/category/category_add.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/category/category_view.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/inventory/inventory_view.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/product/product_add.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/product/product_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_add.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/views/inventory_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_add.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_view.dart';
 import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
 class InventoryDashboardView extends GetView<InventoryController> {

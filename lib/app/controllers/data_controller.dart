@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
@@ -32,9 +34,7 @@ class DataController extends GetxController {
   Future<void> getCategories() async {
     isLoading.value = true;
     final querySnapshot = await DBService.getSubCollection(
-        from: storesRef,
-        id: store.value.storeId!,
-        subCollection: categoriesRef);
+        from: storesRef, id: store.value.id!, subCollection: categoriesRef);
     categories.clear();
     for (var element in querySnapshot.docs) {
       categories.add(CategoryModel.fromSnapshot(element));
@@ -48,7 +48,7 @@ class DataController extends GetxController {
   Future<void> getVariantType() async {
     final querySnapshot = await DBService.db
         .collection(storesRef)
-        .doc(store.value.storeId)
+        .doc(store.value.id)
         .collection(variantTypeRef)
         .get();
     variantTypes.clear();
@@ -63,48 +63,51 @@ class DataController extends GetxController {
   Future<void> getProducts() async {
     isLoading.value = true;
     final querySnapshot = await DBService.getSubCollection(
-        from: storesRef, id: store.value.storeId!, subCollection: productsRef);
+        from: storesRef, id: store.value.id!, subCollection: productsRef);
     products.clear();
     for (var element in querySnapshot.docs) {
       Map<String, dynamic> productData = {
         'product': {
-          "productId": element.id,
-          "productCategoryId": element["productCategoryId"],
-          "productRegularPrice": element["productRegularPrice"],
-          "productSKU": element["productSKU"],
-          "productImage": element["productImage"],
-          "productStock": element["productStock"],
-          "productName": element["productName"],
-          "productMemberPrice": element["productMemberPrice"],
-          "productDescription": element.toString().contains("Description")
-              ? element["productDescription"]
+          "id": element.id,
+          "categoryId": element["categoryId"],
+          "price": element["price"],
+          "sku": element["sku"],
+          "image": element["image"],
+          "stock": element["stock"],
+          "name": element["name"],
+          "description": element.toString().contains("description")
+              ? element["description"]
               : '',
         },
       };
-      await DBService.db
+      List<Map<String, dynamic>> variantData = [];
+      List<Map<String, dynamic>> variantPricesData = [];
+
+      final variantSnapshot = await DBService.db
           .collection(storesRef)
-          .doc(store.value.storeId)
+          .doc(store.value.id)
           .collection(productsRef)
           .doc(element.id)
           .collection(variantsRef)
-          .get()
-          .then((variant) {
-        if (variant.docs.isNotEmpty) {
-          List<Map<String, dynamic>> variantData = [];
-          for (var element in variant.docs) {
-            Map<String, dynamic> variantOnly = {
-              "variantId": element.id,
-              "variantStock": element["variantStock"],
-              "variantRegularPrice": element["variantRegularPrice"],
-              "variantName": element["variantName"],
-              "variantMemberPrice": element["variantMemberPrice"],
-            };
-            variantData.add(variantOnly);
-          }
-          productData.addAll({'variants': variantData});
+          .get();
+      if (variantSnapshot.docs.isNotEmpty) {
+        final variantPriceSnapshot = await DBService.db
+            .collection(storesRef)
+            .doc(store.value.id)
+            .collection(productsRef)
+            .doc(element.id)
+            .collection(variantsPricesRef)
+            .get();
+        for (var variant in variantSnapshot.docs) {
+          variantData.add(variant.data());
         }
-      });
-      products.add(ProductModel.fromJson(productData));
+        for (var prices in variantPriceSnapshot.docs) {
+          variantPricesData.add(prices.data());
+        }
+        variantData.last.addAll({"prices": variantPricesData});
+        productData.addAll({'variants': variantData});
+      }
+      products.add(ProductModel.fromMap(productData));
     }
     isLoading.value = false;
   }

@@ -8,8 +8,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
-import 'package:smart_manager/app/modules/user/inventory/controllers/inventory_controller.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/product/components/product_list.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_list.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class ProductView extends GetView<InventoryController> {
@@ -232,7 +232,7 @@ class ProductView extends GetView<InventoryController> {
                       if (controller.selectedCategoryId.isNotEmpty) {
                         list = controller.listSearchProduct
                             .where((product) =>
-                                product.product.productCategoryId ==
+                                product.product.categoryId ==
                                 controller.selectedCategoryId.value)
                             .toList();
                       } else {
@@ -280,7 +280,7 @@ class ProductView extends GetView<InventoryController> {
                       if (controller.selectedCategoryId.isNotEmpty) {
                         list = controller.dataC.products
                             .where((product) =>
-                                product.product.productCategoryId ==
+                                product.product.categoryId ==
                                 controller.selectedCategoryId.value)
                             .toList();
                       } else {

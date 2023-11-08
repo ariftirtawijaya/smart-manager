@@ -4,6 +4,7 @@ const String storesRef = 'stores';
 const String categoriesRef = 'categories';
 const String productsRef = 'products';
 const String variantsRef = 'variants';
+const String variantsPricesRef = 'variant_prices';
 const String variantTypeRef = 'variantType';
 
 const String deleteUserApi =

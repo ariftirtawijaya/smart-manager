@@ -1,7 +1,6 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:get/get.dart';
-import 'package:smart_manager/app/modules/user/inventory/views/inventory_dashboard.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_view.dart';
 
 import '../modules/admin/dashboard_admin/bindings/dashboard_admin_binding.dart';
 import '../modules/admin/dashboard_admin/views/dashboard_admin_view.dart';
@@ -24,6 +23,7 @@ import '../modules/splash/views/splash_view.dart';
 import '../modules/user/dashboard_user/bindings/dashboard_user_binding.dart';
 import '../modules/user/dashboard_user/views/dashboard_user_view.dart';
 import '../modules/user/inventory/bindings/inventory_binding.dart';
+import '../modules/user/inventory/views/inventory_dashboard.dart';
 import '../modules/user/profile/bindings/profile_binding.dart';
 import '../modules/user/profile/views/profile_view.dart';
 import '../modules/user/report/bindings/report_binding.dart';
@@ -34,6 +34,8 @@ import '../modules/user/transaction/bindings/transaction_binding.dart';
 import '../modules/user/transaction/views/transaction_view.dart';
 import '../modules/user/user_management/bindings/user_management_binding.dart';
 import '../modules/user/user_management/views/user_management_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -152,6 +154,16 @@ class AppPages {
       transitionDuration: const Duration(
         milliseconds: 250,
       ),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT,
+      page: () => const ProductView(),
+      binding: InventoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.CATEGORY,
+      page: () => const CategoryView(),
+      binding: InventoryBinding(),
     ),
   ];
 }

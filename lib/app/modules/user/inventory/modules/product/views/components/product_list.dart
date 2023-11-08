@@ -47,7 +47,7 @@ class ProductList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "${product.product.productName} asda asdasdas dasdasdas",
+                          "${product.product.name} asda asdasdas dasdasdas",
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -55,7 +55,7 @@ class ProductList extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Stock : ${product.product.productStock}",
+                        "Stock : ${product.product.stock}",
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium!
@@ -86,7 +86,7 @@ class ProductList extends StatelessWidget {
                       topLeft: Radius.circular(8.0),
                       topRight: Radius.circular(8.0),
                     ),
-                    imageUrl: product.product.productImage,
+                    imageUrl: product.product.image,
                   ),
                 ),
                 Container(
@@ -101,7 +101,7 @@ class ProductList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.product.productName,
+                        product.product.name,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -112,7 +112,7 @@ class ProductList extends StatelessWidget {
                         height: 4.0,
                       ),
                       Text(
-                        "B\$ ${intl.NumberFormat.currency(decimalDigits: 2, locale: "ms_BN", symbol: '').format(product.product.productRegularPrice)}",
+                        "B\$ ${intl.NumberFormat.currency(decimalDigits: 2, locale: "ms_BN", symbol: '').format(product.product.price)}",
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium!

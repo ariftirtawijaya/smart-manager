@@ -23,6 +23,8 @@ abstract class Routes {
   static const REPORT = _Paths.REPORT;
   static const PROFILE = _Paths.PROFILE;
   static const STORE_SETTING = _Paths.STORE_SETTING;
+  static const PRODUCT = _Paths.PRODUCT;
+  static const CATEGORY = _Paths.CATEGORY;
 }
 
 abstract class _Paths {
@@ -45,4 +47,6 @@ abstract class _Paths {
   static const REPORT = '/report';
   static const PROFILE = '/profile';
   static const STORE_SETTING = '/store-setting';
+  static const PRODUCT = '/product';
+  static const CATEGORY = '/category';
 }
