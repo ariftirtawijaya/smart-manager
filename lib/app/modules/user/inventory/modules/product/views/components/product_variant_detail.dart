@@ -180,8 +180,6 @@ class ProductVariantDetail extends GetView<InventoryController> {
                                 .asMap()
                                 .entries
                                 .map((entry2) {
-                              int rowIndex = entry.key;
-                              int colIndex = entry2.key;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
