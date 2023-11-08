@@ -122,15 +122,10 @@ class ProductVariant extends GetView<ProductController> {
                                           .isEmpty) {
                                         if (controller.productVariant.length <
                                             2) {
-                                          // controller
-                                          //     .addSecondVariant(variantType);
                                           controller.productVariant.add(
                                             model.ProductVariant(
                                               name: variantType,
                                               options: RxList([]),
-                                              prices:
-                                                  RxList<model.VariantPrices>(
-                                                      []),
                                             ),
                                           );
                                         } else {
@@ -256,23 +251,6 @@ class ProductVariant extends GetView<ProductController> {
                                 ))
                             .toList(),
                       )),
-                  // CustomOutlinedButton(
-                  //     onPressed: () {}, text: 'Add New Variant Type')
-                  // for (var index = 0;
-                  //     index < controller.variantForms.length;
-                  //     index++)
-                  //   VariantForm(
-                  //     formKey: controller.variantForms[index].value.formKey,
-                  //     nameController:
-                  //         controller.variantForms[index].value.nameController,
-                  //     regularPriceController: controller
-                  //         .variantForms[index].value.regularPriceController,
-                  //     memberPriceController: controller
-                  //         .variantForms[index].value.memberPriceController,
-                  //     stockController: controller
-                  //         .variantForms[index].value.stockController,
-                  //     index: index,
-                  //   ),
                 ],
               ),
             );
@@ -388,7 +366,6 @@ class ProductVariant extends GetView<ProductController> {
                 controller.createProduct(context);
               } else {
                 controller.setVariantPrices();
-                print(controller.productVariant);
                 Get.to(() => const ProductVariantDetail());
               }
             },

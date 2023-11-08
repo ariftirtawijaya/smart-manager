@@ -69,26 +69,26 @@ class ProductAdd extends GetView<ProductController> {
                                     : 'Choose Image')
                           ],
                         ),
-                        Obx(() {
-                          if (controller.isImageNull.isTrue) {
-                            return Column(
-                              children: [
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                Text(
-                                  "Image cannot empty",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: red),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        })
+                        // Obx(() {
+                        //   if (controller.isImageNull.isTrue) {
+                        //     return Column(
+                        //       children: [
+                        //         const SizedBox(
+                        //           height: 8.0,
+                        //         ),
+                        //         Text(
+                        //           "Image cannot empty",
+                        //           style: Theme.of(context)
+                        //               .textTheme
+                        //               .bodySmall!
+                        //               .copyWith(color: red),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   } else {
+                        //     return const SizedBox();
+                        //   }
+                        // })
                       ],
                     ),
                   );
@@ -122,7 +122,6 @@ class ProductAdd extends GetView<ProductController> {
                           ))
                       .toList(),
                   onChanged: (p0) {
-                    print(p0);
                     if (p0 != null) {
                       controller.categoryController.text = p0;
                     }
@@ -300,11 +299,10 @@ class ProductAdd extends GetView<ProductController> {
             //     controller.isImageNull.isFalse) {
             // }
 
-            if (controller.imagePath.isEmpty) {
-              controller.isImageNull.value = true;
-            }
-            if (addProductKey.currentState!.validate() &&
-                controller.isImageNull.isFalse) {
+            // if (controller.imagePath.isEmpty) {
+            //   controller.isImageNull.value = true;
+            // }
+            if (addProductKey.currentState!.validate()) {
               Get.to(() => const ProductVariant());
               // controller.createProduct(context);
             }

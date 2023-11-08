@@ -1,4 +1,5 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
@@ -47,7 +48,7 @@ class ProductList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "${product.product.name} asda asdasdas dasdasdas",
+                          product.product.name,
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -86,7 +87,7 @@ class ProductList extends StatelessWidget {
                       topLeft: Radius.circular(8.0),
                       topRight: Radius.circular(8.0),
                     ),
-                    imageUrl: product.product.image,
+                    imageUrl: product.product.image ?? "",
                   ),
                 ),
                 Container(
@@ -100,18 +101,18 @@ class ProductList extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        product.product.name,
+                      AutoSizeText(
+                        "${product.product.name}\n",
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(
                         height: 4.0,
                       ),
-                      Text(
+                      AutoSizeText(
                         "B\$ ${intl.NumberFormat.currency(decimalDigits: 2, locale: "ms_BN", symbol: '').format(product.product.price)}",
                         style: Theme.of(context)
                             .textTheme

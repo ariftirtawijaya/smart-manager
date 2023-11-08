@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 class ProductModel {
   Product product;
   List<ProductVariant>? variants;
+  RxList<VariantPrices>? prices;
 
   ProductModel({
     required this.product,
     this.variants,
+    this.prices,
   });
 
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -28,20 +30,29 @@ class ProductModel {
         ?.map((variantData) => ProductVariant.fromMap(variantData))
         .toList();
 
-    return ProductModel(product: product, variants: variants);
+    final prices = (data['prices'] as List<dynamic>?)
+        ?.map((priceData) => VariantPrices.fromMap(priceData))
+        .toList()
+        .obs;
+
+    return ProductModel(product: product, variants: variants, prices: prices);
   }
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     final product = Product.fromMap(map['product']);
     final variants = (map['variants'] as List<dynamic>?)
         ?.map((variantData) => ProductVariant.fromMap(variantData))
         .toList();
-
-    return ProductModel(product: product, variants: variants);
+    final prices = (map['prices'] as List<dynamic>?)
+        ?.map((priceData) => VariantPrices.fromMap(priceData))
+        .toList()
+        .obs;
+    return ProductModel(product: product, variants: variants, prices: prices);
   }
   String toJson() {
     final Map<String, dynamic> data = {
       'product': product.toJson(),
       'variants': variants?.map((variant) => variant.toMap()).toList(),
+      'prices': prices?.map((price) => price.toMap()).toList(),
     };
     return jsonEncode(data);
   }
@@ -50,6 +61,7 @@ class ProductModel {
     return {
       'product': product.toMap(),
       'variants': variants?.map((variant) => variant.toMap()).toList(),
+      'prices': prices?.map((price) => price.toMap()).toList(),
     };
   }
 
@@ -64,7 +76,7 @@ class Product {
   String categoryId;
   double price;
   String sku;
-  String image;
+  String? image;
   int stock;
   String name;
   String? description;
@@ -74,7 +86,7 @@ class Product {
     required this.categoryId,
     required this.price,
     required this.sku,
-    required this.image,
+    this.image,
     required this.stock,
     required this.name,
     this.description,
@@ -134,17 +146,15 @@ class Product {
 class ProductVariant {
   String? name;
   RxList<String>? options;
-  RxList<VariantPrices>? prices;
 
   ProductVariant({
     this.name,
     this.options,
-    this.prices,
   });
 
   @override
   String toString() {
-    return 'ProductVariant(name: $name, options: $options, prices: $prices)';
+    return 'ProductVariant(name: $name, options: $options)';
   }
 
   factory ProductVariant.fromMap(Map<String, dynamic> map) {
@@ -154,17 +164,12 @@ class ProductVariant {
           ?.map((option) => option.toString())
           .toList()
           .obs,
-      prices: (map['prices'] as List<dynamic>?)
-          ?.map((priceData) => VariantPrices.fromMap(priceData))
-          .toList()
-          .obs,
     );
   }
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'options': options,
-      'prices': prices?.map((price) => price.toMap()).toList(),
     };
   }
 }

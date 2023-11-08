@@ -22,10 +22,11 @@ class ProductController extends GetxController {
   final authC = Get.find<AuthController>();
   final dataC = Get.find<DataController>();
   var productVariant = RxList<ProductVariant>([]);
+  var productPrices = RxList<VariantPrices>([]);
 
   RxInt selectedCategoryIndex = 1.obs;
   RxString selectedCategoryId = "".obs;
-  RxBool isImageNull = false.obs;
+  // RxBool isImageNull = false.obs;
 
   var listSearchProduct = RxList<ProductModel>([]);
   final TextEditingController searchProductC = TextEditingController();
@@ -40,7 +41,7 @@ class ProductController extends GetxController {
     skuController.clear();
     regularPriceController.clear();
     imagePath = '';
-    isImageNull.value = false;
+    // isImageNull.value = false;
   }
 
   @override
@@ -113,7 +114,7 @@ class ProductController extends GetxController {
         );
         if (croppedFile != null) {
           imagePath = croppedFile.path;
-          isImageNull.value = false;
+          // isImageNull.value = false;
         }
       }
     } on PlatformException catch (e) {
@@ -168,11 +169,11 @@ class ProductController extends GetxController {
 
   void setVariantPrices() {
     if (productVariant.length > 1) {
-      productVariant.first.prices!.clear();
+      productPrices.clear();
       for (var firstOptions in productVariant.first.options!) {
         for (var secondOptions in productVariant.last.options!) {
           Map<String, String> priceOption = {firstOptions: secondOptions};
-          productVariant.first.prices!.add(
+          productPrices.add(
             VariantPrices(
               option: priceOption,
               price: 0,
@@ -183,10 +184,10 @@ class ProductController extends GetxController {
         }
       }
     } else {
-      productVariant.first.prices!.clear();
+      productPrices.clear();
       for (var firstOptions in productVariant.first.options!) {
         Map<String, String> priceOption = {firstOptions: firstOptions};
-        productVariant.first.prices!.add(
+        productPrices.add(
           VariantPrices(
             option: priceOption,
             price: 0,
@@ -275,8 +276,6 @@ class ProductController extends GetxController {
                           .first
                           .options!
                           .add(variantValueController.text);
-                      print(productVariant);
-                      // addVariantForm();
                       Get.back();
                     }
                   },
@@ -364,15 +363,10 @@ class ProductController extends GetxController {
                                                       ProductVariant(
                                                     name: variantType,
                                                     options: RxList<String>([]),
-                                                    prices:
-                                                        RxList<VariantPrices>(
-                                                            []),
                                                   );
                                                   productVariant
                                                       .add(selectedVariant);
                                                   Get.back();
-                                                  // addValueVariant(
-                                                  //     context, selectedVariant);
                                                 } else {
                                                   EasyLoading.showToast(
                                                       'Maximum 2 types of product variants');
@@ -534,7 +528,7 @@ class ProductController extends GetxController {
               'options': variant.options,
             });
           }
-          for (var price in productVariant.first.prices!) {
+          for (var price in productPrices) {
             await DBService.db
                 .collection(storesRef)
                 .doc(dataC.store.value.id)

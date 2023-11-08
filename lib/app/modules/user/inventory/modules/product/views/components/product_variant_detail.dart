@@ -66,9 +66,7 @@ class ProductVariantDetail extends GetView<ProductController> {
                                               onChanged: (value) {
                                                 if (value.isCurrency) {
                                                   for (var price in controller
-                                                      .productVariant
-                                                      .first
-                                                      .prices!) {
+                                                      .productPrices) {
                                                     if (controller.mapEquals(
                                                         price.option,
                                                         targetOption)) {
@@ -100,9 +98,7 @@ class ProductVariantDetail extends GetView<ProductController> {
                                               onChanged: (value) {
                                                 if (value.isNumericOnly) {
                                                   for (var price in controller
-                                                      .productVariant
-                                                      .first
-                                                      .prices!) {
+                                                      .productPrices) {
                                                     if (controller.mapEquals(
                                                         price.option,
                                                         targetOption)) {
@@ -134,8 +130,8 @@ class ProductVariantDetail extends GetView<ProductController> {
                                         textCapitalization:
                                             TextCapitalization.characters,
                                         onChanged: (value) {
-                                          for (var price in controller
-                                              .productVariant.first.prices!) {
+                                          for (var price
+                                              in controller.productPrices) {
                                             if (controller.mapEquals(
                                                 price.option, targetOption)) {
                                               price.sku = value;

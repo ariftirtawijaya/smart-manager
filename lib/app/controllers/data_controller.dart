@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
@@ -7,6 +8,7 @@ import 'package:smart_manager/app/data/models/user_model.dart';
 import 'package:smart_manager/app/data/services/db_service.dart';
 
 class DataController extends GetxController {
+  final logger = Logger();
   var users = RxList<UserModel>([]);
   var categories = RxList<CategoryModel>([]);
   var products = RxList<ProductModel>([]);
@@ -26,6 +28,7 @@ class DataController extends GetxController {
     users.sort(
       (a, b) => a.name!.compareTo(b.name!),
     );
+    logger.i(users.toString());
     isLoading.value = false;
   }
 
@@ -40,6 +43,7 @@ class DataController extends GetxController {
     categories.sort(
       (a, b) => a.categoryName!.compareTo(b.categoryName!),
     );
+    logger.i(categories.toString());
     isLoading.value = false;
   }
 
@@ -56,6 +60,7 @@ class DataController extends GetxController {
     variantTypes.sort(
       (a, b) => a.compareTo(b),
     );
+    logger.i(variantTypes.toString());
   }
 
   Future<void> getProducts() async {
@@ -70,14 +75,16 @@ class DataController extends GetxController {
           "categoryId": element["categoryId"],
           "price": element["price"],
           "sku": element["sku"],
-          "image": element["image"],
           "stock": element["stock"],
-          "name": element["name"],
-          "description": element.toString().contains("description")
-              ? element["description"]
-              : '',
+          "name": element["name"]
         },
       };
+      if (element.data().toString().contains("image")) {
+        productData["product"]["image"] = element["image"];
+      }
+      if (element.data().toString().contains("description")) {
+        productData["product"]["description"] = element["description"];
+      }
       List<Map<String, dynamic>> variantData = [];
       List<Map<String, dynamic>> variantPricesData = [];
 
@@ -102,11 +109,12 @@ class DataController extends GetxController {
         for (var prices in variantPriceSnapshot.docs) {
           variantPricesData.add(prices.data());
         }
-        variantData.last.addAll({"prices": variantPricesData});
+        productData.addAll({"prices": variantPricesData});
         productData.addAll({'variants': variantData});
       }
       products.add(ProductModel.fromMap(productData));
     }
+    logger.i(products.toString());
     isLoading.value = false;
   }
 
@@ -118,6 +126,7 @@ class DataController extends GetxController {
         store.value = StoreModel.fromSnapshot(result.docs.first);
       }
     });
+    logger.i(store.toString());
   }
 
   void clear() {
