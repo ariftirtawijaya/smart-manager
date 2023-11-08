@@ -24,6 +24,9 @@ class ProductController extends GetxController {
   var productVariant = RxList<ProductVariant>([]);
   var productPrices = RxList<VariantPrices>([]);
 
+  RxDouble selectedPrice = 0.0.obs;
+  RxMap<String, dynamic> selectedPriceOption = <String, dynamic>{}.obs;
+
   RxInt selectedCategoryIndex = 1.obs;
   RxString selectedCategoryId = "".obs;
   // RxBool isImageNull = false.obs;
@@ -42,6 +45,17 @@ class ProductController extends GetxController {
     regularPriceController.clear();
     imagePath = '';
     // isImageNull.value = false;
+  }
+
+  void changeSelectedVariant(
+      {required String keys,
+      required String values,
+      required List<VariantPrices> prices}) {
+    Map<String, dynamic> option = {keys: values};
+    selectedPriceOption.value = option;
+    var test = prices
+        .firstWhere((price) => price.option.toString() == option.toString());
+    selectedPrice.value = test.price!;
   }
 
   @override

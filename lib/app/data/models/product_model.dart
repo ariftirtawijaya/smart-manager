@@ -193,9 +193,15 @@ class VariantPrices {
   }
 
   factory VariantPrices.fromMap(Map<String, dynamic> map) {
+    double price = 0.0;
+    if (map['price'].runtimeType == int) {
+      price = double.parse(map['price'].toString());
+    } else if (map['price'].runtimeType == double) {
+      price = map['price'];
+    }
     return VariantPrices(
       option: map['option'] as Map<String, dynamic>?,
-      price: map['price'] as double?,
+      price: price,
       stock: map['stock'] as int?,
       sku: map['sku'] as String?,
     );

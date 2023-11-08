@@ -479,9 +479,11 @@ class CustomImageView extends StatelessWidget {
     required this.imageUrl,
     this.size,
     this.borderRadius,
+    this.fit,
   });
   final String imageUrl;
   final double? size;
+  final BoxFit? fit;
   final BorderRadiusGeometry? borderRadius;
   @override
   Widget build(BuildContext context) {
@@ -493,7 +495,7 @@ class CustomImageView extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: imageProvider,
-            fit: BoxFit.cover,
+            fit: fit ?? BoxFit.cover,
           ),
           borderRadius: borderRadius ??
               const BorderRadius.all(

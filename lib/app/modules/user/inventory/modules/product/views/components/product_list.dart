@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_detail.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 import 'package:intl/intl.dart' as intl;
 
-class ProductList extends StatelessWidget {
+class ProductList extends GetView<ProductController> {
   const ProductList({
     super.key,
     required this.itemCount,
@@ -30,43 +32,12 @@ class ProductList extends StatelessWidget {
         final ProductModel product = products[index];
         return GestureDetector(
           onTap: () {
-            Get.bottomSheet(Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          product.product.name,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                      Text(
-                        "Stock : ${product.product.stock}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(color: primaryColor),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ));
+            controller.selectedPrice.value = product.variants == null
+                ? product.product.price
+                : product.prices!.first.price!;
+            controller.selectedPriceOption.value =
+                product.prices!.first.option!;
+            Get.to(() => const ProductDetail(), arguments: product);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -113,7 +84,7 @@ class ProductList extends StatelessWidget {
                         height: 4.0,
                       ),
                       AutoSizeText(
-                        "B\$ ${intl.NumberFormat.currency(decimalDigits: 2, locale: "ms_BN", symbol: '').format(product.product.price)}",
+                        "B\$ ${intl.NumberFormat.currency(decimalDigits: 2, locale: "ms_BN", symbol: '').format(product.variants == null ? product.product.price : product.prices!.first.price)}",
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium!
