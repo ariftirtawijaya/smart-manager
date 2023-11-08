@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/controllers/category_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/views/components/category_list.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class CategoryView extends GetView<InventoryController> {
+class CategoryView extends GetView<CategoryController> {
   const CategoryView({super.key});
 
   @override
@@ -22,16 +22,16 @@ class CategoryView extends GetView<InventoryController> {
       child: Scaffold(
         body: Column(
           children: [
-            GetBuilder<InventoryController>(builder: (controller) {
+            GetBuilder<CategoryController>(builder: (controller) {
               return CustomSearch(
                 text: 'Search categories',
                 controller: controller.searchCategoryC,
                 onChanged: (p0) {
-                  controller.changeKeyword('category');
+                  controller.changeKeyword();
                 },
                 onSuffixPressed: () {
                   controller.searchCategoryC.clear();
-                  controller.changeKeyword('category');
+                  controller.changeKeyword();
                 },
               );
             }),

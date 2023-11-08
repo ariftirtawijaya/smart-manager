@@ -2,10 +2,10 @@ import 'package:logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class ProductVariantDetail extends GetView<InventoryController> {
+class ProductVariantDetail extends GetView<ProductController> {
   const ProductVariantDetail({super.key});
 
   @override

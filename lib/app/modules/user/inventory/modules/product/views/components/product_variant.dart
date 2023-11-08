@@ -2,15 +2,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_variant_detail.dart';
 import '../../../../../../../data/models/product_model.dart' as model;
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class ProductVariant extends GetView<InventoryController> {
+class ProductVariant extends GetView<ProductController> {
   const ProductVariant({super.key});
 
   @override

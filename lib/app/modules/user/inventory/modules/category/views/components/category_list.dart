@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/controllers/category_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_edit.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class CategoryList extends GetView<InventoryController> {
+class CategoryList extends GetView<CategoryController> {
   const CategoryList({
     super.key,
     required this.itemCount,

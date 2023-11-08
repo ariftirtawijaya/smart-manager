@@ -8,11 +8,11 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_list.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class ProductView extends GetView<InventoryController> {
+class ProductView extends GetView<ProductController> {
   const ProductView({super.key});
 
   @override
@@ -27,7 +27,7 @@ class ProductView extends GetView<InventoryController> {
       child: Scaffold(
         body: Column(
           children: [
-            GetBuilder<InventoryController>(builder: (controller) {
+            GetBuilder<ProductController>(builder: (controller) {
               return CustomSearch(
                 text: 'Search products or scan barcode',
                 hasPrefixIcon: true,
@@ -36,11 +36,11 @@ class ProductView extends GetView<InventoryController> {
                 },
                 controller: controller.searchProductC,
                 onChanged: (value) {
-                  controller.changeKeyword('product');
+                  controller.changeKeyword();
                 },
                 onSuffixPressed: () {
                   controller.searchProductC.clear();
-                  controller.changeKeyword('product');
+                  controller.changeKeyword();
                 },
                 prefixIcon: FontAwesomeIcons.barcode,
               );

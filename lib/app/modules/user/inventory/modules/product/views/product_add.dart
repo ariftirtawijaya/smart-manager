@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_variant.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class ProductAdd extends GetView<InventoryController> {
+class ProductAdd extends GetView<ProductController> {
   const ProductAdd({super.key});
 
   @override
@@ -24,7 +24,7 @@ class ProductAdd extends GetView<InventoryController> {
             key: addProductKey,
             child: Column(
               children: [
-                GetBuilder<InventoryController>(builder: (controller) {
+                GetBuilder<ProductController>(builder: (controller) {
                   return Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -4,10 +4,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/controllers/category_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_add.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_view.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/inventory/views/inventory_view.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_add.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_view.dart';
 import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
@@ -29,7 +31,7 @@ class InventoryDashboardView extends GetView<InventoryController> {
             ? [
                 IconButton(
                   onPressed: () {
-                    controller.clear();
+                    Get.find<ProductController>().clear();
                     Get.to(() => const ProductAdd());
                   },
                   icon: const Icon(
@@ -45,7 +47,7 @@ class InventoryDashboardView extends GetView<InventoryController> {
                 ? [
                     IconButton(
                       onPressed: () {
-                        controller.clear();
+                        Get.find<CategoryController>().clear();
                         Get.bottomSheet(const CategoryAdd());
                       },
                       icon: const Icon(

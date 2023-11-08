@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/inventory/controllers/inventory_controller.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/category/controllers/category_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class CategoryAdd extends GetView<InventoryController> {
+class CategoryAdd extends GetView<CategoryController> {
   const CategoryAdd({super.key});
 
   @override
@@ -33,7 +33,7 @@ class CategoryAdd extends GetView<InventoryController> {
           const SizedBox(
             height: 16.0,
           ),
-          GetBuilder<InventoryController>(builder: (controller) {
+          GetBuilder<CategoryController>(builder: (controller) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
