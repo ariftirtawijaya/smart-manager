@@ -80,6 +80,7 @@ class Product {
   int stock;
   String name;
   String? description;
+  int sold;
 
   Product({
     required this.id,
@@ -89,6 +90,7 @@ class Product {
     this.image,
     required this.stock,
     required this.name,
+    required this.sold,
     this.description,
   });
 
@@ -98,6 +100,7 @@ class Product {
       categoryId: json['categoryId'],
       price: json['price'],
       sku: json['sku'],
+      sold: json['sold'],
       image: json['image'],
       stock: json['stock'],
       name: json['name'],
@@ -111,6 +114,7 @@ class Product {
       price: map['price'],
       sku: map['sku'],
       image: map['image'],
+      sold: map['sold'],
       stock: map['stock'],
       name: map['name'],
       description: map['description'],
@@ -123,6 +127,7 @@ class Product {
       'price': price,
       'sku': sku,
       'image': image,
+      'sold': sold,
       'stock': stock,
       'name': name,
       'description': description,
@@ -136,6 +141,7 @@ class Product {
       'price': price,
       'sku': sku,
       'image': image,
+      'sold': sold,
       'stock': stock,
       'name': name,
       'description': description,

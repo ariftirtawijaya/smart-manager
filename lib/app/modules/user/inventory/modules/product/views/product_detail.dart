@@ -90,7 +90,13 @@ class ProductDetail extends GetView<ProductController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${product.variants!.first.name!} :"),
+                          Text(
+                            "${product.variants!.first.name!} :",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(
                             width: Get.width,
                             child: Wrap(
@@ -120,7 +126,6 @@ class ProductDetail extends GetView<ProductController> {
                                                 ? primaryColor
                                                 : null,
                                             onPressed: () {
-                                              print(variantType);
                                               String oldValue = controller
                                                   .selectedPriceOption
                                                   .values
@@ -141,7 +146,13 @@ class ProductDetail extends GetView<ProductController> {
                                   .toList(),
                             ),
                           ),
-                          Text("${product.variants!.last.name!} :"),
+                          Text(
+                            "${product.variants!.last.name!} :",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(
                             width: Get.width,
                             child: Wrap(
@@ -171,7 +182,6 @@ class ProductDetail extends GetView<ProductController> {
                                                 ? primaryColor
                                                 : null,
                                             onPressed: () {
-                                              print(variantType);
                                               String oldKey = controller
                                                   .selectedPriceOption
                                                   .keys
@@ -202,7 +212,13 @@ class ProductDetail extends GetView<ProductController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("${product.variants!.first.name!} :"),
+                            Text(
+                              "${product.variants!.first.name!} :",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
                             SizedBox(
                               width: Get.width,
                               child: Wrap(
@@ -242,7 +258,6 @@ class ProductDetail extends GetView<ProductController> {
                                                   ? primaryColor
                                                   : null,
                                               onPressed: () {
-                                                print(variantType);
                                                 controller
                                                     .changeSelectedVariant(
                                                   keys: variantType,
@@ -263,6 +278,172 @@ class ProductDetail extends GetView<ProductController> {
                           ],
                         ),
                       )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8),
+                  child: Text(
+                    "Product Details :",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Obx(() => Padding(
+                      padding:
+                          const EdgeInsets.only(top: 16, left: 16, right: 16),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text("SKU",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  product.prices!
+                                      .firstWhere((price) =>
+                                          price.option.toString() ==
+                                          controller.selectedPriceOption
+                                              .toString())
+                                      .sku!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            color: darkBlue,
+                            thickness: 0.1,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text("Stock",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  product.prices!
+                                      .firstWhere((price) =>
+                                          price.option.toString() ==
+                                          controller.selectedPriceOption
+                                              .toString())
+                                      .stock!
+                                      .toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            color: darkBlue,
+                            thickness: 0.1,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text("Category",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  controller.dataC.categories
+                                      .firstWhere((category) =>
+                                          category.categoryId ==
+                                          product.product.categoryId)
+                                      .categoryName!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            color: darkBlue,
+                            thickness: 0.1,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text("Sold",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  product.product.sold.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            color: darkBlue,
+                            thickness: 0.1,
+                          ),
+                        ],
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Product Descriptions :",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                        product.product.description != null
+                            ? product.product.description!
+                                .replaceAll("\\n", "\n")
+                            : "No description for this product",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

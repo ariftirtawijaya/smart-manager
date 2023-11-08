@@ -76,7 +76,8 @@ class DataController extends GetxController {
           "price": element["price"],
           "sku": element["sku"],
           "stock": element["stock"],
-          "name": element["name"]
+          "name": element["name"],
+          "sold": element["sold"]
         },
       };
       if (element.data().toString().contains("image")) {
@@ -114,7 +115,7 @@ class DataController extends GetxController {
       }
       products.add(ProductModel.fromMap(productData));
     }
-    logger.i(products.toString());
+    logger.i(products.first.product.description);
     isLoading.value = false;
   }
 
