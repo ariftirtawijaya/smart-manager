@@ -10,7 +10,6 @@ import 'package:smart_manager/app/data/models/category_model.dart';
 import 'package:smart_manager/app/data/models/product_model.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_list.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_add.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class ProductView extends GetView<ProductController> {
@@ -216,26 +215,14 @@ class ProductView extends GetView<ProductController> {
                     if (controller.dataC.products.isEmpty) {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.to(() => const ProductAdd());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],
@@ -259,26 +246,14 @@ class ProductView extends GetView<ProductController> {
                       } else {
                         return Stack(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(child: Lottie.asset(empty)),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  CustomButtonSmall(
-                                      onPressed: () {
-                                        controller.clear();
-                                        Get.to(() => const ProductAdd());
-                                      },
-                                      text: '+ Create Product'),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                ],
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(child: Lottie.asset(empty)),
+                                const SizedBox(
+                                  height: 16.0,
+                                ),
+                              ],
                             ),
                             ListView(),
                           ],
@@ -288,26 +263,14 @@ class ProductView extends GetView<ProductController> {
                         controller.keywordProduct.value != '') {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.to(() => const ProductAdd());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],
@@ -331,23 +294,14 @@ class ProductView extends GetView<ProductController> {
                       } else {
                         return Stack(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(child: Lottie.asset(empty)),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  CustomButtonSmall(
-                                      onPressed: () {},
-                                      text: '+ Create Product'),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                ],
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(child: Lottie.asset(empty)),
+                                const SizedBox(
+                                  height: 16.0,
+                                ),
+                              ],
                             ),
                             ListView(),
                           ],

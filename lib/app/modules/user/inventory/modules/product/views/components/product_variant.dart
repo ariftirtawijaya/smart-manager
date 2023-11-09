@@ -339,6 +339,7 @@ class ProductVariant extends GetView<ProductController> {
                 ],
               ),
             );
+            // return Center(child: Lottie.asset(empty));
           }
         }),
       ),

@@ -129,26 +129,14 @@ class UsersAdminView extends GetView<UsersAdminController> {
                     if (controller.dataC.users.isEmpty) {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.to(() => const UsersAdminAddView());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],
@@ -162,26 +150,14 @@ class UsersAdminView extends GetView<UsersAdminController> {
                         controller.keyword.value != '') {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.to(() => const UsersAdminAddView());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],

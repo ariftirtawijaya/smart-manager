@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/controllers/category_controller.dart';
-import 'package:smart_manager/app/modules/user/inventory/modules/category/views/category_add.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/category/views/components/category_list.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
@@ -92,26 +91,14 @@ class CategoryView extends GetView<CategoryController> {
                     if (controller.dataC.categories.isEmpty) {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.bottomSheet(const CategoryAdd());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],
@@ -126,26 +113,14 @@ class CategoryView extends GetView<CategoryController> {
                         controller.keywordCategory.value != '') {
                       return Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(child: Lottie.asset(empty)),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                CustomButtonSmall(
-                                    onPressed: () {
-                                      controller.clear();
-                                      Get.bottomSheet(const CategoryAdd());
-                                    },
-                                    text: '+ Create Product'),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(child: Lottie.asset(empty)),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                           ListView(),
                         ],
