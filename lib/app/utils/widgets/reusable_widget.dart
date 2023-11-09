@@ -34,6 +34,7 @@ class CustomTextField extends StatelessWidget {
     this.readOnly = false,
     this.isPriceField = false,
     this.autofocus = false,
+    this.initialValue,
     this.textCapitalization,
   });
 
@@ -48,6 +49,7 @@ class CustomTextField extends StatelessWidget {
   final bool? isPriceField;
   final bool? readOnly;
   final bool autofocus;
+  final String? initialValue;
   final TextCapitalization? textCapitalization;
 
   @override
@@ -101,6 +103,7 @@ class CustomTextField extends StatelessWidget {
                 ),
               Expanded(
                 child: TextFormField(
+                  initialValue: initialValue,
                   textCapitalization:
                       textCapitalization ?? TextCapitalization.none,
                   autofocus: autofocus,

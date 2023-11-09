@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -25,8 +24,11 @@ class ProductController extends GetxController {
   var productVariant = RxList<ProductVariant>([]);
   var productPrices = RxList<VariantPrices>([]);
   var logger = Logger();
+  RxBool test = false.obs;
   RxDouble selectedPrice = 0.0.obs;
   RxMap<String, dynamic> selectedPriceOption = <String, dynamic>{}.obs;
+  RxList<Map<String, dynamic>> selectedPriceUpdate =
+      <Map<String, dynamic>>[].obs;
 
   RxInt selectedCategoryIndex = 1.obs;
   RxString selectedCategoryId = "".obs;
@@ -48,6 +50,160 @@ class ProductController extends GetxController {
     imagePath = '';
     hasVariant = false;
     // isImageNull.value = false;
+  }
+
+  void selectAllUpdate(bool value) {
+    selectedPriceUpdate.clear();
+    if (value) {
+      for (var price in productPrices) {
+        selectedPriceUpdate.add(price.option!);
+      }
+    }
+    update();
+  }
+
+  void bulkUpdateForm(BuildContext context) {
+    TextEditingController bulkPriceController = TextEditingController();
+    TextEditingController bulkStockController = TextEditingController();
+    TextEditingController bulkSkuController = TextEditingController();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    Get.back();
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+            ),
+            color: Colors.white),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Set it all at once here',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 16.0,
+            ),
+            Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                            controller: bulkPriceController,
+                            keyboardType: TextInputType.number,
+                            isPriceField: true,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Cannot Empty!\n';
+                              }
+                              if (!value.isCurrency) {
+                                return 'Wrong Format!\n';
+                              }
+                              return null;
+                            },
+                            title: 'Price',
+                            hintText: 'Insert Price'),
+                      ),
+                      const SizedBox(
+                        width: 6.0,
+                      ),
+                      Expanded(
+                        child: CustomTextField(
+                            controller: bulkStockController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {},
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Cannot Empty!\n';
+                              }
+                              if (!value.isNumericOnly) {
+                                return 'Numeric Only!\n';
+                              }
+                              return null;
+                            },
+                            title: 'Stock',
+                            hintText: 'Insert Stock'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  CustomTextField(
+                      controller: bulkSkuController,
+                      textCapitalization: TextCapitalization.characters,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Cannot Empty!\n';
+                        }
+                        return null;
+                      },
+                      title: 'SKU',
+                      hintText: 'Insert SKU'),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                ],
+              ),
+            ),
+            CustomButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  EasyLoading.show();
+                  for (var priceUpdate in selectedPriceUpdate) {
+                    productPrices
+                        .firstWhere((price) =>
+                            price.option.toString() == priceUpdate.toString())
+                        .price = double.parse(bulkPriceController.text);
+                    productPrices
+                        .firstWhere((price) =>
+                            price.option.toString() == priceUpdate.toString())
+                        .stock = int.parse(bulkStockController.text);
+                    productPrices
+                        .firstWhere((price) =>
+                            price.option.toString() == priceUpdate.toString())
+                        .sku = bulkSkuController.text;
+                  }
+                  EasyLoading.dismiss();
+                  Get.back();
+                  update();
+                }
+              },
+              text: 'Save',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectPriceUpdate(bool value, Map<String, dynamic> option) {
+    // print(option);
+    if (selectedPriceUpdate.length == productPrices.length) {
+      if (!value) {
+        selectedPriceUpdate
+            .removeWhere((element) => element.toString() == option.toString());
+      }
+    } else {
+      if (value) {
+        selectedPriceUpdate.add(option);
+      } else {
+        selectedPriceUpdate
+            .removeWhere((element) => element.toString() == option.toString());
+      }
+    }
+    print(selectedPriceUpdate);
+    update();
   }
 
   void changeSelectedVariant(
@@ -167,21 +323,6 @@ class ProductController extends GetxController {
         .first
         .options!
         .removeWhere((element) => element == value);
-  }
-
-  bool mapEquals(Map<String, dynamic>? map1, Map<String, dynamic> map2) {
-    if (map1 == null) {
-      return false;
-    }
-    if (map1.length != map2.length) {
-      return false;
-    }
-    for (var key in map1.keys) {
-      if (map1[key] != map2[key]) {
-        return false;
-      }
-    }
-    return true;
   }
 
   void setVariantPrices() {
@@ -544,6 +685,24 @@ class ProductController extends GetxController {
                 .set({
               'name': variant.name,
               'options': variant.options,
+            });
+          }
+          for (var i = 0; i < productPrices.length; i++) {
+            var price = productPrices[i];
+            var productIdTrimed =
+                productData.id.substring(0, productData.id.length - 2);
+            await DBService.db
+                .collection(storesRef)
+                .doc(dataC.store.value.id)
+                .collection(productsRef)
+                .doc(productData.id)
+                .collection(variantsPricesRef)
+                .doc("$i$productIdTrimed$i")
+                .set({
+              'option': price.option,
+              'price': price.price,
+              'stock': price.stock,
+              'sku': price.sku,
             });
           }
           for (var price in productPrices) {
