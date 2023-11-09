@@ -35,8 +35,10 @@ class ProductList extends GetView<ProductController> {
             controller.selectedPrice.value = product.variants == null
                 ? product.product.price
                 : product.prices!.first.price!;
+            print(product.prices!.first);
             controller.selectedPriceOption.value =
                 product.prices!.first.option!;
+            print(controller.selectedPriceOption);
             Get.to(() => const ProductDetail(), arguments: product);
           },
           child: Container(
@@ -73,7 +75,7 @@ class ProductList extends GetView<ProductController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        "${product.product.name}\n",
+                        product.product.name,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -91,6 +93,7 @@ class ProductList extends GetView<ProductController> {
                             .copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: secondaryColor),
+                        maxLines: 1,
                       ),
                     ],
                   ),

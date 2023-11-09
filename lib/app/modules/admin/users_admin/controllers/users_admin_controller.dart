@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
@@ -17,7 +18,7 @@ import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class UsersAdminController extends GetxController {
   final dataC = Get.find<DataController>();
-
+  var logger = Logger();
   TextEditingController nameController = TextEditingController();
   TextEditingController loginNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -183,9 +184,7 @@ class UsersAdminController extends GetxController {
               );
             }
           } catch (e) {
-            if (kDebugMode) {
-              print(e.toString());
-            }
+            logger.e(e.toString());
             endLoading().then(
               (value) => showAlert(
                 context: context,
@@ -265,9 +264,7 @@ class UsersAdminController extends GetxController {
           });
         });
       } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
+        logger.e(e.toString());
         endLoading().then(
           (value) => showAlert(
             context: context,
@@ -344,9 +341,7 @@ class UsersAdminController extends GetxController {
           });
         });
       } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
+        logger.e(e.toString());
         endLoading().then(
           (value) => showAlert(
             context: context,

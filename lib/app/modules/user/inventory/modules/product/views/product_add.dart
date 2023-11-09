@@ -141,6 +141,7 @@ class ProductAdd extends GetView<ProductController> {
                   height: 16.0,
                 ),
                 CustomTextField(
+                    textCapitalization: TextCapitalization.characters,
                     onChanged: (value) {
                       if (value.isNotEmpty) {
                         addProductKey.currentState!.validate();
@@ -179,6 +180,7 @@ class ProductAdd extends GetView<ProductController> {
                               }
                               return null;
                             },
+                            keyboardType: TextInputType.number,
                             controller: controller.stockController,
                             title: 'Product Stock',
                             hintText: 'Insert product stock'),
@@ -289,22 +291,11 @@ class ProductAdd extends GetView<ProductController> {
           ],
         ),
         padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
         child: CustomButton(
           onPressed: () {
-            // if (controller.imagePath.isEmpty) {
-            //   controller.isImageNull.value = true;
-            // }
-            // if (addProductKey.currentState!.validate() &&
-            //     controller.isImageNull.isFalse) {
-            // }
-
-            // if (controller.imagePath.isEmpty) {
-            //   controller.isImageNull.value = true;
-            // }
             if (addProductKey.currentState!.validate()) {
               Get.to(() => const ProductVariant());
-              // controller.createProduct(context);
             }
           },
           text: 'Next',

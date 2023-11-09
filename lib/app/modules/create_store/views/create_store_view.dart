@@ -176,7 +176,7 @@ class CreateStoreView extends GetView<CreateStoreController> {
           ],
         ),
         padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
         child: CustomButton(
           onPressed: () {
             if (addStoreKey.currentState!.validate()) {

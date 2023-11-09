@@ -358,13 +358,14 @@ class ProductVariant extends GetView<ProductController> {
           ],
         ),
         padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+            const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
         child: Obx(
           () => CustomButton(
             onPressed: () {
               if (controller.productVariant.isEmpty) {
                 controller.createProduct(context);
               } else {
+                controller.hasVariant = true;
                 controller.setVariantPrices();
                 Get.to(() => const ProductVariantDetail());
               }

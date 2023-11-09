@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
 import 'package:smart_manager/app/constant/app_strings.dart';
@@ -20,7 +21,7 @@ import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 class CategoryController extends GetxController {
   final authC = Get.find<AuthController>();
   final dataC = Get.find<DataController>();
-
+  var logger = Logger();
   var listSearchCategory = RxList<CategoryModel>([]);
   var keywordCategory = ''.obs;
   RxBool isImageNull = false.obs;
@@ -155,9 +156,8 @@ class CategoryController extends GetxController {
       EasyLoading.showSuccess('New Category Created!');
       clear();
     } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      logger.e(e.toString());
+
       endLoading().then(
         (value) => showAlert(
           context: context,
@@ -207,9 +207,7 @@ class CategoryController extends GetxController {
         clear();
       });
     } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      logger.e(e.toString());
       endLoading().then(
         (value) => showAlert(
           context: context,
@@ -250,9 +248,7 @@ class CategoryController extends GetxController {
               EasyLoading.showSuccess('Category Successfully Deleted!');
             });
           } catch (e) {
-            if (kDebugMode) {
-              print(e.toString());
-            }
+            logger.e(e.toString());
             endLoading().then(
               (value) => showAlert(
                 context: context,

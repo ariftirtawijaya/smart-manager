@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
 import 'package:smart_manager/app/constant/app_strings.dart';
@@ -23,12 +24,13 @@ class ProductController extends GetxController {
   final dataC = Get.find<DataController>();
   var productVariant = RxList<ProductVariant>([]);
   var productPrices = RxList<VariantPrices>([]);
-
+  var logger = Logger();
   RxDouble selectedPrice = 0.0.obs;
   RxMap<String, dynamic> selectedPriceOption = <String, dynamic>{}.obs;
 
   RxInt selectedCategoryIndex = 1.obs;
   RxString selectedCategoryId = "".obs;
+  bool hasVariant = false;
   // RxBool isImageNull = false.obs;
 
   var listSearchProduct = RxList<ProductModel>([]);
@@ -44,6 +46,7 @@ class ProductController extends GetxController {
     skuController.clear();
     regularPriceController.clear();
     imagePath = '';
+    hasVariant = false;
     // isImageNull.value = false;
   }
 
@@ -482,9 +485,7 @@ class ProductController extends GetxController {
       EasyLoading.showSuccess('New Variant Type Created!');
       variantController.clear();
     } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      logger.e(e.toString());
       endLoading().then(
         (value) => showAlert(
           context: context,
@@ -504,6 +505,7 @@ class ProductController extends GetxController {
         'sku': skuController.text,
         'stock': int.parse(stockController.text),
         'price': double.parse(regularPriceController.text),
+        'sold': 0,
       };
       if (descriptionController.text.isNotEmpty) {
         product.addAll({'description': descriptionController.text});
@@ -530,14 +532,16 @@ class ProductController extends GetxController {
               .update({'image': imageUrl});
         }
         if (productVariant.isNotEmpty) {
-          for (var variant in productVariant) {
+          for (var i = 0; i < productVariant.length; i++) {
+            var variant = productVariant[i];
             await DBService.db
                 .collection(storesRef)
                 .doc(dataC.store.value.id)
                 .collection(productsRef)
                 .doc(productData.id)
                 .collection(variantsRef)
-                .add({
+                .doc("$i${productData.id}")
+                .set({
               'name': variant.name,
               'options': variant.options,
             });
@@ -558,15 +562,22 @@ class ProductController extends GetxController {
           }
         }
       });
-      // await dataC.getProducts();
-      endLoading();
-      // Get.back();
-      EasyLoading.showSuccess('New Product Created!');
-      clear();
+      await dataC.getProducts().then((_) {
+        endLoading();
+
+        if (hasVariant) {
+          Get.back();
+          Get.back();
+          Get.back();
+        } else {
+          Get.back();
+          Get.back();
+        }
+        EasyLoading.showSuccess('New Product Created!');
+        clear();
+      });
     } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      logger.e(e.toString());
       endLoading().then(
         (value) => showAlert(
           context: context,

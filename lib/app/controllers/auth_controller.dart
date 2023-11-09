@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
@@ -11,6 +12,7 @@ import 'package:smart_manager/app/routes/app_pages.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class AuthController extends GetxController {
+  var logger = Logger();
   Rx<UserModel> currentUser = UserModel().obs;
   final dataC = Get.find<DataController>();
   TextEditingController loginNumberController = TextEditingController();
@@ -42,9 +44,7 @@ class AuthController extends GetxController {
       ).then((userCollection) {
         if (userCollection.docs.isNotEmpty) {
           for (var element in userCollection.docs) {
-            if (kDebugMode) {
-              print(element.data());
-            }
+            logger.i(element.data());
             data = element.data();
           }
           login(data, context);
@@ -115,9 +115,7 @@ class AuthController extends GetxController {
           ),
         );
       }
-      if (kDebugMode) {
-        print(e.code);
-      }
+      logger.e(e.code);
     } catch (e) {
       endLoading().then(
         (value) => showAlert(
@@ -126,9 +124,7 @@ class AuthController extends GetxController {
           text: e.toString(),
         ),
       );
-      if (kDebugMode) {
-        print(e);
-      }
+      logger.e(e);
     }
   }
 
@@ -160,9 +156,7 @@ class AuthController extends GetxController {
           .then((userCollection) async {
         if (userCollection.docs.isNotEmpty) {
           for (var element in userCollection.docs) {
-            if (kDebugMode) {
-              print(element.data());
-            }
+            logger.i(element.data());
             data = element.data();
           }
           if (data['role'] == 'cashier') {

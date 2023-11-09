@@ -115,7 +115,7 @@ class DataController extends GetxController {
       }
       products.add(ProductModel.fromMap(productData));
     }
-    logger.i(products.first.product.description);
+    logger.i(products);
     isLoading.value = false;
   }
 

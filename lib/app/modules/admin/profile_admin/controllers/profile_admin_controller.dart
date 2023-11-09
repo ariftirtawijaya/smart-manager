@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/auth_controller.dart';
@@ -16,6 +16,7 @@ import 'package:smart_manager/app/data/services/db_service.dart';
 import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class ProfileAdminController extends GetxController {
+  var logger = Logger();
   final authC = Get.find<AuthController>();
   TextEditingController nameController = TextEditingController();
   TextEditingController loginNumberController = TextEditingController();
@@ -154,9 +155,7 @@ class ProfileAdminController extends GetxController {
           });
         });
       } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
+        logger.e(e.toString());
         endLoading().then(
           (value) => showAlert(
             context: context,
