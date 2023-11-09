@@ -83,7 +83,14 @@ class CategoryList extends GetView<CategoryController> {
                       icon: FontAwesomeIcons.trash,
                       color: secondaryColor,
                       onTap: () {
-                        controller.deleteCategory(context, category);
+                        controller.deleteCategory(
+                            context,
+                            category,
+                            productData
+                                .where((product) =>
+                                    product.product.categoryId ==
+                                    category.categoryId)
+                                .isEmpty);
                       },
                     ),
                   ],

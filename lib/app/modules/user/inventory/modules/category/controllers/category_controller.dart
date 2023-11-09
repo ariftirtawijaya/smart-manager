@@ -218,46 +218,57 @@ class CategoryController extends GetxController {
   }
 
   Future<void> deleteCategory(
-      BuildContext context, CategoryModel category) async {
-    endLoading().then(
-      (value) => showAlert(
-        context: context,
-        text:
-            'Are you sure want to delete this category ?\n\nThis action cannot be undone!',
-        type: QuickAlertType.confirm,
-        confirmText: 'Delete Category',
-        onConfirmBtnTap: () async {
-          try {
-            showLoading();
-            if (category.categoryIcon != null) {
-              final storageRef =
-                  FirebaseStorage.instance.refFromURL(category.categoryIcon!);
-              await storageRef.delete();
+      BuildContext context, CategoryModel category, bool isSafeDelete) async {
+    if (isSafeDelete) {
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text:
+              'Are you sure want to delete this category ?\n\nThis action cannot be undone!',
+          type: QuickAlertType.confirm,
+          confirmText: 'Delete Category',
+          onConfirmBtnTap: () async {
+            try {
+              showLoading();
+              if (category.categoryIcon != null) {
+                final storageRef =
+                    FirebaseStorage.instance.refFromURL(category.categoryIcon!);
+                await storageRef.delete();
+              }
+              await DBService.db
+                  .collection(storesRef)
+                  .doc(dataC.store.value.id)
+                  .collection(categoriesRef)
+                  .doc(category.categoryId)
+                  .delete()
+                  .then((_) async {
+                await dataC.getCategories();
+                endLoading();
+                Get.back();
+                EasyLoading.showSuccess('Category Successfully Deleted!');
+              });
+            } catch (e) {
+              logger.e(e.toString());
+              endLoading().then(
+                (value) => showAlert(
+                  context: context,
+                  text: 'Error While Deleting Category',
+                  type: QuickAlertType.error,
+                ),
+              );
             }
-            await DBService.db
-                .collection(storesRef)
-                .doc(dataC.store.value.id)
-                .collection(categoriesRef)
-                .doc(category.categoryId)
-                .delete()
-                .then((_) async {
-              await dataC.getCategories();
-              endLoading();
-              Get.back();
-              EasyLoading.showSuccess('Category Successfully Deleted!');
-            });
-          } catch (e) {
-            logger.e(e.toString());
-            endLoading().then(
-              (value) => showAlert(
-                context: context,
-                text: 'Error While Deleting Category',
-                type: QuickAlertType.error,
-              ),
-            );
-          }
-        },
-      ),
-    );
+          },
+        ),
+      );
+    } else {
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text:
+              'There are products related to this category.\n\nCategory cannot be deleted',
+          type: QuickAlertType.error,
+        ),
+      );
+    }
   }
 }
