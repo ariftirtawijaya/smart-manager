@@ -35,10 +35,8 @@ class ProductList extends GetView<ProductController> {
             controller.selectedPrice.value = product.variants == null
                 ? product.product.price
                 : product.prices!.first.price!;
-            print(product.prices!.first);
             controller.selectedPriceOption.value =
                 product.prices!.first.option!;
-            print(controller.selectedPriceOption);
             Get.to(() => const ProductDetail(), arguments: product);
           },
           child: Container(

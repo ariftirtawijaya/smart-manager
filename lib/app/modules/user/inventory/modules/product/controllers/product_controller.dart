@@ -202,7 +202,6 @@ class ProductController extends GetxController {
             .removeWhere((element) => element.toString() == option.toString());
       }
     }
-    print(selectedPriceUpdate);
     update();
   }
 
