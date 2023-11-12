@@ -94,7 +94,12 @@ class CategoryView extends GetView<CategoryController> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Center(child: Lottie.asset(empty)),
+                              Center(
+                                child: SizedBox(
+                                  width: Get.width * 0.5,
+                                  child: Image.asset(emptyImage),
+                                ),
+                              ),
                               const SizedBox(
                                 height: 16.0,
                               ),
@@ -116,7 +121,12 @@ class CategoryView extends GetView<CategoryController> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Center(child: Lottie.asset(empty)),
+                              Center(
+                                child: SizedBox(
+                                  width: Get.width * 0.5,
+                                  child: Image.asset(emptyImage),
+                                ),
+                              ),
                               const SizedBox(
                                 height: 16.0,
                               ),

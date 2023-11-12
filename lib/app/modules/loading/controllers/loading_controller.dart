@@ -13,11 +13,16 @@ class LoadingController extends GetxController {
 
   @override
   void onInit() {
-    dataC.getUsers().then((_) {
-      dataC.getStore(authC.currentUser.value.uid!).then((_) async {
-        if (authC.currentUser.value.role! == 'admin') {
-          Get.offAllNamed(Routes.DASHBOARD_ADMIN);
-        } else {
+    dataC.getUsers().then((_) async {
+      if (authC.currentUser.value.role! == 'admin') {
+        await dataC
+            .getStores()
+            .then((value) => Get.offAllNamed(Routes.DASHBOARD_ADMIN));
+      } else {
+        dataC.getStore(authC.currentUser.value.uid!).then((_) async {
+          // if (authC.currentUser.value.role! == 'admin') {
+          // Get.offAllNamed(Routes.DASHBOARD_ADMIN);
+          // } else {
           if (authC.currentUser.value.active!) {
             if (dataC.store.value.id != null) {
               await dataC.getCategories().then((_) async {
@@ -44,8 +49,9 @@ class LoadingController extends GetxController {
               Get.offAllNamed(Routes.LOGIN);
             });
           }
-        }
-      });
+          // }
+        });
+      }
     });
     super.onInit();
   }

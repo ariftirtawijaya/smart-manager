@@ -38,7 +38,7 @@ class HomeAdminView extends GetView<HomeAdminController> {
               }),
               CustomCard(
                 title: 'Total Store',
-                value: 0,
+                value: controller.dataC.stores.length,
                 onTap: () {},
                 icon: FontAwesomeIcons.store,
               ),

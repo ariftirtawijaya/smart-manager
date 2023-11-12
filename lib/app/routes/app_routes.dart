@@ -25,6 +25,9 @@ abstract class Routes {
   static const STORE_SETTING = _Paths.STORE_SETTING;
   static const PRODUCT = _Paths.PRODUCT;
   static const CATEGORY = _Paths.CATEGORY;
+  static const ROLE = _Paths.ROLE;
+  static const EMPLOYEE = _Paths.EMPLOYEE;
+  static const CUSTOMER = _Paths.CUSTOMER;
 }
 
 abstract class _Paths {
@@ -49,4 +52,7 @@ abstract class _Paths {
   static const STORE_SETTING = '/store-setting';
   static const PRODUCT = '/product';
   static const CATEGORY = '/category';
+  static const ROLE = '/role';
+  static const EMPLOYEE = '/employee';
+  static const CUSTOMER = '/customer';
 }

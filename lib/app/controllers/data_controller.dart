@@ -10,14 +10,18 @@ import 'package:smart_manager/app/data/services/db_service.dart';
 class DataController extends GetxController {
   final logger = Logger();
   var users = RxList<UserModel>([]);
+  var employees = RxList<UserModel>([]);
   var categories = RxList<CategoryModel>([]);
   var products = RxList<ProductModel>([]);
+  var stores = RxList<StoreModel>([]);
   var variantTypes = RxList<String>([]);
   Rx<StoreModel> store = StoreModel().obs;
+  RxString status = ''.obs;
 
   RxBool isLoading = false.obs;
 
   Future<void> getUsers() async {
+    status.value = 'Users';
     isLoading.value = true;
     final querySnapshot = await DBService.getCollections(
         from: usersRef, where: 'role', isEqualTo: 'user');
@@ -32,7 +36,40 @@ class DataController extends GetxController {
     isLoading.value = false;
   }
 
+  Future<void> getEmployees() async {
+    status.value = 'Employees';
+    isLoading.value = true;
+    final querySnapshot = await DBService.db
+        .collection(storesRef)
+        .doc(store.value.id)
+        .collection(employeeRef)
+        .get();
+    employees.clear();
+    for (var element in querySnapshot.docs) {
+      employees.add(UserModel.fromSnapshot(element));
+    }
+    employees.sort(
+      (a, b) => a.name!.compareTo(b.name!),
+    );
+    logger.i(employees.toString());
+    isLoading.value = false;
+  }
+
+  Future<void> getStores() async {
+    status.value = 'Stores';
+    final querySnapshot = await DBService.getCollections(from: storesRef);
+    stores.clear();
+    for (var element in querySnapshot.docs) {
+      stores.add(StoreModel.fromSnapshot(element));
+    }
+    stores.sort(
+      (a, b) => a.name!.compareTo(b.name!),
+    );
+    logger.i(stores.toString());
+  }
+
   Future<void> getCategories() async {
+    status.value = 'Categories';
     isLoading.value = true;
     final querySnapshot = await DBService.getSubCollection(
         from: storesRef, id: store.value.id!, subCollection: categoriesRef);
@@ -48,6 +85,8 @@ class DataController extends GetxController {
   }
 
   Future<void> getVariantType() async {
+    status.value = 'Variant Type';
+
     final querySnapshot = await DBService.db
         .collection(storesRef)
         .doc(store.value.id)
@@ -64,6 +103,7 @@ class DataController extends GetxController {
   }
 
   Future<void> getProducts() async {
+    status.value = 'Product Data';
     isLoading.value = true;
     final querySnapshot = await DBService.getSubCollection(
         from: storesRef, id: store.value.id!, subCollection: productsRef);
@@ -120,6 +160,7 @@ class DataController extends GetxController {
   }
 
   Future<void> getStore(String uid) async {
+    status.value = 'Store';
     await DBService.getCollections(
             from: storesRef, where: 'userId', isEqualTo: uid)
         .then((result) {

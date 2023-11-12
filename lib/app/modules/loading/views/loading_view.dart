@@ -49,13 +49,12 @@ class LoadingView extends GetView<LoadingController> {
               const SizedBox(
                 height: 24.0,
               ),
-              Text(
-                "Getting Data ...",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Colors.white,
-                    ),
-                // style: size12width400.copyWith(fontWeight: FontWeight.w300),
-              ),
+              Obx(() => Text(
+                    "Getting ${controller.dataC.status} ...",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.white,
+                        ),
+                  )),
               const SizedBox(height: 24.0),
             ],
           ),

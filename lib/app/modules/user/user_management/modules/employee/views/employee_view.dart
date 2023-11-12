@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:smart_manager/app/constant/app_constant.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/views/components/user_list.dart';
-import 'package:smart_manager/app/modules/admin/users_admin/views/users_admin_add.dart';
-import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
+import 'package:smart_manager/app/constant/app_colors.dart';
+import 'package:smart_manager/app/constant/app_images.dart';
+import 'package:smart_manager/app/modules/user/user_management/modules/employee/views/component/employee_list.dart';
 
-import '../controllers/users_admin_controller.dart';
+import '../controllers/employee_controller.dart';
 
-class UsersAdminView extends GetView<UsersAdminController> {
-  const UsersAdminView({super.key});
+class EmployeeView extends GetView<EmployeeController> {
+  const EmployeeView({super.key});
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -22,23 +22,23 @@ class UsersAdminView extends GetView<UsersAdminController> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('List Users'),
-          centerTitle: true,
-          actions: [
-            CustomIconButton(
-              icon: FontAwesomeIcons.squarePlus,
-              color: Colors.white,
-              onTap: () {
-                controller.clear();
-                Get.to(() => const UsersAdminAddView());
-              },
-            ),
-            const SizedBox(
-              width: 8.0,
-            ),
-          ],
-        ),
+        // appBar: AppBar(
+        //   title: const Text('List '),
+        //   centerTitle: true,
+        //   actions: [
+        //     CustomIconButton(
+        //       icon: FontAwesomeIcons.squarePlus,
+        //       color: Colors.white,
+        //       onTap: () {
+        //         controller.clear();
+        //         Get.to(() => const UsersAdminAddView());
+        //       },
+        //     ),
+        //     const SizedBox(
+        //       width: 8.0,
+        //     ),
+        //   ],
+        // ),
         body: Column(
           children: [
             Container(
@@ -64,7 +64,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
                     isDense: false,
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: 'Search Users',
+                    hintText: 'Search Employee',
                     suffixIcon: Icon(
                       FontAwesomeIcons.magnifyingGlass,
                       color: primaryColor,
@@ -76,7 +76,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () {
-                  return controller.dataC.getUsers();
+                  return controller.dataC.getEmployees();
                 },
                 child: Obx(() {
                   if (controller.dataC.isLoading.isTrue) {
@@ -126,7 +126,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
                       },
                     );
                   } else {
-                    if (controller.dataC.users.isEmpty) {
+                    if (controller.dataC.employees.isEmpty) {
                       return Stack(
                         children: [
                           Column(
@@ -147,7 +147,7 @@ class UsersAdminView extends GetView<UsersAdminController> {
                         ],
                       );
                     } else if (controller.listSearch.isNotEmpty) {
-                      return UsersList(
+                      return EmployeeList(
                         itemCount: controller.listSearch.length,
                         userData: controller.listSearch,
                       );
@@ -159,11 +159,10 @@ class UsersAdminView extends GetView<UsersAdminController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
-                                child: SizedBox(
-                                  width: Get.width * 0.5,
-                                  child: Image.asset(emptyImage),
-                                ),
-                              ),
+                                  child: SizedBox(
+                                width: Get.width * 0.5,
+                                child: Image.asset(emptyImage),
+                              )),
                               const SizedBox(
                                 height: 16.0,
                               ),
@@ -173,9 +172,9 @@ class UsersAdminView extends GetView<UsersAdminController> {
                         ],
                       );
                     } else {
-                      return UsersList(
-                        itemCount: controller.dataC.users.length,
-                        userData: controller.dataC.users,
+                      return EmployeeList(
+                        itemCount: controller.dataC.employees.length,
+                        userData: controller.dataC.employees,
                       );
                     }
                   }

@@ -79,7 +79,12 @@ class TermsConditionsView extends GetView<ProfileAdminController> {
             } else {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Center(child: Lottie.asset(empty)),
+                child: Center(
+                  child: SizedBox(
+                    width: Get.width * 0.5,
+                    child: Image.asset(emptyImage),
+                  ),
+                ),
               );
             }
           },
