@@ -1,6 +1,7 @@
 const String usersRef = 'users';
 const String settingsRef = 'settings';
 const String storesRef = 'stores';
+const String rolesRef = 'roles';
 const String employeeRef = 'employees';
 const String categoriesRef = 'categories';
 const String productsRef = 'products';

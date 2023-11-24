@@ -1,23 +1,6 @@
 import 'package:get/get.dart';
+import 'package:smart_manager/app/controllers/data_controller.dart';
 
 class RoleController extends GetxController {
-  //TODO: Implement RoleController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  final dataC = Get.find<DataController>();
 }
