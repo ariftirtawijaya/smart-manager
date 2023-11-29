@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/customer/views/customer_view.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/employee/views/employee_view.dart';
+import 'package:smart_manager/app/modules/user/user_management/modules/role/controllers/role_controller.dart';
+import 'package:smart_manager/app/modules/user/user_management/modules/role/views/add_role.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/role/views/role_view.dart';
 import 'package:smart_manager/app/utils/widgets/custom_user_page.dart';
 
@@ -52,7 +56,10 @@ class UserManagementView extends GetView<UserManagementController> {
                   ]
                 : [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.find<RoleController>().generatePermissions();
+                        Get.to(() => const AddRole());
+                      },
                       icon: const Icon(
                         FontAwesomeIcons.squarePlus,
                         size: 24.0,

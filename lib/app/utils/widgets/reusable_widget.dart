@@ -36,6 +36,7 @@ class CustomTextField extends StatelessWidget {
     this.autofocus = false,
     this.initialValue,
     this.textCapitalization,
+    this.isMandatory = false,
   });
 
   final String title;
@@ -50,6 +51,7 @@ class CustomTextField extends StatelessWidget {
   final bool? readOnly;
   final bool autofocus;
   final String? initialValue;
+  final bool? isMandatory;
   final TextCapitalization? textCapitalization;
 
   @override
@@ -71,13 +73,34 @@ class CustomTextField extends StatelessWidget {
                 const SizedBox(
                   width: 16.0,
                 ),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: darkBlue,
+                isMandatory!
+                    ? Row(
+                        children: [
+                          Text(
+                            title,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: darkBlue,
+                                    ),
+                          ),
+                          Text(
+                            " *",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: red,
+                                    ),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        title,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: darkBlue,
+                            ),
                       ),
-                ),
               ],
             ),
           ),
@@ -703,6 +726,45 @@ class CustomSearch extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomNoDataWidget extends StatelessWidget {
+  const CustomNoDataWidget({
+    super.key,
+    required this.text,
+  });
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: Get.width * 0.5,
+                    child: Image.asset(emptyImage),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Text("No $text"),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16.0,
+            ),
+          ],
+        ),
+        ListView(),
+      ],
     );
   }
 }

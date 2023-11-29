@@ -489,17 +489,18 @@ class _MyAppSpace extends GetView<ProductController> {
             SafeArea(
               child: Center(
                 child: Opacity(
-                    opacity: 1 - opacity,
-                    child: Text(
-                      "${product.product.name} ${product.variants != null ? product.variants!.length > 1 ? "- ${controller.selectedPriceOption.keys.first}, ${controller.selectedPriceOption.values.first} " : "- ${controller.selectedPriceOption.keys.first}" : ""}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    )),
+                  opacity: 1 - opacity,
+                  child: Obx(() => Text(
+                        "${product.product.name} ${product.variants != null ? product.variants!.length > 1 ? "- ${controller.selectedPriceOption.keys.first}, ${controller.selectedPriceOption.values.first} " : "- ${controller.selectedPriceOption.keys.first}" : ""}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Colors.white),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      )),
+                ),
               ),
             ),
             Opacity(

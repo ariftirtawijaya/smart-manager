@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/category_model.dart';
@@ -213,25 +212,7 @@ class ProductView extends GetView<ProductController> {
                     );
                   } else {
                     if (controller.dataC.products.isEmpty) {
-                      return Stack(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: Get.width * 0.5,
-                                  child: Image.asset(emptyImage),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                            ],
-                          ),
-                          ListView(),
-                        ],
-                      );
+                      return const CustomNoDataWidget(text: "Product");
                     } else if (controller.listSearchProduct.isNotEmpty) {
                       List<ProductModel> list = [];
                       if (controller.selectedCategoryId.isNotEmpty) {
@@ -249,47 +230,11 @@ class ProductView extends GetView<ProductController> {
                           products: list,
                         );
                       } else {
-                        return Stack(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    width: Get.width * 0.5,
-                                    child: Image.asset(emptyImage),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
-                            ListView(),
-                          ],
-                        );
+                        return const CustomNoDataWidget(text: "Product");
                       }
                     } else if (controller.listSearchProduct.isEmpty &&
                         controller.keywordProduct.value != '') {
-                      return Stack(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: Get.width * 0.5,
-                                  child: Image.asset(emptyImage),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                            ],
-                          ),
-                          ListView(),
-                        ],
-                      );
+                      return const CustomNoDataWidget(text: "Product");
                     } else {
                       List<ProductModel> list = [];
                       if (controller.selectedCategoryId.isNotEmpty) {
@@ -307,25 +252,7 @@ class ProductView extends GetView<ProductController> {
                           products: list,
                         );
                       } else {
-                        return Stack(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    width: Get.width * 0.5,
-                                    child: Image.asset(emptyImage),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
-                            ListView(),
-                          ],
-                        );
+                        return const CustomNoDataWidget(text: "Product");
                       }
                     }
                   }

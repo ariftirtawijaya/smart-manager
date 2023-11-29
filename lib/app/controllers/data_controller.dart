@@ -119,6 +119,7 @@ class DataController extends GetxController {
       roles.clear();
       for (var element in querySnapshot.docs) {
         roles.add(RoleModel.fromJson(element.data()));
+        log(json.encode(element.data()));
       }
       roles.sort(
         (a, b) => a.name.compareTo(b.name),

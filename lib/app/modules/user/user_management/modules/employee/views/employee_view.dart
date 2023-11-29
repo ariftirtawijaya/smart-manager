@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_manager/app/constant/app_colors.dart';
-import 'package:smart_manager/app/constant/app_images.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/employee/views/component/employee_list.dart';
+import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 import '../controllers/employee_controller.dart';
 
@@ -22,23 +21,6 @@ class EmployeeView extends GetView<EmployeeController> {
         }
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('List '),
-        //   centerTitle: true,
-        //   actions: [
-        //     CustomIconButton(
-        //       icon: FontAwesomeIcons.squarePlus,
-        //       color: Colors.white,
-        //       onTap: () {
-        //         controller.clear();
-        //         Get.to(() => const UsersAdminAddView());
-        //       },
-        //     ),
-        //     const SizedBox(
-        //       width: 8.0,
-        //     ),
-        //   ],
-        // ),
         body: Column(
           children: [
             Container(
@@ -127,25 +109,7 @@ class EmployeeView extends GetView<EmployeeController> {
                     );
                   } else {
                     if (controller.dataC.employees.isEmpty) {
-                      return Stack(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: Get.width * 0.5,
-                                  child: Image.asset(emptyImage),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                            ],
-                          ),
-                          ListView(),
-                        ],
-                      );
+                      return const CustomNoDataWidget(text: 'Employee');
                     } else if (controller.listSearch.isNotEmpty) {
                       return EmployeeList(
                         itemCount: controller.listSearch.length,
@@ -153,24 +117,7 @@ class EmployeeView extends GetView<EmployeeController> {
                       );
                     } else if (controller.listSearch.isEmpty &&
                         controller.keyword.value != '') {
-                      return Stack(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                  child: SizedBox(
-                                width: Get.width * 0.5,
-                                child: Image.asset(emptyImage),
-                              )),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                            ],
-                          ),
-                          ListView(),
-                        ],
-                      );
+                      return const CustomNoDataWidget(text: 'Employee');
                     } else {
                       return EmployeeList(
                         itemCount: controller.dataC.employees.length,
