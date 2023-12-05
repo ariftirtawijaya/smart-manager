@@ -8,22 +8,27 @@ import 'package:smart_manager/app/data/models/role_model.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/role/controllers/role_controller.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
-class AddRole extends GetView<RoleController> {
-  const AddRole({super.key});
+class EditRole extends GetView<RoleController> {
+  const EditRole({super.key});
 
   @override
   Widget build(BuildContext context) {
-    controller.statusController.text = 'Active';
-    final GlobalKey<FormState> addRoleKey = GlobalKey<FormState>();
+    final RoleModel role = Get.arguments;
+    controller.statusController.text =
+        role.active == true ? 'Active' : 'Inactive';
+    controller.roleName.text = role.name;
+    controller.roleDescription.text = role.description ?? '';
+    log(role.permission.toString());
+    final GlobalKey<FormState> editRoleKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add User Role'),
+        title: const Text('Edit User Role'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Form(
-            key: addRoleKey,
+            key: editRoleKey,
             child: Column(
               children: [
                 CustomTextField(
@@ -236,7 +241,7 @@ class AddRole extends GetView<RoleController> {
             const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
         child: CustomButton(
           onPressed: () {
-            if (addRoleKey.currentState!.validate()) {
+            if (editRoleKey.currentState!.validate()) {
               // log("Name : ${controller.roleName.text}");
               // log("Description : ${controller.roleDescription.text}");
               // log("Active : ${controller.statusController.text}");

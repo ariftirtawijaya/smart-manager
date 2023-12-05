@@ -27,13 +27,13 @@ Permission checkPermission(RoleModel role, PermissionType permissionType) {
 
 class RoleModel {
   String name;
-  String description;
+  String? description;
   bool active;
   List<Map<PermissionType, Permission>> permission;
 
   RoleModel({
     required this.name,
-    required this.description,
+    this.description,
     required this.active,
     required this.permission,
   });

@@ -1,17 +1,27 @@
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/controllers/data_controller.dart';
 import 'package:smart_manager/app/data/models/role_model.dart';
+import 'package:smart_manager/app/data/services/db_service.dart';
+import 'package:smart_manager/app/utils/functions/reusable_functions.dart';
 
 class RoleController extends GetxController {
   final dataC = Get.find<DataController>();
   var logger = Logger();
   var listSearch = RxList<RoleModel>([]);
+  List<String> statusList = ['Active', 'Inactive'];
+
   var keyword = ''.obs;
   final TextEditingController searchC = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
+  final TextEditingController roleName = TextEditingController();
+  final TextEditingController roleDescription = TextEditingController();
   void changeKeyword() {
     keyword.value = searchC.text;
   }
@@ -130,4 +140,53 @@ class RoleController extends GetxController {
     {"return": "Return"},
     {"store_settings": "Store Settings"},
   ];
+
+  Future<void> createRole(BuildContext context) async {
+    showLoading(status: 'Creating Role ...');
+    try {
+      Map<String, dynamic> data = {};
+      if (roleDescription.text.isEmpty) {
+        data = {
+          'name': roleName.text,
+          'active': statusController.text == 'Active' ? true : false,
+          'permission': permissions
+        };
+      } else {
+        data = {
+          'name': roleName.text,
+          'description': roleDescription.text,
+          'active': statusController.text == 'Active' ? true : false,
+          'permission': permissions
+        };
+      }
+
+      await DBService.db
+          .collection(storesRef)
+          .doc(dataC.store.value.id)
+          .collection(rolesRef)
+          .add(data)
+          .then((result) async {
+        await dataC.getRoles();
+        endLoading();
+        Get.back();
+        EasyLoading.showSuccess('New Role Created!');
+        clear();
+      });
+    } catch (e) {
+      logger.e(e.toString());
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: 'Error While Creating User',
+          type: QuickAlertType.error,
+        ),
+      );
+    }
+  }
+
+  void clear() {
+    roleName.clear();
+    roleDescription.clear();
+    statusController.text = 'Active';
+  }
 }

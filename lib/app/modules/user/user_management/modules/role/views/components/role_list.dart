@@ -38,6 +38,43 @@ class RoleList extends GetView<RoleController> {
               borderRadius: BorderRadius.circular(8),
               overlayColor: const MaterialStatePropertyAll(primaryColor),
               onTap: () {
+                Get.bottomSheet(Container(
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                      ),
+                      color: Colors.white),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        role.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child:
+                                  CustomButton(onPressed: () {}, text: 'Edit')),
+                          const SizedBox(
+                            width: 16.0,
+                          ),
+                          Expanded(
+                              child: CustomOutlinedButton(
+                                  onPressed: () {}, text: 'Delete')),
+                        ],
+                      ),
+                    ],
+                  ),
+                ));
                 // Get.to(() => const UsersAdminDetailView(), arguments: role);
               },
               child: ListTile(
@@ -48,40 +85,51 @@ class RoleList extends GetView<RoleController> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                // leading: role.profilePic == null
-                //     ? Image.asset(
-                //         imagePlaceholder,
-                //         height: 52,
-                //       )
-                //     : CustomImageView(
-                //         imageUrl: role.profilePic!,
-                //         size: 52,
-                //       ),
+                // subtitle: Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     Text(role.active == false ? 'Not Active' : 'Active'),
+                //     Switch(
+                //       value: true,
+                //       onChanged: (value) {},
+                //     )
+                //   ],
+                // ),
                 subtitle:
-                    role.active == false ? const Text('(Inactive)') : null,
+                    role.description != null ? Text(role.description!) : null,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomIconButton(
-                      icon: FontAwesomeIcons.solidPenToSquare,
-                      color: secondaryColor,
-                      onTap: () {
-                        // controller.clear();
-                        // Get.to(() => const UsersAdminEdit(), arguments: role);
-                      },
-                    ),
-                    const SizedBox(
-                      width: 8.0,
-                    ),
-                    CustomIconButton(
-                      icon: FontAwesomeIcons.trash,
-                      color: secondaryColor,
-                      onTap: () {
-                        // controller.deleteUser(context, role, false);
-                      },
-                    ),
+                    Text(role.active == false ? 'Not Active' : 'Active'),
+                    Switch(
+                      value: role.active,
+                      onChanged: (value) {},
+                    )
                   ],
                 ),
+                // trailing: Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     CustomIconButton(
+                //       icon: FontAwesomeIcons.solidPenToSquare,
+                //       color: secondaryColor,
+                //       onTap: () {
+                //         // controller.clear();
+                //         // Get.to(() => const UsersAdminEdit(), arguments: role);
+                //       },
+                //     ),
+                //     const SizedBox(
+                //       width: 8.0,
+                //     ),
+                //     CustomIconButton(
+                //       icon: FontAwesomeIcons.trash,
+                //       color: secondaryColor,
+                //       onTap: () {
+                //         // controller.deleteUser(context, role, false);
+                //       },
+                //     ),
+                //   ],
+                // ),
               ),
             ),
           ),
