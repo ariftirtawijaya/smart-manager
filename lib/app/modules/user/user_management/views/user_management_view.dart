@@ -57,6 +57,7 @@ class UserManagementView extends GetView<UserManagementController> {
                 : [
                     IconButton(
                       onPressed: () {
+                        Get.find<RoleController>().clear();
                         Get.find<RoleController>().generatePermissions();
                         Get.to(() => const AddRole());
                       },

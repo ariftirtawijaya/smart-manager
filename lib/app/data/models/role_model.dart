@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum PermissionType {
   product,
   category,
@@ -26,12 +28,14 @@ Permission checkPermission(RoleModel role, PermissionType permissionType) {
 }
 
 class RoleModel {
+  String id;
   String name;
   String? description;
   bool active;
   List<Map<PermissionType, Permission>> permission;
 
   RoleModel({
+    required this.id,
     required this.name,
     this.description,
     required this.active,
@@ -43,7 +47,28 @@ class RoleModel {
     return 'RoleModel{name: $name, description: $description, isActive: $active, permission: $permission}';
   }
 
+  factory RoleModel.fromSnapshot(DocumentSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    return RoleModel(
+      id: snapshot.id,
+      name: data["name"],
+      active: data["active"],
+      description: data["description"],
+      permission:
+      List<Map<PermissionType, Permission>>.from(data["permission"].map(
+            (x) => Map.from(x).map(
+              (k, v) {
+            final permissionType = _getPermissionTypeFromString(k);
+            return MapEntry<PermissionType, Permission>(
+                permissionType, Permission.fromJson(v));
+          },
+        ),
+      )),
+    );
+  }
+
   factory RoleModel.fromJson(Map<String, dynamic> json) => RoleModel(
+        id: json["id"],
         name: json["name"],
         active: json["active"],
         description: json["description"],
@@ -60,6 +85,7 @@ class RoleModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "description": description,
         "permission": List<dynamic>.from(permission.map(
@@ -71,6 +97,8 @@ class RoleModel {
       };
 
   static PermissionType _getPermissionTypeFromString(String type) {
+    print(type);
+    if (type.contains("_")) {}
     return PermissionType.values.firstWhere(
       (e) => e.toString().split('.').last == type,
       orElse: () => PermissionType.product,

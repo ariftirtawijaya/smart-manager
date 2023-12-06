@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';
 import 'package:smart_manager/app/data/models/role_model.dart';
 import 'package:smart_manager/app/modules/user/user_management/modules/role/controllers/role_controller.dart';
+import 'package:smart_manager/app/modules/user/user_management/modules/role/views/edit_role.dart';
 import 'package:smart_manager/app/utils/widgets/reusable_widget.dart';
 
 class RoleList extends GetView<RoleController> {
@@ -63,13 +64,20 @@ class RoleList extends GetView<RoleController> {
                         children: [
                           Expanded(
                               child:
-                                  CustomButton(onPressed: () {}, text: 'Edit')),
+                                  CustomButton(onPressed: () {
+                                   controller.assignPermission(role.permission);
+                                    Get.back();
+                                    Get.to(()=> const EditRole(), arguments: role);
+                                  }, text: 'Edit')),
                           const SizedBox(
                             width: 16.0,
                           ),
                           Expanded(
                               child: CustomOutlinedButton(
-                                  onPressed: () {}, text: 'Delete')),
+                                  onPressed: () {
+                                    Get.back();
+                                    controller.deleteRole(context, role.id);
+                                  }, text: 'Delete')),
                         ],
                       ),
                     ],
@@ -103,7 +111,9 @@ class RoleList extends GetView<RoleController> {
                     Text(role.active == false ? 'Not Active' : 'Active'),
                     Switch(
                       value: role.active,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        controller.toggleRoleStatus(context, role.active, role.id);
+                      },
                     )
                   ],
                 ),

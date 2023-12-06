@@ -59,6 +59,26 @@ class RoleController extends GetxController {
 
   var permissions = RxList<Map<String, Map<String, bool>>>([]);
 
+  void assignPermission(List<Map<PermissionType, Permission>> permission) {
+    permissions.clear();
+    for (var element in permission) {
+      String permissionKey =
+          element.keys.first.toString().replaceAll("PermissionType.", "");
+      String permissionName = permissionType
+          .firstWhere((type) => type.keys.first == permissionKey)
+          .values
+          .first;
+      permissions.add({
+        permissionKey: {
+          "add": element.values.first.add,
+          "view": element.values.first.view,
+          "edit": element.values.first.edit,
+          "delete": element.values.first.delete,
+        }
+      });
+    }
+  }
+
   void checklistPermission(
       {required String modulName, required String permission}) {
     if (permission != 'view') {
@@ -129,16 +149,16 @@ class RoleController extends GetxController {
     {"product": "Product"},
     {"category": "Category"},
     {"employee": "Employee"},
-    {"payment": "Payment Method"},
+    {"paymentMethod": "Payment Method"},
     {"customer": "Customer"},
     {"order": "Order"},
-    {"pre_order": "Pre Order"},
-    {"history": "History Transaction"},
+    {"preOrder": "Pre Order"},
+    {"historyTransaction": "History Transaction"},
     {"report": "Report"},
     {"roles": "Roles"},
     {"inventory": "Inventory"},
-    {"return": "Return"},
-    {"store_settings": "Store Settings"},
+    {"returnPermission": "Return"},
+    {"storeSettings": "Store Settings"},
   ];
 
   Future<void> createRole(BuildContext context) async {
@@ -177,11 +197,133 @@ class RoleController extends GetxController {
       endLoading().then(
         (value) => showAlert(
           context: context,
-          text: 'Error While Creating User',
+          text: 'Error While Creating Role',
           type: QuickAlertType.error,
         ),
       );
     }
+  }
+
+  Future<void> editRole(BuildContext context, String roleId) async {
+    showLoading(status: 'Editing Role ...');
+    try {
+      Map<String, dynamic> data = {};
+      if (roleDescription.text.isEmpty) {
+        data = {
+          'name': roleName.text,
+          'active': statusController.text == 'Active' ? true : false,
+          'permission': permissions
+        };
+      } else {
+        data = {
+          'name': roleName.text,
+          'description': roleDescription.text,
+          'active': statusController.text == 'Active' ? true : false,
+          'permission': permissions
+        };
+      }
+
+      await DBService.db
+          .collection(storesRef)
+          .doc(dataC.store.value.id)
+          .collection(rolesRef)
+          .doc(roleId)
+          .set(data)
+          .then((result) async {
+        await dataC.getRoles();
+        endLoading();
+        Get.back();
+        EasyLoading.showSuccess('Role Updated!');
+        clear();
+      });
+    } catch (e) {
+      logger.e(e.toString());
+      endLoading().then(
+        (value) => showAlert(
+          context: context,
+          text: 'Error While Updating Role',
+          type: QuickAlertType.error,
+        ),
+      );
+    }
+  }
+
+  Future<void> toggleRoleStatus(
+      BuildContext context, bool currentStatus, String roleId) async {
+    showAlert(
+      context: context,
+      type: QuickAlertType.confirm,
+      text:
+          'Do you want to ${currentStatus == false ? 'activate' : 'deactivate'} this role?',
+      onConfirmBtnTap: () async {
+        showLoading(
+            status:
+                '${currentStatus == false ? 'Activating' : 'Deactivating'} Role ...');
+        try {
+          await DBService.db
+              .collection(storesRef)
+              .doc(dataC.store.value.id)
+              .collection(rolesRef)
+              .doc(roleId)
+              .update({'active': currentStatus == false ? true : false}).then(
+                  (result) async {
+            await dataC.getRoles();
+            endLoading();
+            Get.back();
+            EasyLoading.showSuccess('Role Updated!');
+            clear();
+          });
+        } catch (e) {
+          logger.e(e.toString());
+          endLoading().then(
+            (value) => showAlert(
+              context: context,
+              text: 'Error While Updating Role',
+              type: QuickAlertType.error,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> deleteRole(
+      BuildContext context, String roleId) async {
+    showAlert(
+      context: context,
+      type: QuickAlertType.confirm,
+      text:
+      'Do you want to delete this role?',
+      onConfirmBtnTap: () async {
+        showLoading(
+            status:
+            'Deleting Role ...');
+        try {
+          await DBService.db
+              .collection(storesRef)
+              .doc(dataC.store.value.id)
+              .collection(rolesRef)
+              .doc(roleId)
+              .delete().then(
+                  (result) async {
+                await dataC.getRoles();
+                endLoading();
+                Get.back();
+                EasyLoading.showSuccess('Role Deleted!');
+                clear();
+              });
+        } catch (e) {
+          logger.e(e.toString());
+          endLoading().then(
+                (value) => showAlert(
+              context: context,
+              text: 'Error While Deleting Role',
+              type: QuickAlertType.error,
+            ),
+          );
+        }
+      },
+    );
   }
 
   void clear() {

@@ -18,7 +18,6 @@ class EditRole extends GetView<RoleController> {
         role.active == true ? 'Active' : 'Inactive';
     controller.roleName.text = role.name;
     controller.roleDescription.text = role.description ?? '';
-    log(role.permission.toString());
     final GlobalKey<FormState> editRoleKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
@@ -246,7 +245,7 @@ class EditRole extends GetView<RoleController> {
               // log("Description : ${controller.roleDescription.text}");
               // log("Active : ${controller.statusController.text}");
               // log("Permissions : ${controller.permissions}");
-              controller.createRole(context);
+              controller.editRole(context, role.id);
             }
           },
           text: 'Save',
