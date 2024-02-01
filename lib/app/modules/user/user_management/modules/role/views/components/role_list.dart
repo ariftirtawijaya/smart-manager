@@ -58,17 +58,25 @@ class RoleList extends GetView<RoleController> {
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
+                        height: 8.0,
+                      ),
+                      Text("Choose Options",
+                          style: Theme.of(context).textTheme.titleSmall!),
+                      const SizedBox(
                         height: 16.0,
                       ),
                       Row(
                         children: [
                           Expanded(
-                              child:
-                                  CustomButton(onPressed: () {
-                                   controller.assignPermission(role.permission);
+                              child: CustomButton(
+                                  onPressed: () {
+                                    controller
+                                        .assignPermission(role.permission);
                                     Get.back();
-                                    Get.to(()=> const EditRole(), arguments: role);
-                                  }, text: 'Edit')),
+                                    Get.to(() => const EditRole(),
+                                        arguments: role);
+                                  },
+                                  text: 'Edit')),
                           const SizedBox(
                             width: 16.0,
                           ),
@@ -77,7 +85,8 @@ class RoleList extends GetView<RoleController> {
                                   onPressed: () {
                                     Get.back();
                                     controller.deleteRole(context, role.id);
-                                  }, text: 'Delete')),
+                                  },
+                                  text: 'Delete')),
                         ],
                       ),
                     ],
@@ -92,6 +101,10 @@ class RoleList extends GetView<RoleController> {
                   role.name.capitalize!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
                 // subtitle: Row(
                 //   mainAxisSize: MainAxisSize.min,
@@ -112,7 +125,8 @@ class RoleList extends GetView<RoleController> {
                     Switch(
                       value: role.active,
                       onChanged: (value) {
-                        controller.toggleRoleStatus(context, role.active, role.id);
+                        controller.toggleRoleStatus(
+                            context, role.active, role.id);
                       },
                     )
                   ],

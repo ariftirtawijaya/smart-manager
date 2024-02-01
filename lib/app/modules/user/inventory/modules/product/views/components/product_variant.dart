@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/controllers/product_controller.dart';
 import 'package:smart_manager/app/modules/user/inventory/modules/product/views/components/product_variant_detail.dart';
+import 'package:smart_manager/app/modules/user/inventory/modules/product/views/product_add.dart';
+import 'package:smart_manager/app/routes/app_pages.dart';
 import '../../../../../../../data/models/product_model.dart' as model;
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:smart_manager/app/constant/app_constant.dart';

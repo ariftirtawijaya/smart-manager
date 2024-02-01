@@ -287,35 +287,32 @@ class RoleController extends GetxController {
     );
   }
 
-  Future<void> deleteRole(
-      BuildContext context, String roleId) async {
+  Future<void> deleteRole(BuildContext context, String roleId) async {
     showAlert(
       context: context,
       type: QuickAlertType.confirm,
       text:
-      'Do you want to delete this role?',
+          'Do you want to delete this role?\n\nPlease ensure that no users are using this role!',
       onConfirmBtnTap: () async {
-        showLoading(
-            status:
-            'Deleting Role ...');
+        showLoading(status: 'Deleting Role ...');
         try {
           await DBService.db
               .collection(storesRef)
               .doc(dataC.store.value.id)
               .collection(rolesRef)
               .doc(roleId)
-              .delete().then(
-                  (result) async {
-                await dataC.getRoles();
-                endLoading();
-                Get.back();
-                EasyLoading.showSuccess('Role Deleted!');
-                clear();
-              });
+              .delete()
+              .then((result) async {
+            await dataC.getRoles();
+            endLoading();
+            Get.back();
+            EasyLoading.showSuccess('Role Deleted!');
+            clear();
+          });
         } catch (e) {
           logger.e(e.toString());
           endLoading().then(
-                (value) => showAlert(
+            (value) => showAlert(
               context: context,
               text: 'Error While Deleting Role',
               type: QuickAlertType.error,

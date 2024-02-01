@@ -93,6 +93,11 @@ class AddRole extends GetView<RoleController> {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
+                          height: 8.0,
+                        ),
+                        Text("Set permissions for each module",
+                            style: Theme.of(context).textTheme.labelMedium!),
+                        const SizedBox(
                           height: 16.0,
                         ),
                         GetBuilder<RoleController>(builder: (controller) {
